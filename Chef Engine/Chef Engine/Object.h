@@ -1,5 +1,5 @@
 #pragma once
-#include <iostream>
+#include <string>
 
 namespace ce 
 {
@@ -20,10 +20,7 @@ namespace ce
 		// Destroys the specified Object instance
 		Object Destroy(Object object);
 
-	private:
-
 		int instanceID;
-
 	};
 }
 
