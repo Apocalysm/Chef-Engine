@@ -10,11 +10,12 @@ namespace ce
 		Transform();
 		~Transform();
 
-		void SetRotation(float rotation);
-		void SetPosition(const sf::Vector2f& position);
-		void SetScale(const sf::Vector2f& scale);
+		void SetRotation(float newRotation);
+		void SetPosition(const sf::Vector2f& newPosition);
+		void SetScale(const sf::Vector2f& newScale);
 		void Rotate(float angle);
 
+	private:
 		float rotation;
 		sf::Vector2f position;
 		sf::Vector2f scale;
