@@ -1,6 +1,6 @@
 #include "Component.h"
 
-
+using ce::Component;
 
 Component::Component()
 {

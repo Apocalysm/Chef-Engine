@@ -17,7 +17,9 @@
     <ClCompile Include="Object.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="Component.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
