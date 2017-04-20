@@ -11,6 +11,11 @@ namespace ce
 
 		Component GetComponent();
 
+		int layer = Default;
+
+	private:
+		enum Layers { Default, Player, Enemy, Terrain, UI };
+
 	};
 }
 
