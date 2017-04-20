@@ -19,8 +19,6 @@ namespace ce
 
 		// Destroys the specified Object instance
 		Object Destroy(Object object);
-
-		int instanceID;
 	};
 }
 

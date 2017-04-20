@@ -10,7 +10,6 @@ namespace ce
 	{
 	public:
 		GameObject(std::string name);
-		~GameObject();
 
 		template<typename T>
 		T& GetComponent(T);
@@ -21,14 +20,21 @@ namespace ce
 		template<typename T>
 		void RemoveComponent(T);
 
+		enum Layers { Default, Player, Enemy, Terrain, UI };
+
+		Layers layer = Default;
+
+		int instanceID;
+
+		bool isNew;
+		
+		static unsigned long long uniqueIDCounter;
+
+		bool operator==(const GameObject& other);
+
 	private:
 		// All the components the GameObject is currently holding
 		std::vector<Component*> components;
-		int layer = Default;
-
-	private:
-		enum Layers { Default, Player, Enemy, Terrain, UI };
-
 	};
 }
 

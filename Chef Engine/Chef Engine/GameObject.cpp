@@ -5,11 +5,20 @@ using ce::GameObject;
 GameObject::GameObject(std::string name)
 {
 	name = name;
+	instanceID = uniqueIDCounter++;
+	isNew = true;
 }
 
 
-GameObject::~GameObject()
+bool ce::GameObject::operator==(const GameObject & other)
 {
+	if (instanceID == other.instanceID)
+	{
+		// This is the same gameobject
+		return true;
+	}
+
+	return false;
 }
 
 template<typename T>

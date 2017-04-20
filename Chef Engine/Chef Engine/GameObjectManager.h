@@ -10,15 +10,19 @@ namespace ce
 	class GameObjectManager
 	{
 	public:
+		typedef std::map<int, GameObject*> GameObjectMap;
+		typedef std::map<int, GameObjectMap> LayerObjectMap;
+
 		GameObjectManager();
 
 		void AddObject(GameObject* object);
 		void RemoveObject(GameObject* object);
+		void Update();
 
 	private:
 		GameObject* gameObj;
 
-		std::map<int, std::vector<GameObject*>> enumToVectorObj;
-		std::map<int, std::vector<GameObject*>> newObjects;
+		LayerObjectMap enumToVectorObj;
+		LayerObjectMap newObjects;
 	};
 }
