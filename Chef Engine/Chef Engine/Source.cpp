@@ -8,7 +8,7 @@
 #if _DEBUG
 int main()
 #else
-int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
+int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #endif
 {
 	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
