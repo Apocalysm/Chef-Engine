@@ -1,9 +1,12 @@
+#include "Component.h"
+#include "GameObject.h"
+#include "Transform.h"
+
 #include <Windows.h>
+#include <typeinfo>
 
 #include <SFML/Graphics.hpp>
 #include <Tmx\TmxTile.h>
-
-#include "Component.h"
 
 #if _DEBUG
 int main()
@@ -14,7 +17,7 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
 	sf::CircleShape shape(100.f);
 	shape.setFillColor(sf::Color::Green);
-	
+
 	while (window.isOpen())
 	{
 		sf::Event event;
