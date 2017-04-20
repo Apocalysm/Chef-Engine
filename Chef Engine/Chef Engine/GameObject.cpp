@@ -10,14 +10,16 @@ GameObject::GameObject(std::string name)
 }
 
 
+// Overloads the '==' operator to compare the instanceID variables of the GameObjects you are comparing
 bool ce::GameObject::operator==(const GameObject & other)
 {
 	if (instanceID == other.instanceID)
 	{
-		// This is the same gameobject
+		// This is the same GameObjects
 		return true;
 	}
 
+    // These were not the same GameObjects
 	return false;
 }
 
