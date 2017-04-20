@@ -32,6 +32,9 @@ namespace ce
 
 		bool operator==(const GameObject& other);
 
+		// This is another test
+		int newVariable2 = 2982;
+
 	private:
 		// All the components the GameObject is currently holding
 		std::vector<Component*> components;
