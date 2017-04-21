@@ -4,6 +4,7 @@
 
 #include <Windows.h>
 #include <typeinfo>
+#include <iostream>
 
 #include <SFML/Graphics.hpp>
 #include <Tmx\TmxTile.h>
@@ -14,23 +15,13 @@ int main()
 int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #endif
 {
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-	sf::CircleShape shape(100.f);
-	shape.setFillColor(sf::Color::Green);
+	ce::GameObject obj("hej");
 
-	while (window.isOpen())
-	{
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window.close();
-		}
+	ce::Transform* transform = obj.AddComponent<ce::Transform>();
 
-		window.clear();
-		window.draw(shape);
-		window.display();
-	}
+	std::cout << transform->GetPosition().x << " " << transform->GetPosition().y << std::endl;
+	transform->SetPosition(2, 3);
+	std::cout << transform->GetPosition().x << " " << transform->GetPosition().y << std::endl;
 
 	return 0;
 }

@@ -1,6 +1,8 @@
 #pragma once
 #include "Object.h"
 #include <vector>
+#include <string>
+#include <typeinfo>
 
 namespace ce
 {
@@ -9,13 +11,14 @@ namespace ce
 	class GameObject : public ce::Object
 	{
 	public:
+		GameObject();
 		GameObject(std::string name);
 
 		template<typename T>
-		T& GetComponent(T);
+		T* AddComponent();
 
 		template<typename T>
-		T AddComponent(T);
+		T* GetComponent();
 
 		template<typename T>
 		void RemoveComponent(T);
@@ -27,17 +30,48 @@ namespace ce
 		int instanceID;
 
 		bool isNew;
-		
-		static unsigned long long uniqueIDCounter;
+
+		unsigned long long uniqueIDCounter;
 
 		bool operator==(const GameObject& other);
-
-		// This is another test
-		int newVariable2 = 2982;
 
 	private:
 		// All the components the GameObject is currently holding
 		std::vector<Component*> components;
 	};
+
+
+	template<typename T>
+	T* GameObject::AddComponent()
+	{
+		T* t = new T();
+
+		components.push_back(t);
+
+		return t;
+	}
+
+
+	template<typename T>
+	T* GameObject::GetComponent()
+	{
+		for (auto it = components.begin(); it != components.end(); it++)
+		{
+			if (typeid(dynamic_cast<T*>((*it))).hash_code() == typeid(T*).hash_code())
+			{
+				return (T*)(*it);
+			}
+		}
+
+		return nullptr;
+	}
+
+
+	template<typename T>
+	void GameObject::RemoveComponent(T)
+	{
+
+	}
+
 }
 

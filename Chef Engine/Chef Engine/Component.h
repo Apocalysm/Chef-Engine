@@ -19,9 +19,11 @@ namespace ce
 		// The GameObject holding this Component
 		GameObject* gameObject;
 
-		void Start();
+		virtual void Start();
 		// This gets called every frame from the GameObjectManager
 		void Update();
+
+		bool operator==(const Component& other);
 	};
 }
 

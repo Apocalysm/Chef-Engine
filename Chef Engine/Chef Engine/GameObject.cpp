@@ -1,10 +1,16 @@
 #include "GameObject.h"
+#include "Component.h"
 
-using ce::GameObject;
+//using namespace ce;
 
-GameObject::GameObject(std::string name)
+ce::GameObject::GameObject()
 {
-	name = name;
+	//GameObject("none");
+}
+
+ce::GameObject::GameObject(std::string name)
+{ 
+	this->name = name;
 	instanceID = uniqueIDCounter++;
 	isNew = true;
 }
@@ -19,21 +25,4 @@ bool ce::GameObject::operator==(const GameObject & other)
 	}
 
 	return false;
-}
-
-template<typename T>
-T GameObject::GetComponent(T)
-{
-	return T();
-}
-
-template<typename T>
-T ce::GameObject::AddComponent(T)
-{
-	return T();
-}
-
-template<typename T>
-void GameObject::RemoveComponent(T)
-{
 }

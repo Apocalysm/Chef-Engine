@@ -20,10 +20,16 @@
     <ClCompile Include="Component.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Component.cpp" />
-    <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="GameObjectManager.cpp" />
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectManager.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
