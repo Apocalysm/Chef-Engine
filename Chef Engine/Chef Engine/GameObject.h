@@ -23,11 +23,13 @@ namespace ce
 		template<typename T>
 		void RemoveComponent(T);
 
-		enum Layers { Default, Player, Enemy, Terrain, UI };
+		void SetActive(bool active);
 
+		enum Layers { Default, Player, Enemy, Terrain, UI };
+		
 		Layers layer = Default;
 
-		int instanceID;
+		unsigned long long instanceID;
 
 		bool isNew;
 
@@ -36,8 +38,15 @@ namespace ce
 		bool operator==(const GameObject& other);
 
 	private:
+		
+		friend class GameObjectManager;
+
 		// All the components the GameObject is currently holding
 		std::vector<Component*> components;
+
+		void ComponentUpdate();
+
+		bool m_active = true;
 	};
 
 
@@ -74,4 +83,3 @@ namespace ce
 	}
 
 }
-

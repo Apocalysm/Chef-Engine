@@ -15,6 +15,11 @@ ce::GameObject::GameObject(std::string name)
 	isNew = true;
 }
 
+void ce::GameObject::SetActive(bool active)
+{
+	m_active = active;
+}
+
 
 bool ce::GameObject::operator==(const GameObject & other)
 {
