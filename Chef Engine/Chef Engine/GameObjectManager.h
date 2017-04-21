@@ -1,28 +1,25 @@
 #pragma once
-#include <iostream>
 #include <map>
 #include <vector>
 
 namespace ce
 {
-	class GameObject;
+	class GameObject;	// Forward declaration
 
 	class GameObjectManager
 	{
 	public:
-		typedef std::map<int, GameObject*> GameObjectMap;
-		typedef std::map<int, GameObjectMap> LayerObjectMap;
-
 		GameObjectManager();
 
 		void AddObject(GameObject* object);
 		void RemoveObject(GameObject* object);
-		void Update();
+		void CallUpdate();
 
 	private:
-		GameObject* gameObj;
+		typedef std::map<int, GameObject*> GameObjectMap;
+		typedef std::map<int, GameObjectMap> LayerObjectMap;
 
-		LayerObjectMap enumToVectorObj;
-		LayerObjectMap newObjects;
+		LayerObjectMap enumToMapObj;	// Map with GameObjects recently created
+		LayerObjectMap enumToMapNewObj;	// Map with GameObjects
 	};
 }

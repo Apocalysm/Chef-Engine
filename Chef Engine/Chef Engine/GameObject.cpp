@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "Component.h"
 
 using ce::GameObject;
 
@@ -7,6 +8,11 @@ GameObject::GameObject(std::string name)
 	name = name;
 	instanceID = uniqueIDCounter++;
 	isNew = true;
+}
+
+void ce::GameObject::SetActive(bool active)
+{
+	m_active = active;
 }
 
 
@@ -19,6 +25,14 @@ bool ce::GameObject::operator==(const GameObject & other)
 	}
 
 	return false;
+}
+
+void ce::GameObject::ComponentUpdate()
+{
+	for (auto it = components.begin(); it != components.end(); it++)
+	{
+		(*it)->Update();
+	}
 }
 
 template<typename T>
