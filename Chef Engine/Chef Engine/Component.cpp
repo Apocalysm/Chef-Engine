@@ -6,7 +6,6 @@ using ce::Component;
 
 Component::Component()
 {
-
 }
 
 
@@ -24,9 +23,10 @@ void Component::Update()
 
 }
 
+// MUST FIX THIS SO WE COMPARE HASH_CODE FROM TYPEID
 bool Component::operator==(const Component& other)
 {
-	/*if (typeid(other).hash_code() == typeid(this).hash_code())
+	/*if ()
 	{
 		return true;
 	}*/

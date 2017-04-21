@@ -5,7 +5,7 @@
 
 ce::GameObject::GameObject()
 {
-	//GameObject("none");
+	GameObject("none");
 }
 
 ce::GameObject::GameObject(std::string name)
@@ -30,4 +30,8 @@ bool ce::GameObject::operator==(const GameObject & other)
 	}
 
 	return false;
+}
+
+void ce::GameObject::ComponentUpdate()
+{
 }
