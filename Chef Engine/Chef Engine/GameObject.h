@@ -34,6 +34,9 @@ namespace ce
 
 		bool operator==(const GameObject& other);
 
+		// This is another test
+		int newVariable2 = 2982;
+
 	private:
 		
 		friend class GameObjectManager;
