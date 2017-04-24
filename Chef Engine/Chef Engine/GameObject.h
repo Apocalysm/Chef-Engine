@@ -39,7 +39,7 @@ namespace ce
 		unsigned long long instanceID;
 
 		// We set instanceID with this value 
-		static unsigned long long uniqueIDCounter;
+		unsigned long long uniqueIDCounter;
 
 		// If we created the object this frame
 		bool isNew;
