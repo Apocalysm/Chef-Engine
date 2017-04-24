@@ -25,7 +25,7 @@ namespace ce
 
 		// Removes the component of the specified typename if the GameObject is holding one
 		template<typename T>
-		void RemoveComponent(T);
+		void RemoveComponent();
 
 		// Sets the bool 'm_active'
 		void SetActive(bool active);
@@ -73,6 +73,9 @@ namespace ce
 
 			components.push_back(t);
 
+			// Sets the int 'hash' of component to be equal to the types hash_code
+			components.back()->hash = typeid(dynamic_cast<T*>(components.back())).hash_code();
+
 			return t;
 		}
 	}
@@ -85,7 +88,7 @@ namespace ce
 		for (auto it = components.begin(); it != components.end(); it++)
 		{
 			// Checks if we find the same hash_code on the two types we are comparing
-			if (typeid(dynamic_cast<T*>((*it))).hash_code() == typeid(T*).hash_code())
+			if ((*it)->hash == typeid(T*).hash_code())
 			{
 				// We return the component and casts it to type T
 				return (T*)(*it);
@@ -97,9 +100,21 @@ namespace ce
 
 
 	template<typename T>
-	void GameObject::RemoveComponent(T)
+	void GameObject::RemoveComponent()
 	{
+		// Iterates all of GameObject's components
+		for (auto it = components.begin(); it != components.end(); it++)
+		{
+			// Checks if we find the same hash_code on the two types we are comparing
+			if ((*it)->hash == typeid(T*).hash_code())
+			{
+				// We delete the object from the vector and the memory
+				delete (*it);
 
+				it = components.erase(it);
+				
+				break;
+			}
+		}
 	}
-
 }

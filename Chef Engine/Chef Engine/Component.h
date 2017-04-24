@@ -23,6 +23,9 @@ namespace ce
 		// This gets called every frame from the GameObjectManager
 		void Update();
 
+		// The hash_code of the Component, is set in AddComponent
+		int hash;
+
 		bool operator==(const Component& other);
 	};
 }
