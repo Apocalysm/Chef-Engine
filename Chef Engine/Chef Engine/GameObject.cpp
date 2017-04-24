@@ -3,16 +3,17 @@
 
 //using namespace ce;
 
+// Initializes our ID generator
+unsigned long long ce::GameObject::uniqueIDCounter = 0;
+
 ce::GameObject::GameObject()
 {
 	GameObject("none");
 }
 
 ce::GameObject::GameObject(std::string name)
+	: Object(name)
 { 
-	// Sets name to the specified name
-	this->name = name;
-
 	// Sets the instanceID of the object to the incremented value of uniqueIDCounter
 	instanceID = uniqueIDCounter++;
 

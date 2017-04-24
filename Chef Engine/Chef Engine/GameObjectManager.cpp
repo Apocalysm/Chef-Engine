@@ -16,7 +16,7 @@ void ce::GameObjectManager::AddObject(GameObject* object)
 
 void ce::GameObjectManager::RemoveObject(GameObject* object)
 {
-	const int ID = object->instanceID;
+	const unsigned long long ID = object->instanceID;
 
 	if (object->isNew)
 	{

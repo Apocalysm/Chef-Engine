@@ -30,6 +30,9 @@
     <ClCompile Include="Transform.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="LuaBridgeBinder.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -45,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameObjectManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaBridgeBinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
