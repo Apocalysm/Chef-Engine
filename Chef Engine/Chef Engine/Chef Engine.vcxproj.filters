@@ -23,6 +23,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="MapHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -35,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MapHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
