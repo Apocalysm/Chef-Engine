@@ -23,13 +23,13 @@ void Component::Update()
 
 }
 
-// MUST FIX THIS SO WE COMPARE HASH_CODE FROM TYPEID
+// The == operator of Component compares the hash of the 
 bool Component::operator==(const Component& other)
 {
-	/*if ()
+	if (this->hash == other.hash)
 	{
 		return true;
-	}*/
+	}
 
 	return false;
 }

@@ -10,8 +10,13 @@ ce::GameObject::GameObject()
 
 ce::GameObject::GameObject(std::string name)
 { 
+	// Sets name to the specified name
 	this->name = name;
+
+	// Sets the instanceID of the object to the incremented value of uniqueIDCounter
 	instanceID = uniqueIDCounter++;
+
+	// The object was instantiated this frame
 	isNew = true;
 }
 
