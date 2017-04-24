@@ -1,32 +1,68 @@
 #include "Transform.h"
 
 
+using ce::Transform;
 
-ce::Transform::Transform()
+// Default Constructor
+Transform::Transform()
+{
+	SetPosition(0, 0);
+	SetRotation(0);
+	SetScale(1, 1);
+}
+
+Transform::Transform(const sf::Vector2f& position, const float rotation, const sf::Vector2f& scale)
+{
+	SetPosition(position);
+	SetRotation(rotation);
+	SetScale(scale);
+}
+
+Transform::~Transform()
 {
 }
 
-
-ce::Transform::~Transform()
+void Transform::Start()
 {
 }
 
-void ce::Transform::SetRotation(float newRotation)
+// Overload for SetPosition with floats instead of a sf::Vector2f
+void Transform::SetPosition(const float x, const float y)
 {
-	rotation = newRotation;
+	SetPosition(sf::Vector2f(x, y));
 }
-
-void ce::Transform::SetPosition(const sf::Vector2f& newPosition)
+void Transform::SetPosition(const sf::Vector2f& newPosition)
 {
 	position = newPosition;
 }
 
-void ce::Transform::SetScale(const sf::Vector2f& newScale)
+const sf::Vector2f& Transform::GetPosition() const
+{
+	return position;
+}
+
+
+
+
+void Transform::SetRotation(float newRotation)
+{
+	rotation = newRotation;
+}
+// Adds to the rotation with the specified angle
+void Transform::Rotate(float angle)
+{
+	rotation += angle;
+}
+
+// Overload for SetScale with floats instead of a sf::Vector2f
+void Transform::SetScale(const float x, const float y)
+{
+	SetScale(sf::Vector2f(x, y));
+}
+
+void Transform::SetScale(const sf::Vector2f& newScale)
 {
 	scale = newScale;
 }
 
-void ce::Transform::Rotate(float angle)
-{
-	rotation += angle;
-}
+

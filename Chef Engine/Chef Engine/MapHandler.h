@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <string>
+#include <cassert>
 
 #include <SFML\Graphics.hpp>
 
@@ -21,8 +22,12 @@ namespace ce
 		MapHandler();
 		~MapHandler();
 
+		void LoadMap(const int mapIndex);
 		void LoadMap(const std::string& fileName);
 		void DrawMap(sf::RenderWindow window);
+		void AddMapName(std::string* mapName);
+		void AddMapName(int& index, std::string* mapName);
+		std::vector<std::string*> tileMapNames;
 
 	private:
 		int mapHeight;
@@ -32,9 +37,10 @@ namespace ce
 		std::vector<Tmx::TileLayer*> tileLayers;
 		std::vector <sf::VertexArray*> vertexLayers;
 
-		Tmx::Tileset* tileSet;
+		Tmx::Tileset* tmxTileSet;
 		Tmx::Map map;
 
+		sf::Texture tileSetTexture;
 	};
 }
 

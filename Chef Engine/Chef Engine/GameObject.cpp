@@ -1,12 +1,37 @@
 #include "GameObject.h"
+#include "Component.h"
 
-using ce::GameObject;
+//using namespace ce;
 
-GameObject::GameObject(std::string name)
+ce::GameObject::GameObject()
 {
+	GameObject("none");
+}
+
+ce::GameObject::GameObject(std::string name)
+{ 
+	this->name = name;
+	instanceID = uniqueIDCounter++;
+	isNew = true;
+}
+
+void ce::GameObject::SetActive(bool active)
+{
+	m_active = active;
 }
 
 
-GameObject::~GameObject()
+bool ce::GameObject::operator==(const GameObject & other)
+{
+	if (instanceID == other.instanceID)
+	{
+		// This is the same gameobject
+		return true;
+	}
+
+	return false;
+}
+
+void ce::GameObject::ComponentUpdate()
 {
 }

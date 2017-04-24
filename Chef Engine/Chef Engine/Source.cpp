@@ -1,9 +1,13 @@
+#include "Component.h"
+#include "GameObject.h"
+#include "Transform.h"
+
 #include <Windows.h>
+#include <typeinfo>
+#include <iostream>
 
 #include <SFML/Graphics.hpp>
 #include <Tmx\TmxTile.h>
-
-#include "Component.h"
 
 #if _DEBUG
 int main()
@@ -11,23 +15,13 @@ int main()
 int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #endif
 {
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-	sf::CircleShape shape(100.f);
-	shape.setFillColor(sf::Color::Green);
-	
-	while (window.isOpen())
-	{
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window.close();
-		}
+	ce::GameObject obj("hej");
 
-		window.clear();
-		window.draw(shape);
-		window.display();
-	}
+	ce::Transform* transform = obj.AddComponent<ce::Transform>();
+
+	std::cout << transform->GetPosition().x << " " << transform->GetPosition().y << std::endl;
+	transform->SetPosition(2, 3);
+	std::cout << transform->GetPosition().x << " " << transform->GetPosition().y << std::endl;
 
 	return 0;
 }
