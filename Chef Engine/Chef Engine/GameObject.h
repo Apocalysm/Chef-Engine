@@ -8,7 +8,7 @@ namespace ce
 {
 	// Forward declaration
 	class Component;
-
+	
 	class GameObject : public ce::Object
 	{
 	public:
@@ -32,20 +32,20 @@ namespace ce
 
 		// An enumerator for differentiating our GameObjects between layers
 		enum Layers { Default, Player, Enemy, Terrain, UI };
-		
-		Layers layer = Default;
-
-		// number to differentiate our different GameObject
-		unsigned long long instanceID;
-
-		// We set instanceID with this value 
-		unsigned long long uniqueIDCounter;
-
-		// If we created the object this frame
-		bool isNew;
 
 		// Overloads the == operator to a method
 		bool operator==(const GameObject& other);
+
+		// Getter and setter for m_active variable
+		void SetActive(bool active);
+		bool GetActive();
+
+		// Getter and setter for layer variable
+		void SetLayer(Layers newLayer);
+		int GetLayer();
+
+		// Getter for instanceID
+		unsigned long long GetID();
 
 	private:
 		// Lets GameObjectManager access the private members in GameObjects
@@ -59,6 +59,17 @@ namespace ce
 
 		// If the gameObject should be considered active or not
 		bool m_active = true;
+
+		Layers layer = Default;
+
+		// number to differentiate our different GameObject
+		unsigned long long instanceID;
+
+		// We set instanceID with this value 
+		static unsigned long long uniqueIDCounter;
+
+		// If we created the object this frame
+		bool isNew;
 	};
 
 	// Adds a new component of the specified type
