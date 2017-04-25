@@ -31,7 +31,9 @@
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="MapHandler.cpp" />
+    <ClCompile Include="MapHandler.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">

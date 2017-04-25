@@ -38,7 +38,7 @@ namespace ce
 		std::vector <sf::VertexArray*> vertexLayers;
 
 		Tmx::Tileset* tmxTileSet;
-		Tmx::Map map;
+		Tmx::Map* map;
 
 		sf::Texture tileSetTexture;
 	};
