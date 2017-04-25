@@ -34,6 +34,7 @@ namespace ce
 		int mapWidth;
 		int tileHeight;
 		int tileWidth;
+
 		std::vector<Tmx::TileLayer*> tileLayers;
 		std::vector <sf::VertexArray*> vertexLayers;
 

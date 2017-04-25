@@ -65,6 +65,9 @@ namespace ce
 	template<typename T>
 	T* GameObject::AddComponent()
 	{
+		// Makes sure that this method only takes types derived from ce::Component
+		static_assert((std::is_base_of<ce::Component, T>::value), "Type <T> of GameObject.AddComponent<>() must be of type ce::Component");
+
 		// First checks if we don't already have a component of this type on the GameObject
 		if (GameObject::GetComponent<T>() == nullptr)
 		{
@@ -84,6 +87,9 @@ namespace ce
 	template<typename T>
 	T* GameObject::GetComponent()
 	{
+		// Makes sure that this method only takes types derived from ce::Component
+		static_assert((std::is_base_of<ce::Component, T>::value), "Type <T> of GameObject.GetComponent<>() must be of type ce::Component");
+
 		// Iterates all of GameObject's components
 		for (auto it = components.begin(); it != components.end(); it++)
 		{
@@ -102,6 +108,9 @@ namespace ce
 	template<typename T>
 	void GameObject::RemoveComponent()
 	{
+		// Makes sure that this method only takes types derived from ce::Component
+		static_assert((std::is_base_of<ce::Component, T>::value), "Type <T> of GameObject.RemoveComponent<>() must be of type ce::Component");
+
 		// Iterates all of GameObject's components
 		for (auto it = components.begin(); it != components.end(); it++)
 		{

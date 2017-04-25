@@ -41,6 +41,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 	tmxTileSet = *map->GetTilesets().begin();
 	tileLayers = map->GetTileLayers();
+
 	if (!tileSetTexture.loadFromFile(tmxTileSet->GetImage()->GetSource()))
 	{
 		assert(!"Couldnt load file!");

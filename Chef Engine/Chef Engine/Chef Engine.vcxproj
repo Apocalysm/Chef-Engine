@@ -69,12 +69,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\SFML-2.4.2\include;..\..\tmxparser\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\SFML-2.4.2\lib;..\..\tmxparser\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Lua\include;..\..\LuaBridge;..\..\SFML-2.4.2\include;..\..\tmxparser\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\Lua;..\..\SFML-2.4.2\lib;..\..\tmxparser\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\..\SFML-2.4.2\include;..\..\tmxparser\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\SFML-2.4.2\lib;..\..\tmxparser\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Lua\include;..\..\LuaBridge;..\..\SFML-2.4.2\include;..\..\tmxparser\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\Lua;..\..\SFML-2.4.2\lib;..\..\tmxparser\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -132,6 +132,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="MapHandler.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
+    <ClCompile Include="LuaBridgeBinder.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Transform.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="MapHandler.h" />
+    <ClInclude Include="LuaBridgeBinder.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>

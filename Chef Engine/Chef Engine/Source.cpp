@@ -9,20 +9,14 @@
 #include <SFML/Graphics.hpp>
 #include <Tmx\TmxTile.h>
 
-// Initializes our ID generator
-unsigned long long ce::GameObject::uniqueIDCounter = 0;
-
 #if _DEBUG
 int main()
 #else
 int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #endif
 {	
-	ce::GameObject obj("hej");
-
-	for (size_t i = 0; i < 10; i++)
-		ce::Transform* transform = obj.AddComponent<ce::Transform>();
-	
+	// Binds all defined classes with LuaBridge
+	LuaBridgeBinder::BindAll();
 
 	sf::RenderWindow window(sf::VideoMode(200, 200), "Test");
 
@@ -34,14 +28,6 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-		{
-			obj.AddComponent<ce::Transform>();
-			std::cout << obj.GetComponent<ce::Transform>()->hash << std::endl;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace))
-			obj.RemoveComponent<ce::Transform>();
 
 		window.clear();
 
