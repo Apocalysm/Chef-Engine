@@ -26,6 +26,25 @@ void ce::GameObject::SetActive(bool active)
 	m_active = active;
 }
 
+bool ce::GameObject::GetActive()
+{
+	return m_active;
+}
+
+void ce::GameObject::SetLayer(Layers newLayer)
+{
+}
+
+int ce::GameObject::GetLayer()
+{
+	return layer;
+}
+
+unsigned long long ce::GameObject::GetID()
+{
+	return instanceID;
+}
+
 
 bool ce::GameObject::operator==(const GameObject & other)
 {
