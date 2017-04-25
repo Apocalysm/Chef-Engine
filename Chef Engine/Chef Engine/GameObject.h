@@ -27,9 +27,6 @@ namespace ce
 		template<typename T>
 		void RemoveComponent();
 
-		// Sets the bool 'm_active'
-		void SetActive(bool active);
-
 		// An enumerator for differentiating our GameObjects between layers
 		enum Layers { Default, Player, Enemy, Terrain, UI };
 
