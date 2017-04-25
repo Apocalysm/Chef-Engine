@@ -15,11 +15,11 @@ namespace ce
 		~Object();
 
 		// Getter and setter methods for 'name' variable
-		std::string GetName();
+		std::string GetName() const;
 		void SetName(std::string name);
 
 		// Getter and setter methods for 'tag' variable
-		std::string GetTag();
+		std::string GetTag() const;
 		void SetTag(std::string tag);
 
 		// Creates a new instance of the specified Object
