@@ -27,7 +27,10 @@ namespace ce
 		void DrawMap(sf::RenderWindow window);
 		void AddMapName(std::string* mapName);
 		void AddMapName(int& index, std::string* mapName);
+
 		std::vector<std::string*> tileMapNames;
+
+		void LayerOnOff(bool onOff, int layerNmb);
 
 	private:
 		int mapHeight;
@@ -38,7 +41,7 @@ namespace ce
 		std::vector <sf::VertexArray*> vertexLayers;
 
 		Tmx::Tileset* tmxTileSet;
-		Tmx::Map map;
+		Tmx::Map* map;
 
 		sf::Texture tileSetTexture;
 	};
