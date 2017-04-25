@@ -37,11 +37,11 @@ bool ce::Component::GetEnabled() const
 {
 	return enabled;
 }
-
+/*
 ce::GameObject* Component::GetGameObject() const
 {
-	return gameObject;
-}
+	//return gameObject;
+}*/
 
 // The == operator of Component compares the hash of the 
 bool Component::operator==(const Component& other)

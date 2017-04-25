@@ -1,6 +1,8 @@
 #pragma once
 #include <lua.hpp>
 #include <LuaBridge.h>
+#include <vector>
+#include <string>
 
 class LuaBridgeBinder
 {
@@ -11,5 +13,9 @@ public:
 	static void Bind(lua_State* L);
 
 	static void BindAll();
+
+private:
+	static void LoadLua(lua_State* L, const std::string& path);
+ 
 };
 

@@ -69,11 +69,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\Lua_\include;..\..\Lua_Bridge;..\..\SFML-2.4.2\include;..\..\tmxparser\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\dirent;..\..\Lua_\include;..\..\Lua_Bridge;..\..\SFML-2.4.2\include;..\..\tmxparser\include;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\Lua_;..\..\SFML-2.4.2\lib;..\..\tmxparser\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\..\Lua_\include;..\..\Lua_Bridge;..\..\SFML-2.4.2\include;..\..\tmxparser\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\dirent;..\..\Lua_\include;..\..\Lua_Bridge;..\..\SFML-2.4.2\include;..\..\tmxparser\include;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\Lua_;..\..\SFML-2.4.2\lib;..\..\tmxparser\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

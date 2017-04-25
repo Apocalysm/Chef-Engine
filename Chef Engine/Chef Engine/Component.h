@@ -25,7 +25,7 @@ namespace ce
 		bool GetEnabled() const;
 
 		// Getter for 'gameObject'-variable
-		GameObject* GetGameObject() const;
+		//GameObject* GetGameObject() const;
 
 		bool operator==(const Component& other);
 

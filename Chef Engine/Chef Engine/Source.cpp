@@ -10,11 +10,11 @@
 #include <Tmx\TmxTile.h>
 
 #if _DEBUG
-int main()
+int main(int argc, char* argv[])
 #else
 int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #endif
-{	
+{
 	// Binds all defined classes with LuaBridge
 	LuaBridgeBinder::BindAll();
 

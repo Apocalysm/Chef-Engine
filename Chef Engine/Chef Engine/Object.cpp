@@ -4,6 +4,7 @@ using ce::Object;
 
 Object::Object()
 {
+	name = "none";
 }
 
 Object::Object(std::string name)
