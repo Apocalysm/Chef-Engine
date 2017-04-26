@@ -48,11 +48,15 @@ void MapHandler::LoadMap(const std::string& fileName)
 	for (size_t i = 0; i < tileSets.size(); i++)
 	{
 		sf::Texture texture;
-		if (!texture.loadFromFile(tileSets[i]->GetImage()->GetSource()))
+		sf::Image image;
+
+
+		if (!image.loadFromFile(tileSets[i]->GetImage()->GetSource()))
 		{
 			assert(!"Couldn't load file!");
 		}
-
+		image.createMaskFromColor(sf::Color(255, 0, 255, 255));
+		texture.loadFromImage(image);
 		tileTextures.push_back(texture);
 	}
 
@@ -76,6 +80,10 @@ void MapHandler::LoadMap(const std::string& fileName)
 				int tu = tileNumber % (tileTextures[0].getSize().x / tileWidth);
 				int tv = tileNumber / (tileTextures[0].getSize().x / tileWidth);
 
+				for (size_t k = 0; k < tileTextures.size(); k++)
+				{
+					
+				}
 
 				quad[0].position = sf::Vector2f(j * tileWidth, i * tileHeight);
 				quad[1].position = sf::Vector2f((j + 1) * tileWidth, i * tileHeight);

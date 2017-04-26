@@ -32,7 +32,7 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 				window.close();
 		}
 
-		map->LoadMap("orthogonal-outside.tmx");
+		map->LoadMap("sewers.tmx");
 
 		window.clear();
 		map->DrawMap(window);
