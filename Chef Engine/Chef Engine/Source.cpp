@@ -1,6 +1,7 @@
 #include "Component.h"
 #include "GameObject.h"
 #include "Transform.h"
+#include "MapHandler.h"
 
 #include <Windows.h>
 #include <typeinfo>
@@ -18,7 +19,9 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	// Binds all defined classes with LuaBridge
 	LuaBridgeBinder::BindAll();
 
-	sf::RenderWindow window(sf::VideoMode(200, 200), "Test");
+	sf::RenderWindow window(sf::VideoMode(1280, 720), "Test");
+
+	ce::MapHandler* map = new ce::MapHandler;
 
 	while (window.isOpen())
 	{
@@ -29,9 +32,13 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 				window.close();
 		}
 
-		window.clear();
+		map->LoadMap("orthogonal-outside.tmx");
 
+		window.clear();
+		map->DrawMap(window);
 		window.display();
+
+
 	}
 
 	return 0;

@@ -11,6 +11,7 @@
 #include <vector>
 #include <string>
 #include <cassert>
+#include <array>
 
 #include <SFML\Graphics.hpp>
 
@@ -24,27 +25,26 @@ namespace ce
 
 		void LoadMap(const int mapIndex);
 		void LoadMap(const std::string& fileName);
-		void DrawMap(sf::RenderWindow window);
+		void DrawMap(sf::RenderWindow& window);
 		void AddMapName(std::string* mapName);
 		void AddMapName(int& index, std::string* mapName);
 
 		std::vector<std::string*> tileMapNames;
-
-		void LayerOnOff(bool onOff, int layerNmb);
 
 	private:
 		int mapHeight;
 		int mapWidth;
 		int tileHeight;
 		int tileWidth;
-
+		
+		std::vector<Tmx::Tileset*> tileSets;
+		std::vector<sf::Texture> tileTextures;
 		std::vector<Tmx::TileLayer*> tileLayers;
 		std::vector <sf::VertexArray*> vertexLayers;
+		std::vector<sf::RenderStates*> states;
 
-		Tmx::Tileset* tmxTileSet;
 		Tmx::Map* map;
 
-		sf::Texture tileSetTexture;
 	};
 }
 
