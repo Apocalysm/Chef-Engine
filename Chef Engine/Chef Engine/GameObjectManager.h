@@ -1,6 +1,5 @@
 #pragma once
 #include <map>
-#include <vector>
 
 namespace ce
 {
@@ -16,11 +15,13 @@ namespace ce
 		void CallUpdate();
 
 	private:
-		friend class DrawEventManager;
 		typedef std::map<int, GameObject*> GameObjectMap;
 		typedef std::map<int, GameObjectMap> LayerObjectMap;
 
-		LayerObjectMap enumToMapObj;	// Map with GameObjects recently created
-		LayerObjectMap enumToMapNewObj;	// Map with GameObjects
+		// Map with GameObjects recently created
+		LayerObjectMap enumToMapObj;
+
+		// Map with GameObjects
+		LayerObjectMap enumToMapNewObj;
 	};
 }

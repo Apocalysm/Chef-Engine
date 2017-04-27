@@ -19,7 +19,7 @@ namespace ce
 	public:
 		GameObject();
 		GameObject(std::string name);
-
+		~GameObject();
 		// Adds a new component to the GameObject based on the typename in the method call
 		template<typename T>
 		T* AddComponent();

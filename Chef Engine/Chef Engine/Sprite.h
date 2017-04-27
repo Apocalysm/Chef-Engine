@@ -4,7 +4,7 @@
 
 namespace ce
 {
-	class Sprite : ce::Component
+	class Sprite : public ce::Component
 	{
 	public:
 		Sprite();
@@ -45,17 +45,21 @@ namespace ce
 		int GetDrawOrder() const;
 
 	private:
+		friend class DrawEventManager;
 		sf::Sprite* sprite;
 		sf::Texture texture;
 		sf::Vector2f position;
 		sf::Vector2f scale;
 		float rotation;
 		sf::Color color;
-		int m_drawOrder = 0;
+		int drawOrder = 0;
+		bool isNew = true;
 
-		ce::Transform* transform; // The transform of this components GameObject
+		// The transform of this components GameObject
+		ce::Transform* transform; 
 
-		static void DoBind(lua_State* L); // Bridges parts of this script to Lua
+		// Bridges parts of this script to Lua
+		static void DoBind(lua_State* L); 
 	};
 }
 

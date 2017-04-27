@@ -23,6 +23,13 @@ GameObject::GameObject(std::string name)
 	transform = GetComponentInternal<ce::Transform>();
 }
 
+GameObject::~GameObject()
+{
+	/*if(GetComponentInternal<ce::Sprite>() != nullptr)
+
+	components.clear();*/
+}
+
 void GameObject::SetActive(bool active)
 {
 	m_active = active;

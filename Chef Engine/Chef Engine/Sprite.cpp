@@ -5,18 +5,17 @@ using ce::Sprite;
 
 Sprite::Sprite()
 {
-	
+	Sprite(nullptr, drawOrder);
 }
 
-Sprite::Sprite(const std::string& fileName, const int drawOrder)
+Sprite::Sprite(const std::string& fileName, const int newDrawOrder)
 {
 	// Gets the transform of the owner of this sprite-component
-	//transform = GetGameObject().GetComponent<ce::Transform>();
-	
+	transform = gameObject->GetTransform();
 
 	SetSprite(fileName);
 
-	m_drawOrder = drawOrder;
+	drawOrder = newDrawOrder;
 }
 
 void Sprite::Update()
@@ -81,9 +80,9 @@ void Sprite::SetColor(const int r, const int g, const int b, const int a)
 	sprite->setColor(sf::Color(r, g, b, a));
 }
 
-void Sprite::SetDrawOrder(const int drawOrder)
+void Sprite::SetDrawOrder(const int newDrawOrder)
 {
-	m_drawOrder = drawOrder;
+	drawOrder = newDrawOrder;
 }
 
 sf::Sprite* Sprite::GetSprite() const
@@ -120,7 +119,7 @@ sf::Color Sprite::GetColor() const
 
 int Sprite::GetDrawOrder() const
 {
-	return m_drawOrder;
+	return drawOrder;
 }
 
 void Sprite::DoBind(lua_State * L)

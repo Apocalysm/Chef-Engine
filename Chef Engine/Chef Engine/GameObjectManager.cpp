@@ -59,8 +59,11 @@ void ce::GameObjectManager::CallUpdate()
 			// Iterates through every object in the map
 			for (auto inner_it = outer_it->second.begin(); inner_it != outer_it->second.end(); inner_it++)
 			{
-				// Updates the object
-				inner_it->second->ComponentUpdate();
+				if(inner_it->second->m_active)
+					// Updates the object
+					inner_it->second->ComponentUpdate();
+
+				inner_it->second->isNew = false;
 
 				// Adds the new object to the other map since it isn't new anymore
 				enumToMapObj[inner_it->second->layer].insert(std::make_pair(inner_it->second->instanceID, inner_it->second));
