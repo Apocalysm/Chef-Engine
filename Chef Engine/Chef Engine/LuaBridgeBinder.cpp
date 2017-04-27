@@ -13,6 +13,8 @@
 // Linking a library through code
 #pragma comment(lib, "lua53.lib")
 
+using ce::LuaBridgeBinder;
+
 // Creates a templated Bind function
 template<typename T>
 void LuaBridgeBinder::Bind(lua_State* L)

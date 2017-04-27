@@ -57,30 +57,17 @@ unsigned long long GameObject::GetID() const
 	return instanceID;
 }
 
-
-bool ce::GameObject::operator==(const GameObject & other)
-{
-	if (instanceID == other.instanceID)
-	{
-		// This is the same gameobject
-		return true;
-	}
-
-	return false;
-}
-
 void GameObject::ComponentUpdate()
 {
 	for (auto it = components.begin(); it != components.end(); it++)
 	{
-		(*it)->Update();
+		(*it).second->Update();
 	}
 }
 
 // Adds a new component of the specified type
 ce::Component* GameObject::AddComponent(const int hash)
 {
-		
 	if(GameObject::GetComponentInternal(hash) == nullptr)
 		return nullptr;
 		
@@ -89,17 +76,9 @@ ce::Component* GameObject::AddComponent(const int hash)
 // Tries to get a component of the specified type from GameObject's vector 'components'
 ce::Component* GameObject::GetComponentInternal(const int hash)
 {
-	// Iterates all of GameObject's components
-	for (auto it = components.begin(); it != components.end(); it++)
-	{
-		// Checks if we find the same hash_code on the two types we are comparing
-		if ((*it)->GetHashCode() == hash)
-		{
-			return (*it);
-		}
-	}
+	Component* comp = components[hash];
 
-	return nullptr;
+	return comp;
 }
 
 // Uses GetComponentInternal and also writes an error message to the console if we couldn't find anything
@@ -119,20 +98,19 @@ ce::Component* GameObject::GetComponent(const int hash)
 
 void GameObject::RemoveComponent(const int hash)
 {
-	// Iterates all of GameObject's components
-	for (auto it = components.begin(); it != components.end(); it++)
+	// delete the object from the vector and the memory
+	delete components[hash];
+}
+
+bool GameObject::operator==(const GameObject& other)
+{
+	if (this->layer == other.GetLayer())
 	{
-		// Checks if we find the same hash_code on the two types we are comparing
-		if ((*it)->GetHashCode() == hash)
-		{
-			// We delete the object from the vector and the memory
-			delete (*it);
-
-			it = components.erase(it);
-
-			break;
-		}
+		if (this->instanceID == other.GetID())
+			return true;
 	}
+
+	return false;
 }
 
 void GameObject::DoBind(lua_State * L)
@@ -146,6 +124,7 @@ void GameObject::DoBind(lua_State * L)
 				.addFunction("AddComponent", &GameObject::AddComponent)
 				.addFunction("GetComponent", &GameObject::GetComponent)
 				.addFunction("RemoveComponent", &GameObject::RemoveComponent)
+				.addFunction("Equals", &GameObject::operator==)
 			.endClass()
 		.endNamespace();
 			

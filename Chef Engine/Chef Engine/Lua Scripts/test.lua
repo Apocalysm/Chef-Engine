@@ -6,3 +6,9 @@ print(obj.name);
 obj.name = "Hej";
 
 print(obj.name);
+
+newComp = 
+{
+	hash = ComponentRef.GetHash();
+}
+

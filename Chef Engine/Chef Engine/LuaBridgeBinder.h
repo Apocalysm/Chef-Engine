@@ -4,18 +4,21 @@
 #include <vector>
 #include <string>
 
-class LuaBridgeBinder
+namespace ce
 {
-public:
+	class LuaBridgeBinder
+	{
+	public:
 
-	// Creates a templated Bind function
-	template<typename T>
-	static void Bind(lua_State* L);
+		// Creates a templated Bind function
+		template<typename T>
+		static void Bind(lua_State* L);
 
-	static void BindAll();
+		static void BindAll();
 
-private:
-	static void LoadLua(lua_State* L, const std::string& path);
- 
-};
+	private:
+		static void LoadLua(lua_State* L, const std::string& path);
+
+	};
+}
 

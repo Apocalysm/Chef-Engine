@@ -129,6 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="ComponentRef.cpp" />
     <ClCompile Include="DrawEventManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="MapHandler.cpp" />
@@ -141,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentRef.h" />
     <ClInclude Include="DrawEventManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectManager.h" />

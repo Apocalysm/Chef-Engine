@@ -16,7 +16,7 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #endif
 {
 	// Binds all defined classes with LuaBridge
-	LuaBridgeBinder::BindAll();
+	ce::LuaBridgeBinder::BindAll();
 
 	sf::RenderWindow window(sf::VideoMode(200, 200), "Test");
 
