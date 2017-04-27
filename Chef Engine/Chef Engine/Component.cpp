@@ -28,6 +28,11 @@ int Component::GetHashCode() const
 	return hash;
 }
 
+void ce::Component::SetHashCode(int hash)
+{
+	this->hash = hash;
+}
+
 void Component::SetEnabled(bool enabled)
 {
 	this->enabled = enabled;
@@ -37,11 +42,11 @@ bool ce::Component::GetEnabled() const
 {
 	return enabled;
 }
-/*
-ce::GameObject* Component::GetGameObject() const
+
+GameObject* Component::GetGameObject() const
 {
-	//return gameObject;
-}*/
+	return gameObject;
+}
 
 // The == operator of Component compares the hash of the 
 bool Component::operator==(const Component& other)
@@ -52,4 +57,17 @@ bool Component::operator==(const Component& other)
 	}
 
 	return false;
+}
+
+void ce::Component::DoBind(lua_State * L)
+{
+	luabridge::getGlobalNamespace(L)
+		.beginNamespace("Chef")
+			.beginClass<Component>("Component")
+				.addProperty("hash_code", &Component::GetHashCode)
+				.addProperty("enabled", &Component::GetEnabled, &Component::SetEnabled)
+				.addProperty("gameObject", &Component::GetGameObject)
+				.addFunction("Equals", &Component::operator==)
+			.endClass()
+		.endNamespace();
 }

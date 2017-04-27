@@ -1,5 +1,9 @@
 #include "LuaBridgeBinder.h"
+
+// All the different classes we want to bind with Lua Bridge
 #include "Object.h"
+#include "Component.h"
+
 #include <iostream>
 #include <vector>
 
@@ -15,6 +19,7 @@ void LuaBridgeBinder::Bind(lua_State* L)
 {
 	T::DoBind(L);
 }
+
 // The directory path where we store our .lua-scripts
 const std::string LUA_SCRIPTS_PATH = "Lua Scripts";
 
@@ -52,9 +57,6 @@ static const std::vector<std::string*> LoadDirectory(const std::string dir_path)
 					continue;
 				else
 				{
-					// Creates a new string for the new directory we found
-					
-
 					// Recursively calls this method to read the directory on the new path
 					const std::vector<std::string*> data = LoadDirectory(newPath);
 					
@@ -96,6 +98,7 @@ void LuaBridgeBinder::BindAll()
 
 	// Here you put all the method calls for the classes you want to bind
 	Bind<ce::Object>(L);
+	Bind<ce::Component>(L);
 	
 	// Gets all the .lua file_paths
     std::vector<std::string*> file_paths = LoadDirectory(LUA_SCRIPTS_PATH);
