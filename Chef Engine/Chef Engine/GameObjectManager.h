@@ -16,6 +16,7 @@ namespace ce
 		void CallUpdate();
 
 	private:
+		friend class DrawEventManager;
 		typedef std::map<int, GameObject*> GameObjectMap;
 		typedef std::map<int, GameObjectMap> LayerObjectMap;
 
