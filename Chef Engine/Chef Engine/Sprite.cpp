@@ -12,7 +12,7 @@ Sprite::Sprite(const std::string& fileName, const int drawOrder)
 {
 	// Gets the transform of the owner of this sprite-component
 	//transform = GetGameObject().GetComponent<ce::Transform>();
-	transform = GetGameObject()->GetTransform();
+	
 
 	SetSprite(fileName);
 

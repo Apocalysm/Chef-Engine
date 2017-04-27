@@ -2,28 +2,27 @@
 #include "GameObject.h"
 #include <typeinfo>
 
-using ce::Component;
 
-Component::Component()
+ce::Component::Component()
 {
 }
 
 
-Component::~Component()
+ce::Component::~Component()
 {
 }
 
-void Component::Start()
-{
-
-}
-
-void Component::Update()
+void ce::Component::Start()
 {
 
 }
 
-int Component::GetHashCode() const
+void ce::Component::Update()
+{
+
+}
+
+int ce::Component::GetHashCode() const
 {
 	return hash;
 }
@@ -33,7 +32,7 @@ void ce::Component::SetHashCode(int hash)
 	this->hash = hash;
 }
 
-void Component::SetEnabled(bool enabled)
+void ce::Component::SetEnabled(bool enabled)
 {
 	this->enabled = enabled;
 }
@@ -43,13 +42,13 @@ bool ce::Component::GetEnabled() const
 	return enabled;
 }
 
-GameObject* Component::GetGameObject() const
+ce::GameObject* ce::Component::GetGameObject() const
 {
 	return gameObject;
 }
 
 // The == operator of Component compares the hash of the 
-bool Component::operator==(const Component& other)
+bool ce::Component::operator==(const Component& other)
 {
 	if (this->hash == other.hash)
 	{

@@ -1,15 +1,17 @@
 #include "GameObject.h"
 #include "Component.h"
 
+using ce::GameObject;
+
 // Initializes our ID generator
 unsigned long long ce::GameObject::uniqueIDCounter = 0;
 
-ce::GameObject::GameObject()
+GameObject::GameObject()
 {
 	GameObject("none");
 }
 
-ce::GameObject::GameObject(std::string name)
+GameObject::GameObject(std::string name)
 	: Object(name)
 { 
 	// Sets the instanceID of the object to the incremented value of uniqueIDCounter
@@ -18,39 +20,39 @@ ce::GameObject::GameObject(std::string name)
 	// The object was instantiated this frame
 	isNew = true;
 
-	transform = GetComponent<ce::Transform>();
+	transform = GetComponentInternal<ce::Transform>();
 }
 
-void ce::GameObject::SetActive(bool active)
+void GameObject::SetActive(bool active)
 {
 	m_active = active;
 }
 
-bool ce::GameObject::GetActive() const
+bool GameObject::GetActive() const
 {
 	return m_active;
 }
 
-void ce::GameObject::SetLayer(Layers newLayer)
+void GameObject::SetLayer(Layers newLayer)
 {
 }
 
-int ce::GameObject::GetLayer() const
+int GameObject::GetLayer() const
 {
 	return layer;
 }
 
-void ce::GameObject::SetTransform(ce::Transform* transform)
+void GameObject::SetTransform(ce::Transform* transform)
 {
 	this->transform = transform;
 }
 
-ce::Transform* ce::GameObject::GetTransform() const
+ce::Transform* GameObject::GetTransform() const
 {
 	return transform;
 }
 
-unsigned long long ce::GameObject::GetID()
+unsigned long long GameObject::GetID() const
 {
 	return instanceID;
 }
@@ -67,7 +69,7 @@ bool ce::GameObject::operator==(const GameObject & other)
 	return false;
 }
 
-void ce::GameObject::ComponentUpdate()
+void GameObject::ComponentUpdate()
 {
 	for (auto it = components.begin(); it != components.end(); it++)
 	{
@@ -75,7 +77,65 @@ void ce::GameObject::ComponentUpdate()
 	}
 }
 
-void ce::GameObject::DoBind(lua_State * L)
+// Adds a new component of the specified type
+ce::Component* GameObject::AddComponent(const int hash)
+{
+		
+	if(GameObject::GetComponentInternal(hash) == nullptr)
+		return nullptr;
+		
+}
+
+// Tries to get a component of the specified type from GameObject's vector 'components'
+ce::Component* GameObject::GetComponentInternal(const int hash)
+{
+	// Iterates all of GameObject's components
+	for (auto it = components.begin(); it != components.end(); it++)
+	{
+		// Checks if we find the same hash_code on the two types we are comparing
+		if ((*it)->GetHashCode() == hash)
+		{
+			return (*it);
+		}
+	}
+
+	return nullptr;
+}
+
+// Uses GetComponentInternal and also writes an error message to the console if we couldn't find anything
+ce::Component* GameObject::GetComponent(const int hash)
+{
+	Component* comp = GetComponentInternal(hash);
+
+	if (comp == nullptr)
+	{
+		std::cerr << "Could not find component" << std::endl;
+
+		return nullptr;
+	}
+
+	return comp;
+}
+
+void GameObject::RemoveComponent(const int hash)
+{
+	// Iterates all of GameObject's components
+	for (auto it = components.begin(); it != components.end(); it++)
+	{
+		// Checks if we find the same hash_code on the two types we are comparing
+		if ((*it)->GetHashCode() == hash)
+		{
+			// We delete the object from the vector and the memory
+			delete (*it);
+
+			it = components.erase(it);
+
+			break;
+		}
+	}
+}
+
+void GameObject::DoBind(lua_State * L)
 {
 	luabridge::getGlobalNamespace(L)
 		.beginNamespace("Chef")

@@ -4,10 +4,12 @@
 
 #include <SFML\Graphics.hpp>
 
-class GameObject;
+
 
 namespace ce
 {
+	class GameObject;
+
 	class Component : public ce::Object
 	{
 		// Befriends the templated Bind function so it can access our protected functions
@@ -37,6 +39,9 @@ namespace ce
 	protected: 
 		// Binds all relevant members of this class with LuaBridge
 		static void DoBind(lua_State* L);
+		
+		// The GameObject holding this Component
+		ce::GameObject* gameObject = nullptr;
 
 	private: 
 
@@ -46,8 +51,7 @@ namespace ce
 		// This decides if the Component should be updated for example via the Update method
 		bool enabled = true;
 
-		// The GameObject holding this Component
-		GameObject* gameObject = nullptr;
+		
 
 	};
 }

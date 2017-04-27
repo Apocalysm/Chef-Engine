@@ -3,6 +3,7 @@
 #include "Transform.h"
 #include <vector>
 #include <string>
+#include <iostream>
 #include <typeinfo>
 
 namespace ce
@@ -119,14 +120,7 @@ namespace ce
 		}
 	}
 
-	// Adds a new component of the specified type
-	Component* GameObject::AddComponent(const int hash)
-	{
-		
-		if(GameObject::GetComponentInternal(hash) == nullptr)
-			return nullptr;
-		
-	}
+	
 
 	// Tries to get a component of the specified type from GameObject's vector 'components'
 	template<typename T>
@@ -149,21 +143,7 @@ namespace ce
 		return nullptr;
 	}
 
-	// Tries to get a component of the specified type from GameObject's vector 'components'
-	Component* GameObject::GetComponentInternal(const int hash)
-	{
-		// Iterates all of GameObject's components
-		for (auto it = components.begin(); it != components.end(); it++)
-		{
-			// Checks if we find the same hash_code on the two types we are comparing
-			if ((*it)->GetHashCode() == hash)
-			{
-				return (*it);
-			}
-		}
-
-		return nullptr;
-		}
+	
 
 	// Uses GetComponentInternal and also writes an error message to the console if we couldn't find anything
 	template<typename T>
@@ -181,20 +161,7 @@ namespace ce
 		return t;
 	}
 
-	// Uses GetComponentInternal and also writes an error message to the console if we couldn't find anything
-	Component* GameObject::GetComponent(const int hash)
-	{
-		Component* comp = GetComponentInternal(hash);
 
-		if (comp == nullptr)
-		{
-			std::cerr << "Could not find component" << std::endl;
-
-			return nullptr;
-		}
-
-		return comp;
-	}
 
 
 	template<typename T>
@@ -219,21 +186,4 @@ namespace ce
 		}
 	}
 
-	void GameObject::RemoveComponent(const int hash)
-	{
-		// Iterates all of GameObject's components
-		for (auto it = components.begin(); it != components.end(); it++)
-		{
-			// Checks if we find the same hash_code on the two types we are comparing
-			if ((*it)->GetHashCode() == hash)
-			{
-				// We delete the object from the vector and the memory
-				delete (*it);
-
-				it = components.erase(it);
-
-				break;
-			}
-		}
-	}
 }
