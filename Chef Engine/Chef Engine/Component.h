@@ -47,7 +47,7 @@ namespace ce
 		bool enabled = true;
 
 		// The GameObject holding this Component
-		GameObject* gameObject;
+		GameObject* gameObject = nullptr;
 
 	};
 }

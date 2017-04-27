@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "Transform.h"
 #include <vector>
 #include <string>
 #include <typeinfo>
@@ -41,6 +42,9 @@ namespace ce
 		void SetLayer(Layers newLayer);
 		int GetLayer();
 
+		void SetTransform(Transform* transform);
+		Transform* GetTransform() const;
+
 		// Getter for instanceID
 		unsigned long long GetID();
 
@@ -67,6 +71,8 @@ namespace ce
 
 		// If we created the object this frame
 		bool isNew;
+
+		Transform* transform;
 	};
 
 	// Adds a new component of the specified type
@@ -83,6 +89,8 @@ namespace ce
 			T* t = new T();
 
 			components.push_back(t);
+
+			t->SetGameObject(this);
 
 			// Sets the int 'hash' of component to be equal to the types hash_code
 			components.back()->hash = typeid(dynamic_cast<T*>(components.back())).hash_code();
