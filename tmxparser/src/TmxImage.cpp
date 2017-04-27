@@ -28,6 +28,9 @@
 #include "tinyxml2\tinyxml2.h"
 
 #include "TmxImage.h"
+#include "TmxColor.h"
+
+#include <sstream>
 
 namespace Tmx 
 {   
@@ -35,11 +38,14 @@ namespace Tmx
         : source()
         , width()
         , height()
-        , transparent_color()
+        , transparent_color(new Color())
+		, is_transparent(false)
     {}
 
     Image::~Image() 
-    {}
+    {
+		delete transparent_color;
+	}
 
     void Image::Parse(const tinyxml2::XMLNode *imageNode) 
     {
@@ -54,7 +60,8 @@ namespace Tmx
         const char *trans = imageElem->Attribute("trans");
         if (trans) 
         {
-            transparent_color = trans;
+			transparent_color->SetColor(trans);
+			is_transparent = true;
         }
     }
 }

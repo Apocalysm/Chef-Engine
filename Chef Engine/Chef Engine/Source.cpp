@@ -23,6 +23,8 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	ce::MapHandler* map = new ce::MapHandler;
 
+
+	map->LoadMap("sewers.tmx");
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -31,8 +33,6 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
-
-		map->LoadMap("sewers.tmx");
 
 		window.clear();
 		map->DrawMap(window);
