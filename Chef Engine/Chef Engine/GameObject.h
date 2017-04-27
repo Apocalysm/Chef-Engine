@@ -12,6 +12,9 @@ namespace ce
 	
 	class GameObject : public ce::Object
 	{
+		// Befriends the templated Bind function so it can access our protected functions
+		friend void LuaBridgeBinder::Bind<ce::GameObject>(lua_State*);
+
 	public:
 		GameObject();
 		GameObject(std::string name);
@@ -20,13 +23,19 @@ namespace ce
 		template<typename T>
 		T* AddComponent();
 
+		Component* AddComponent(const int hash);
+
 		// Tries to find the component of the specified typename
 		template<typename T>
 		T* GetComponent();
 
+		Component* GameObject::GetComponent(const int hash);
+
 		// Removes the component of the specified typename if the GameObject is holding one
 		template<typename T>
 		void RemoveComponent();
+
+		void RemoveComponent(const int hash);
 
 		// An enumerator for differentiating our GameObjects between layers
 		enum Layers { Default, Player, Enemy, Terrain, UI };
@@ -36,17 +45,21 @@ namespace ce
 
 		// Getter and setter for m_active variable
 		void SetActive(bool active);
-		bool GetActive();
+		bool GetActive() const;
 
 		// Getter and setter for layer variable
 		void SetLayer(Layers newLayer);
-		int GetLayer();
+		int GetLayer() const;
 
 		void SetTransform(Transform* transform);
 		Transform* GetTransform() const;
 
 		// Getter for instanceID
-		unsigned long long GetID();
+		unsigned long long GetID() const;
+
+	protected:
+		// Binds all relevant members of this class with LuaBridge
+		static void DoBind(lua_State* L);
 
 	private:
 		// Lets GameObjectManager access the private members in GameObjects
@@ -73,6 +86,13 @@ namespace ce
 		bool isNew;
 
 		Transform* transform;
+
+		// Tries to find the component of the specified typename
+		template<typename T>
+		T* GetComponentInternal();
+
+		// Tries to find the component of the specified typename
+		Component* GetComponentInternal(const int hash);
 	};
 
 	// Adds a new component of the specified type
@@ -83,7 +103,7 @@ namespace ce
 		static_assert((std::is_base_of<ce::Component, T>::value), "Type <T> of GameObject.AddComponent<>() must be of type ce::Component");
 
 		// First checks if we don't already have a component of this type on the GameObject
-		if (GameObject::GetComponent<T>() == nullptr)
+		if (GameObject::GetComponentInternal<T>() == nullptr)
 		{
 			// Creates a instance of our type T
 			T* t = new T();
@@ -93,24 +113,33 @@ namespace ce
 			t->SetGameObject(this);
 
 			// Sets the int 'hash' of component to be equal to the types hash_code
-			components.back()->hash = typeid(dynamic_cast<T*>(components.back())).hash_code();
+			components.back()->SetHashCode(typeid(dynamic_cast<T*>(components.back())).hash_code());
 
 			return t;
 		}
 	}
 
+	// Adds a new component of the specified type
+	Component* GameObject::AddComponent(const int hash)
+	{
+		
+		if(GameObject::GetComponentInternal(hash) == nullptr)
+			return nullptr;
+		
+	}
+
 	// Tries to get a component of the specified type from GameObject's vector 'components'
 	template<typename T>
-	T* GameObject::GetComponent()
+	T* GameObject::GetComponentInternal()
 	{
 		// Makes sure that this method only takes types derived from ce::Component
-		static_assert((std::is_base_of<ce::Component, T>::value), "Type <T> of GameObject.GetComponent<>() must be of type ce::Component");
+		static_assert((std::is_base_of<ce::Component, T>::value), "Type <T> of GameObject.GetComponent must be of type ce::Component");
 
 		// Iterates all of GameObject's components
 		for (auto it = components.begin(); it != components.end(); it++)
 		{
 			// Checks if we find the same hash_code on the two types we are comparing
-			if ((*it)->hash == typeid(T*).hash_code())
+			if ((*it)->GetHashCode() == typeid(T*).hash_code())
 			{
 				// We return the component and casts it to type T
 				return (T*)(*it);
@@ -118,6 +147,53 @@ namespace ce
 		}
 
 		return nullptr;
+	}
+
+	// Tries to get a component of the specified type from GameObject's vector 'components'
+	Component* GameObject::GetComponentInternal(const int hash)
+	{
+		// Iterates all of GameObject's components
+		for (auto it = components.begin(); it != components.end(); it++)
+		{
+			// Checks if we find the same hash_code on the two types we are comparing
+			if ((*it)->GetHashCode() == hash)
+			{
+				return (*it);
+			}
+		}
+
+		return nullptr;
+		}
+
+	// Uses GetComponentInternal and also writes an error message to the console if we couldn't find anything
+	template<typename T>
+	T* GameObject::GetComponent()
+	{
+		T* t = GetComponentInternal<T>();
+
+		if (t == nullptr)
+		{
+			std::cerr << "Could not find component of type <" << typeid(T).name() << ">" << std::endl;
+
+		return nullptr;
+	}
+
+		return t;
+	}
+
+	// Uses GetComponentInternal and also writes an error message to the console if we couldn't find anything
+	Component* GameObject::GetComponent(const int hash)
+	{
+		Component* comp = GetComponentInternal(hash);
+
+		if (comp == nullptr)
+		{
+			std::cerr << "Could not find component" << std::endl;
+
+			return nullptr;
+		}
+
+		return comp;
 	}
 
 
@@ -138,6 +214,24 @@ namespace ce
 
 				it = components.erase(it);
 				
+				break;
+			}
+		}
+	}
+
+	void GameObject::RemoveComponent(const int hash)
+	{
+		// Iterates all of GameObject's components
+		for (auto it = components.begin(); it != components.end(); it++)
+		{
+			// Checks if we find the same hash_code on the two types we are comparing
+			if ((*it)->GetHashCode() == hash)
+			{
+				// We delete the object from the vector and the memory
+				delete (*it);
+
+				it = components.erase(it);
+
 				break;
 			}
 		}

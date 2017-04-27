@@ -48,12 +48,12 @@ Object Object::Destroy(Object object)
 	return Object();
 }
 
-void ce::Object::DoBind(lua_State * L)
+void ce::Object::DoBind(lua_State* L)
 {
 	luabridge::getGlobalNamespace(L)
 		.beginNamespace("Chef")
 			.beginClass<Object>("Object")
-				.addConstructor<void(*)(void)>()
+				.addConstructor<void(*)(std::string)>()
 				.addProperty("name", &Object::GetName, &Object::SetName)
 				.addProperty("tag", &Object::GetTag, &Object::SetTag)
 				.addFunction("Instantiate", &Object::Instantiate)

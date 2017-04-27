@@ -29,6 +29,7 @@ namespace ce
 		Object Destroy(Object object);
 
 	protected:
+		// Binds all relevant members of this class with LuaBridge
 		static void DoBind(lua_State* L);
 
 	private:

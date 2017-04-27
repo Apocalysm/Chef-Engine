@@ -1,8 +1,6 @@
 #include "GameObject.h"
 #include "Component.h"
 
-//using namespace ce;
-
 // Initializes our ID generator
 unsigned long long ce::GameObject::uniqueIDCounter = 0;
 
@@ -28,7 +26,7 @@ void ce::GameObject::SetActive(bool active)
 	m_active = active;
 }
 
-bool ce::GameObject::GetActive()
+bool ce::GameObject::GetActive() const
 {
 	return m_active;
 }
@@ -37,7 +35,7 @@ void ce::GameObject::SetLayer(Layers newLayer)
 {
 }
 
-int ce::GameObject::GetLayer()
+int ce::GameObject::GetLayer() const
 {
 	return layer;
 }
@@ -71,4 +69,26 @@ bool ce::GameObject::operator==(const GameObject & other)
 
 void ce::GameObject::ComponentUpdate()
 {
+	for (auto it = components.begin(); it != components.end(); it++)
+	{
+		(*it)->Update();
+	}
 }
+
+void ce::GameObject::DoBind(lua_State * L)
+{
+	luabridge::getGlobalNamespace(L)
+		.beginNamespace("Chef")
+			.beginClass<GameObject>("GameObject")
+				.addProperty("active", &GameObject::GetActive, &GameObject::SetActive)
+				.addProperty("layer", &GameObject::GetLayer, &GameObject::SetLayer)
+				.addProperty("instanceID", &GameObject::GetID)
+				.addFunction("AddComponent", &GameObject::AddComponent)
+				.addFunction("GetComponent", &GameObject::GetComponent)
+				.addFunction("RemoveComponent", &GameObject::RemoveComponent)
+			.endClass()
+		.endNamespace();
+			
+
+}
+
