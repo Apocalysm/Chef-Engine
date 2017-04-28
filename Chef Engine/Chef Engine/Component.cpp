@@ -47,6 +47,11 @@ ce::GameObject* ce::Component::GetGameObject() const
 	return gameObject;
 }
 
+void ce::Component::SetGameObject(GameObject * gameObject)
+{
+	this->gameObject = gameObject;
+}
+
 // The == operator of Component compares the hash of the 
 bool ce::Component::operator==(const Component& other)
 {

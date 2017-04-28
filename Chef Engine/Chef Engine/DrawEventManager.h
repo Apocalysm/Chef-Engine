@@ -11,8 +11,8 @@ namespace ce
 	public:
 		DrawEventManager();
 
-		void AddSprite(Sprite* sprite);
-		void RemoveSprite(Sprite* sprite);
+		static void AddSprite(Sprite* sprite);
+		static void RemoveSprite(Sprite* sprite);
 		void Draw(sf::RenderWindow& window);
 
 	private:
@@ -20,9 +20,9 @@ namespace ce
 		typedef std::map<int, SpriteMap> OrderSpriteMap;
 
 		// OrderSpriteMap with Sprite components recently created
-		OrderSpriteMap enumToMapNewSpr;
+		static OrderSpriteMap enumToMapNewSpr;
 
 		// Map with Sprite componenets
-		OrderSpriteMap enumToMapSpr;
+		static OrderSpriteMap enumToMapSpr;
 	};
 }

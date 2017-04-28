@@ -5,9 +5,14 @@
 
 using ce::DrawEventManager;
 
+// Map with GameObjects 
+std::map<int, std::map<int, ce::Sprite*>> ce::DrawEventManager::enumToMapSpr;
+
+// Map with GameObjects recently created
+std::map<int, std::map<int, ce::Sprite*>> ce::DrawEventManager::enumToMapNewSpr;
+
 DrawEventManager::DrawEventManager()
 {
-
 }
 
 void DrawEventManager::AddSprite(ce::Sprite* sprite)

@@ -10,18 +10,18 @@ namespace ce
 	public:
 		GameObjectManager();
 
-		void AddObject(GameObject* object);
-		void RemoveObject(GameObject* object);
+		static void AddObject(GameObject* object);
+		static void RemoveObject(GameObject* object);
 		void CallUpdate();
 
 	private:
 		typedef std::map<int, GameObject*> GameObjectMap;
 		typedef std::map<int, GameObjectMap> LayerObjectMap;
 
-		// Map with GameObjects recently created
-		LayerObjectMap enumToMapObj;
+		// Map with GameObjects 
+		static LayerObjectMap enumToMapObj;
 
-		// Map with GameObjects
-		LayerObjectMap enumToMapNewObj;
+		// Map with GameObjects recently created
+		static LayerObjectMap enumToMapNewObj;
 	};
 }

@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "Component.h"
+#include "GameObjectManager.h"
 
 using ce::GameObject;
 
@@ -20,7 +21,9 @@ GameObject::GameObject(std::string name)
 	// The object was instantiated this frame
 	isNew = true;
 
-	transform = GetComponentInternal<ce::Transform>();
+	transform = AddComponent<ce::Transform>();
+
+	ce::GameObjectManager::AddObject(this);
 }
 
 GameObject::~GameObject()

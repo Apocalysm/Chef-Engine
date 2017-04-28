@@ -33,6 +33,7 @@ namespace ce
 
 		// Getter for 'gameObject'-variable
 		GameObject* GetGameObject() const;
+		void SetGameObject(GameObject* gameObject);
 
 		bool operator==(const Component& other);
 

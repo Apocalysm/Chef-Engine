@@ -1,11 +1,15 @@
 #include "Sprite.h"
 #include "GameObject.h"
+#include "DrawEventManager.h"
 
 using ce::Sprite;
 
 Sprite::Sprite()
 {
-	Sprite(nullptr, drawOrder);
+	ce::DrawEventManager::AddSprite(this);
+
+	// Gets the transform of the owner of this sprite-component
+	transform = gameObject->GetTransform();
 }
 
 Sprite::Sprite(const std::string& fileName, const int newDrawOrder)
@@ -13,9 +17,11 @@ Sprite::Sprite(const std::string& fileName, const int newDrawOrder)
 	// Gets the transform of the owner of this sprite-component
 	transform = gameObject->GetTransform();
 
-	SetSprite(fileName);
+	//SetSprite(fileName);
 
 	drawOrder = newDrawOrder;
+
+	ce::DrawEventManager::AddSprite(this);
 }
 
 void Sprite::Update()

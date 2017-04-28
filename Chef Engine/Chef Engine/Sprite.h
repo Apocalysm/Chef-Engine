@@ -46,6 +46,7 @@ namespace ce
 
 	private:
 		friend class DrawEventManager;
+
 		sf::Sprite* sprite;
 		sf::Texture texture;
 		sf::Vector2f position;
