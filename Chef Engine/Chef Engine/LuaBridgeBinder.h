@@ -18,7 +18,7 @@ namespace ce
 
 	private:
 		static void LoadLua(lua_State* L, const std::string& path);
-
+		
 	};
 }
 
