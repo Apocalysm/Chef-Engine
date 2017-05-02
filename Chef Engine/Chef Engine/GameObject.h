@@ -11,7 +11,7 @@ namespace ce
 	// Forward declaration
 	class Component;
 	
-	class GameObject : public ce::Object
+	class GameObject
 	{
 		// Befriends the templated Bind function so it can access our protected functions
 		friend void LuaBridgeBinder::Bind<ce::GameObject>(lua_State*);
@@ -41,6 +41,9 @@ namespace ce
 		// An enumerator for differentiating our GameObjects between layers
 		enum Layers { Default, Player, Enemy, Terrain, UI };
 
+		// The amount of different values in the Layers enum
+		static const int LAYER_AMOUNT;
+
 		// Overloads the == operator to a method
 		bool operator==(const GameObject& other);
 
@@ -54,6 +57,17 @@ namespace ce
 
 		void SetTransform(Transform* transform);
 		Transform* GetTransform() const;
+
+		// Getter and setter methods for 'name' variable
+		std::string GetName() const;
+		void SetName(std::string name);
+
+		// Getter and setter methods for 'tag' variable
+		std::string GetTag() const;
+		void SetTag(std::string tag);
+
+		// Destroys the specified Object instance
+		void Destroy();
 
 		// Getter for instanceID
 		unsigned long long GetID() const;
@@ -71,6 +85,11 @@ namespace ce
 
 		// Updates all the components that our GameObject holds
 		void ComponentUpdate();
+
+		std::string name;
+
+		// Specifies what kind of Object this is
+		std::string tag;
 
 		// If the gameObject should be considered active or not
 		bool m_active = true;

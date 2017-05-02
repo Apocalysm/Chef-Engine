@@ -5,14 +5,20 @@
 
 using ce::DrawEventManager;
 
-// Map with GameObjects 
+// Map with Sprites 
 std::map<int, std::map<int, ce::Sprite*>> ce::DrawEventManager::enumToMapSpr;
 
-// Map with GameObjects recently created
+// Map with Sprites recently created
 std::map<int, std::map<int, ce::Sprite*>> ce::DrawEventManager::enumToMapNewSpr;
 
 DrawEventManager::DrawEventManager()
 {
+	for (int i = 0; i < ce::GameObject::LAYER_AMOUNT; i++)
+	{
+		SpriteMap map;
+		enumToMapSpr.insert(std::make_pair(i, map));
+		enumToMapNewSpr.insert(std::make_pair(i, map));
+	}
 }
 
 void DrawEventManager::AddSprite(ce::Sprite* sprite)
@@ -22,19 +28,14 @@ void DrawEventManager::AddSprite(ce::Sprite* sprite)
 
 void ce::DrawEventManager::RemoveSprite(Sprite * sprite)
 {
-	const unsigned long long ID = sprite->GetGameObject()->GetID();
+	if (sprite != nullptr)
+	{
+		const unsigned long long ID = sprite->GetGameObject()->GetID();
 
-	if (sprite->isNew)
-	{
-		// Deletes and erases the requested sprite from the map of new sprites
-		delete enumToMapNewSpr[sprite->drawOrder][ID];
-		enumToMapNewSpr[sprite->drawOrder].erase(ID);
-	}
-	else
-	{
-		// Deletes and erases the requested sprite from the map of sprites
-		delete enumToMapSpr[sprite->drawOrder][ID];
-		enumToMapSpr[sprite->drawOrder].erase(ID);
+		if (sprite->isNew)
+			enumToMapNewSpr[sprite->drawOrder].erase(ID);
+		else
+			enumToMapSpr[sprite->drawOrder].erase(ID);
 	}
 }
 
@@ -44,10 +45,14 @@ void ce::DrawEventManager::Draw(sf::RenderWindow& window)
 	{
 		for (auto outer_it = enumToMapSpr.begin(); outer_it != enumToMapSpr.end(); outer_it++)
 		{
-			for (auto inner_it = outer_it->second.begin(); inner_it != outer_it->second.end(); inner_it++)
+			// If there is any sprite in the map
+			if (!outer_it->second.empty())
 			{
-				if (inner_it->second->GetEnabled() && inner_it->second->gameObject->GetActive())
-					window.draw(*inner_it->second->sprite);
+				for (auto inner_it = outer_it->second.begin(); inner_it != outer_it->second.end(); inner_it++)
+				{
+					if (inner_it->second->GetEnabled() && inner_it->second->gameObject->GetActive())
+						window.draw(*inner_it->second->sprite);
+				}
 			}
 		}
 	}
@@ -56,18 +61,22 @@ void ce::DrawEventManager::Draw(sf::RenderWindow& window)
 	{
 		for (auto outer_it = enumToMapNewSpr.begin(); outer_it != enumToMapNewSpr.end(); outer_it++)
 		{
-			for (auto inner_it = outer_it->second.begin(); inner_it != outer_it->second.end(); inner_it++)
+			// If there is any sprite in the map
+			if (!outer_it->second.empty())
 			{
-				if (inner_it->second->GetEnabled() && inner_it->second->gameObject->GetActive())
-					window.draw(*inner_it->second->sprite);
+				for (auto inner_it = outer_it->second.begin(); inner_it != outer_it->second.end(); inner_it++)
+				{
+					if (inner_it->second->GetEnabled() && inner_it->second->gameObject->GetActive())
+						window.draw(*inner_it->second->sprite);
 
-				inner_it->second->isNew = false;
+					inner_it->second->isNew = false;
 
-				// Adds the new object to the other map since it isn't new anymore
-				enumToMapSpr[inner_it->second->drawOrder].insert(std::make_pair(inner_it->second->gameObject->GetID(), inner_it->second));
+					// Adds the new object to the other map since it isn't new anymore
+					enumToMapSpr[inner_it->second->drawOrder].insert(std::make_pair(inner_it->second->gameObject->GetID(), inner_it->second));
+				}
 
-				// Removes the object from the map of new objects
-				enumToMapNewSpr[inner_it->second->drawOrder].erase(inner_it->second->gameObject->GetID());
+				// Clears all the inner maps since they shouldn't contain anything anymore
+				outer_it->second.clear();
 			}
 		}
 	}

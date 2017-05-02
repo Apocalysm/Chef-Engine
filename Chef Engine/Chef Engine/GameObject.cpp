@@ -1,11 +1,15 @@
 #include "GameObject.h"
 #include "Component.h"
 #include "GameObjectManager.h"
+#include "DrawEventManager.h"
+#include "Sprite.h"
 
 using ce::GameObject;
 
 // Initializes our ID generator
 unsigned long long ce::GameObject::uniqueIDCounter = 0;
+
+const int ce::GameObject::LAYER_AMOUNT = 6;
 
 GameObject::GameObject()
 {
@@ -13,7 +17,6 @@ GameObject::GameObject()
 }
 
 GameObject::GameObject(std::string name)
-	: Object(name)
 { 
 	// Sets the instanceID of the object to the incremented value of uniqueIDCounter
 	instanceID = uniqueIDCounter++;
@@ -90,10 +93,8 @@ void GameObject::ComponentUpdate()
 // Adds a new component of the specified type
 ce::Component* GameObject::AddComponent(const int hash)
 {
-		
 	if(GameObject::GetComponentInternal(hash) == nullptr)
 		return nullptr;
-		
 }
 
 // Tries to get a component of the specified type from GameObject's vector 'components'
@@ -143,6 +144,45 @@ void GameObject::RemoveComponent(const int hash)
 			break;
 		}
 	}
+}
+
+// Getter and setter methods for 'name' variable
+std::string GameObject::GetName() const
+{
+	return name;
+}
+void GameObject::SetName(std::string name)
+{
+	this->name = name;
+}
+
+// Getter and setter methods for 'tag' variable
+std::string GameObject::GetTag() const
+{
+	return tag;
+}
+void GameObject::SetTag(std::string tag)
+{
+	this->tag = tag;
+}
+
+void GameObject::Destroy()
+{
+	ce::Sprite* spr = GetComponentInternal<ce::Sprite>();
+
+	if (spr != nullptr)
+		ce::DrawEventManager::RemoveSprite(spr);
+
+	// Iterates all of GameObject's components
+	for (auto it = components.begin(); it != components.end(); it++)
+	{
+		// We delete the object from the vector and the memory
+		delete (*it);
+
+		it = components.erase(it);
+	}
+
+	ce::GameObjectManager::RemoveObject(this);
 }
 
 void GameObject::DoBind(lua_State * L)

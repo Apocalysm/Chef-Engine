@@ -6,22 +6,16 @@ using ce::Sprite;
 
 Sprite::Sprite()
 {
-	ce::DrawEventManager::AddSprite(this);
-
-	// Gets the transform of the owner of this sprite-component
-	transform = gameObject->GetTransform();
+	sprite = new sf::Sprite();
 }
 
 Sprite::Sprite(const std::string& fileName, const int newDrawOrder)
 {
-	// Gets the transform of the owner of this sprite-component
-	transform = gameObject->GetTransform();
+	sprite = new sf::Sprite();
 
 	//SetSprite(fileName);
 
 	drawOrder = newDrawOrder;
-
-	ce::DrawEventManager::AddSprite(this);
 }
 
 void Sprite::Update()
@@ -126,6 +120,16 @@ sf::Color Sprite::GetColor() const
 int Sprite::GetDrawOrder() const
 {
 	return drawOrder;
+}
+
+void ce::Sprite::SetGameObject(GameObject * gameObject)
+{
+	this->gameObject = gameObject;
+
+	// Gets the transform of the owner of this sprite-component
+	transform = gameObject->GetTransform();
+	
+	ce::DrawEventManager::AddSprite(this);
 }
 
 void Sprite::DoBind(lua_State * L)

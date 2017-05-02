@@ -44,6 +44,8 @@ namespace ce
 
 		int GetDrawOrder() const;
 
+		void SetGameObject(GameObject* gameObject);
+
 	private:
 		friend class DrawEventManager;
 
@@ -57,7 +59,7 @@ namespace ce
 		bool isNew = true;
 
 		// The transform of this components GameObject
-		ce::Transform* transform; 
+		ce::Transform* transform;
 
 		// Bridges parts of this script to Lua
 		static void DoBind(lua_State* L); 
