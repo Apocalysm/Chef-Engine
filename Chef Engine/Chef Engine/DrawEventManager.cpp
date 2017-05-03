@@ -23,10 +23,11 @@ DrawEventManager::DrawEventManager()
 
 void DrawEventManager::AddSprite(ce::Sprite* sprite)
 {
+	//enumToMapNewSpr[sprite->GetDrawOrder()].insert(std::make_pair(sprite->GetGameObject()->GetID(), sprite));
 	enumToMapNewSpr[sprite->GetDrawOrder()].insert(std::make_pair(sprite->GetGameObject()->GetID(), sprite));
 }
 
-void ce::DrawEventManager::RemoveSprite(Sprite * sprite)
+void ce::DrawEventManager::RemoveSprite(Sprite* sprite)
 {
 	if (sprite != nullptr)
 	{
@@ -36,6 +37,8 @@ void ce::DrawEventManager::RemoveSprite(Sprite * sprite)
 			enumToMapNewSpr[sprite->drawOrder].erase(ID);
 		else
 			enumToMapSpr[sprite->drawOrder].erase(ID);
+
+		delete sprite->sprite;
 	}
 }
 
@@ -45,6 +48,7 @@ void ce::DrawEventManager::Draw(sf::RenderWindow& window)
 	{
 		for (auto outer_it = enumToMapSpr.begin(); outer_it != enumToMapSpr.end(); outer_it++)
 		{
+			//tilemaps[outer_it->first].draw
 			// If there is any sprite in the map
 			if (!outer_it->second.empty())
 			{
@@ -52,6 +56,7 @@ void ce::DrawEventManager::Draw(sf::RenderWindow& window)
 				{
 					if (inner_it->second->GetEnabled() && inner_it->second->gameObject->GetActive())
 						window.draw(*inner_it->second->sprite);
+					
 				}
 			}
 		}

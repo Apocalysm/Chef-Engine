@@ -13,6 +13,7 @@ namespace ce
 
 		static void AddSprite(Sprite* sprite);
 		static void RemoveSprite(Sprite* sprite);
+		static void AddTmxLayer();
 		void Draw(sf::RenderWindow& window);
 
 	private:

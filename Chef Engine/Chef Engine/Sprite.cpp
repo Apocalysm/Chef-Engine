@@ -18,6 +18,12 @@ Sprite::Sprite(const std::string& fileName, const int newDrawOrder)
 	drawOrder = newDrawOrder;
 }
 
+
+Sprite::~Sprite()
+{
+	delete sprite;
+}
+
 void Sprite::Update()
 {
 	// Updates psition, scale and rotation depending on the set values in the transform
@@ -122,7 +128,7 @@ int Sprite::GetDrawOrder() const
 	return drawOrder;
 }
 
-void ce::Sprite::SetGameObject(GameObject * gameObject)
+void ce::Sprite::SetGameObject(GameObject* gameObject)
 {
 	this->gameObject = gameObject;
 
