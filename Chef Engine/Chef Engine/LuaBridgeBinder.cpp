@@ -99,7 +99,6 @@ void LuaBridgeBinder::BindAll()
 	luaL_openlibs(L);
 
 	// Here you put all the method calls for the classes you want to bind
-	Bind<ce::Object>(L);
 	Bind<ce::Component>(L);
 	
 	// Gets all the .lua file_paths

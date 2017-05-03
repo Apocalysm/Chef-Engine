@@ -1,3 +1,14 @@
-collider = {}
+comp = Chef.Component()
 
-Chef.RegisterComponent(collider);
+print(comp.enabled)
+comp.enabled = false
+print(comp.enabled)
+
+
+local publicClass={}
+
+function publicClass.helloWorld()
+		print("Hello World")
+end
+
+return publicClass
