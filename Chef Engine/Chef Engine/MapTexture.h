@@ -6,17 +6,17 @@
 class MapTexture
 {
 public:
-	MapTexture(const sf::VertexArray& va, const sf::Texture& texture);
+	MapTexture(const sf::VertexArray* va, const sf::Texture& txt);
 	~MapTexture();
 
-	sf::VertexArray GetVertexArray() const;
+	const sf::VertexArray& GetVertexArray() const;
 	void SetVertexArray(const sf::VertexArray& va);
 
-	sf::Texture GetTexture() const;
+	const sf::Texture& GetTexture() const;
 	void SetTexture(const sf::Texture& txt);
 
 private:
-	sf::VertexArray* vertex_array;
-	sf::Texture* texture;
+	const sf::VertexArray* vertex_array;
+	const sf::Texture* texture;
 };
 

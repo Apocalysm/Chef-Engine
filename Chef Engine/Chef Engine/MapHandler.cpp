@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MapHandler.h"
-#include <iostream>
+#include <algorithm>
 using ce::MapHandler;
 
 MapHandler::MapHandler()
@@ -45,7 +45,6 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 	tileSets = map->GetTilesets();
 	tileLayers = map->GetTileLayers();
-
 	
 	// Load in all the texture to the specific tile map
 	for (size_t i = 0; i < tileSets.size(); i++)
@@ -73,7 +72,8 @@ void MapHandler::LoadMap(const std::string& fileName)
 	{
 		//Making a vertexarray so it can act as a list of quads
 		//vertexLayers.push_back(new sf::VertexArray(sf::Quads, mapHeight * mapWidth * 4));
-		vertexLayers.push_back(new MapTexture());
+		
+		std::vector<int> mapTileID;
 
 		for (size_t i = 0; i < mapHeight; i++)
 		{
@@ -83,17 +83,32 @@ void MapHandler::LoadMap(const std::string& fileName)
 				const Tmx::MapTile tile = tiles->GetTile(j, i);
 				if (tile.tilesetId == -1)
 					continue;
+
+				if (std::find(mapTileID.begin(), mapTileID.end(), tile.tilesetId) != mapTileID.end())
+				{
+
+				}
+
+				else
+				{
+					vertexLayers.push_back(new MapTexture(new sf::VertexArray(sf::Quads, mapHeight * mapWidth * 4), tileTextures[tile.tilesetId]));
+					mapTileID.push_back(tile.tilesetId);
+					
+				}
+
+
 				//Get the current layer
-				sf::VertexArray* vertexLayer = *(vertexLayers.end() - 1);
+				sf::VertexArray vertexLayer = vertexLayers[tile.tilesetId]->GetVertexArray();
 				//Get the quad
-				sf::Vertex* quad = &(*vertexLayer)[(i * mapWidth + j) * 4];
+				sf::Vertex* quad = &(vertexLayer)[(i * mapWidth + j) * 4];
+
+				
 
 				//Find the position in the tileset texture
 				unsigned int tileNumber = tile.id;
 				int tu;
 				int tv;
 				
-				std::cout << tile.tilesetId << std::endl;
 				
 				tu = tileNumber % (tileTextures[tile.tilesetId].getSize().x / tileWidth);
 				tv = tileNumber / (tileTextures[tile.tilesetId].getSize().x / tileWidth);
@@ -132,6 +147,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 		}
 	}
 
+
 }
 
 void ce::MapHandler::DrawMap(sf::RenderWindow& window)
@@ -152,8 +168,9 @@ void ce::MapHandler::DrawMap(sf::RenderWindow& window)
 			window.draw(*i, *j);
 		}*/
 		sf::RenderStates s;
-		s.texture = *i->GetTexture();
-		window.draw(*i->GetVertexArray(), s);
+		s.texture = &i->GetTexture();
+		window.draw(i->GetVertexArray(), s);
+
 	}
 
 	/*
@@ -162,8 +179,8 @@ void ce::MapHandler::DrawMap(sf::RenderWindow& window)
 		delete (*it);
 
 		it = states.erase(it);
-	}
-	*/
+	}*/
+	
 }
 
 void ce::MapHandler::AddMapName(std::string* mapName)

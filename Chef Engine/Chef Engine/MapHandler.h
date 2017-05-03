@@ -50,6 +50,7 @@ namespace ce
 		std::vector<Tmx::TileLayer*> tileLayers;
 		std::vector <MapTexture*> vertexLayers;
 		std::vector<sf::RenderStates*> states;
+		std::vector<Tmx::Object*> objects;
 
 		Tmx::Map* map;
 
