@@ -66,4 +66,3 @@ namespace ce
 		static void DoBind(lua_State* L); 
 	};
 }
-
