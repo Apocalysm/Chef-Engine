@@ -2,6 +2,7 @@
 #include "Sprite.h"
 #include "GameObject.h"
 #include "Component.h"
+#include "MapTexture.h"
 
 using ce::DrawEventManager;
 
@@ -12,9 +13,9 @@ std::map<int, std::map<int, ce::Sprite*>> ce::DrawEventManager::enumToMapSpr;
 std::map<int, std::map<int, ce::Sprite*>> ce::DrawEventManager::enumToMapNewSpr;
 
 // Vector containing layers from Tiled to be drawn
-std::vector<sf::VertexArray> ce::DrawEventManager::m_tileMapLayers;
+std::vector<ce::MapTexture>* ce::DrawEventManager::m_tileMapLayers;
 
-sf::RenderStates ce::DrawEventManager::renderState;
+std::vector<sf::RenderStates> ce::DrawEventManager::renderStates;
 
 
 DrawEventManager::DrawEventManager()
@@ -46,10 +47,18 @@ void ce::DrawEventManager::RemoveSprite(Sprite* sprite)
 	}
 }
 
-void ce::DrawEventManager::AddTmxLayers(std::vector<sf::VertexArray>* tileMapLayers, sf::RenderStates state)
+void ce::DrawEventManager::AddTmxLayers(std::vector<ce::MapTexture>* tileMapLayers)
 {
 	m_tileMapLayers = *tileMapLayers;
-	renderState = state;
+
+	renderStates.clear();
+
+	for (int i = 0; i < m_tileMapLayers.size(); i++)
+	{
+		sf::RenderStates state;
+		renderStates.push_back(state);
+		renderStates[i].texture = m_tileMapLayers[i].GetTexture();
+	}
 
 	// Adds as many empty SpriteMaps as the size of m_timeMapLayers
 	// This ensures that the layers will be drawn in case there are too few draw orders for sprites
@@ -68,7 +77,7 @@ void ce::DrawEventManager::Draw(sf::RenderWindow& window)
 		{
 			// Draws the layer that has the same order as tha current order to draw
 			if (outer_it->first < m_tileMapLayers.size())
-				window.draw(m_tileMapLayers[outer_it->first], renderState);
+				window.draw(m_tileMapLayers[outer_it->first], renderStates[outer_it->first]);
 			
 			// If there is any sprite in the map
 			if (!outer_it->second.empty())
