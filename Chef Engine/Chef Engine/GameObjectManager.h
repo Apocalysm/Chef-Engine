@@ -1,6 +1,5 @@
 #pragma once
 #include <map>
-#include <vector>
 
 namespace ce
 {
@@ -11,15 +10,18 @@ namespace ce
 	public:
 		GameObjectManager();
 
-		void AddObject(GameObject* object);
-		void RemoveObject(GameObject* object);
+		static void AddObject(GameObject* object);
+		static void RemoveObject(GameObject* object);
 		void CallUpdate();
 
 	private:
 		typedef std::map<int, GameObject*> GameObjectMap;
 		typedef std::map<int, GameObjectMap> LayerObjectMap;
 
-		LayerObjectMap enumToMapObj;	// Map with GameObjects recently created
-		LayerObjectMap enumToMapNewObj;	// Map with GameObjects
+		// Map with GameObjects 
+		static LayerObjectMap enumToMapObj;
+
+		// Map with GameObjects recently created
+		static LayerObjectMap enumToMapNewObj;
 	};
 }

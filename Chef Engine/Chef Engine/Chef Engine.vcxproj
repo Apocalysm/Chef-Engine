@@ -69,12 +69,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\Lua\include;..\..\LuaBridge;..\..\SFML-2.4.2\include;..\..\tmxparser\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\Lua;..\..\SFML-2.4.2\lib;..\..\tmxparser\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\dirent;..\..\Lua_\include;..\..\Lua_Bridge;..\..\SFML-2.4.2\include;..\..\tmxparser\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\Lua_;..\..\SFML-2.4.2\lib;..\..\tmxparser\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\..\Lua\include;..\..\LuaBridge;..\..\SFML-2.4.2\include;..\..\tmxparser\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\Lua;..\..\SFML-2.4.2\lib;..\..\tmxparser\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\dirent;..\..\Lua_\include;..\..\Lua_Bridge;..\..\SFML-2.4.2\include;..\..\tmxparser\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\Lua_;..\..\SFML-2.4.2\lib;..\..\tmxparser\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -129,6 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="DrawEventManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="MapHandler.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
@@ -136,16 +137,19 @@
     <ClCompile Include="MapTexture.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
+    <ClInclude Include="DrawEventManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="MapHandler.h" />
     <ClInclude Include="LuaBridgeBinder.h" />
     <ClInclude Include="MapTexture.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="Sprite.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

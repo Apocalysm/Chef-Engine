@@ -33,11 +33,15 @@
     <ClCompile Include="LuaBridgeBinder.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="MapHandler.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="MapTexture.cpp" />
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawEventManager.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -53,6 +57,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameObjectManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MapHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaBridgeBinder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawEventManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MapHandler.h">

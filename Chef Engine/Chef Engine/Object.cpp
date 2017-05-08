@@ -1,9 +1,12 @@
 #include "Object.h"
+#include "GameObjectManager.h";
+#include "GameObject.h"
 
 using ce::Object;
 
 Object::Object()
 {
+	name = "none";
 }
 
 Object::Object(std::string name)
@@ -17,9 +20,9 @@ Object::~Object()
 }
 
 // Getter and setter methods for 'name' variable
-std::string ce::Object::GetName()
+std::string ce::Object::GetName() const
 {
-	return this->name;
+	return name;
 }
 void ce::Object::SetName(std::string name)
 {
@@ -27,36 +30,30 @@ void ce::Object::SetName(std::string name)
 }
 
 // Getter and setter methods for 'tag' variable
-std::string ce::Object::GetTag()
+std::string ce::Object::GetTag() const
 {
-	return this->tag;
+	return tag;
 }
 void ce::Object::SetTag(std::string tag)
 {
 	this->tag = tag;
 }
 
-
-Object Object::Instantiate(Object object)
-{
-	return object;
-}
-
 Object Object::Destroy(Object object)
 {
+	//ce::GameObjectManager::RemoveObject((ce::GameObject)this);
 	return Object();
 }
 
-void ce::Object::DoBind(lua_State * L)
+void ce::Object::DoBind(lua_State* L)
 {
 	luabridge::getGlobalNamespace(L)
 		.beginNamespace("Chef")
 			.beginClass<Object>("Object")
-				.addConstructor<void(*)(void)>()
-				//.addProperty("name", ce::Object::GetName, ce::Object::SetName)
-				.addFunction("Instantiate", &Object::Instantiate)
+				.addConstructor<void(*)(std::string)>()
+				.addProperty("name", &Object::GetName, &Object::SetName)
+				.addProperty("tag", &Object::GetTag, &Object::SetTag)
 				.addFunction("Destroy", &Object::Destroy)
 			.endClass()
 		.endNamespace();
 }
-

@@ -15,20 +15,18 @@ namespace ce
 		~Object();
 
 		// Getter and setter methods for 'name' variable
-		std::string GetName();
+		std::string GetName() const;
 		void SetName(std::string name);
 
 		// Getter and setter methods for 'tag' variable
-		std::string GetTag();
+		std::string GetTag() const;
 		void SetTag(std::string tag);
-
-		// Creates a new instance of the specified Object
-		Object Instantiate(Object object);
 
 		// Destroys the specified Object instance
 		Object Destroy(Object object);
 
 	protected:
+		// Binds all relevant members of this class with LuaBridge
 		static void DoBind(lua_State* L);
 
 	private:

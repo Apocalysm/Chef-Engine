@@ -2,6 +2,9 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "MapHandler.h"
+#include "Sprite.h"
+#include "GameObjectManager.h"
+#include "DrawEventManager.h"
 
 #include <Windows.h>
 #include <typeinfo>
@@ -11,7 +14,7 @@
 #include <Tmx\TmxTile.h>
 
 #if _DEBUG
-int main()
+int main(int argc, char* argv[])
 #else
 int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #endif

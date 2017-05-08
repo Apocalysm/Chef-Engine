@@ -19,10 +19,16 @@ namespace ce
 		const sf::Vector2f& GetPosition() const;
 
 		void SetRotation(float newRotation);
+
+		float GetRotation() const;
+
 		void Rotate(float angle);
 		
 		void SetScale(const sf::Vector2f& newScale);
 		void SetScale(const float x, const float y);
+
+		sf::Vector2f GetScale() const;
+
 
 	private:
 		float rotation;

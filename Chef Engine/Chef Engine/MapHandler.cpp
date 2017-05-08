@@ -2,6 +2,8 @@
 
 #include "MapHandler.h"
 #include <algorithm>
+#include "DrawEventManager.h"
+
 using ce::MapHandler;
 
 MapHandler::MapHandler()
@@ -171,7 +173,10 @@ void ce::MapHandler::DrawMap(sf::RenderWindow& window)
 		s.texture = &i->GetTexture();
 		window.draw(i->GetVertexArray(), s);
 
+		
 	}
+
+	ce::DrawEventManager::
 
 	/*
 	for (auto it = states.begin(); it != states.end();)
@@ -180,7 +185,6 @@ void ce::MapHandler::DrawMap(sf::RenderWindow& window)
 
 		it = states.erase(it);
 	}*/
-	
 }
 
 void ce::MapHandler::AddMapName(std::string* mapName)
