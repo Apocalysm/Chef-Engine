@@ -14,7 +14,7 @@ int ce::ComponentRef::componentIDCounter = 0;
 
 void ComponentRef()
 {
-
+	
 }
 
 void ce::ComponentRef::BindComponentID()

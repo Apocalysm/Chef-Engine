@@ -1,7 +1,5 @@
 #include "LuaBridgeBinder.h"
 
-#include <fstream>
-
 // All the different classes we want to bind with Lua Bridge
 #include "Object.h"
 #include "Component.h"
@@ -132,88 +130,4 @@ void LuaBridgeBinder::LoadLua(lua_State * L, const std::string & path)
 		std::cerr << lua_tostring(L, -1) << std::endl;
 		assert(false);
 	}
-}
-
-void LuaBridgeBinder::DoRequire(const std::vector<std::string*> & paths)
-{
-    std::fstream lua_file;
-
-    std::vector<std::string*> fileNames;
-    for (auto it = paths.begin(); it != paths.end(); it += 2)
-    {
-        std::string* newFileName = new std::string();
-        *newFileName = (**it);
-        newFileName->erase(newFileName->length() - 4, 4);
-        fileNames.push_back(newFileName);
-    }
-
-    std::vector<std::string*> filePaths;
-    for (auto it = paths.begin(); it != paths.end(); it++)
-    {
-        it++;
-        std::string* newFilePath = new std::string();
-        *newFilePath = (**it);
-        newFilePath->erase(newFilePath->length() - (*(it -1))->length(), (*(it - 1))->length());
-
-        std::vector<int> characterLocations;
-        for (int i = 0; i < newFilePath->length(); i++)
-        {
-            if ((*newFilePath)[i] == '\\')
-                characterLocations.push_back(i);
-        }
-
-        for (auto inner_it = characterLocations.begin(); inner_it != characterLocations.end(); inner_it++)
-        {
-            (*newFilePath)[*inner_it] = '/';
-        }
-
-        filePaths.push_back(newFilePath);
-    }
-
-    for (auto outer_it = paths.begin(); outer_it != paths.end(); outer_it++)
-    {
-        outer_it++;  
-
-        std::stringstream file_dump;
-
-        file_dump << "package.path = package.path .. \"";
-
-        for (auto inner_it = filePaths.begin(); inner_it != filePaths.end(); inner_it++)
-        {
-            if (inner_it > filePaths.begin())
-            {
-                if(**inner_it != (**(inner_it - 1)))
-                    file_dump << ";../Chef Engine/" << (**inner_it) << "?.lua";
-            }
-            else
-                file_dump << ";../Chef Engine/" << (**inner_it) << "?.lua";
-        }
-
-        file_dump << "\"" << std::endl;
-
-        for (auto inner_it = fileNames.begin(); inner_it != fileNames.end(); inner_it++)
-        {
-            if ((*outer_it)->find(**inner_it) == (*outer_it)->npos)
-            {
-                file_dump << "require \"" << (**inner_it) << "\"" << std::endl;
-            }
-        }
-
-        lua_file.open((*outer_it)->c_str());
-        
-        std::string str;
-
-        while (std::getline(lua_file, str))
-        {
-            file_dump << str << std::endl;
-        }
-
-        lua_file.close();
-
-        lua_file.open((*outer_it)->c_str(), std::fstream::out | std::fstream::trunc);
-
-        lua_file << file_dump.str();
-
-        lua_file.close();
-    }
 }

@@ -19,7 +19,6 @@ namespace ce
 	private:
 		static void LoadLua(lua_State* L, const std::string& path);
         
-        static void DoRequire(const std::vector<std::string*> & paths);
 	};
 }
 

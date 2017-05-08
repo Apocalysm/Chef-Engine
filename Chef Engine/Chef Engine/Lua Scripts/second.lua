@@ -2,7 +2,7 @@ package.path = package.path .. ";../Chef Engine/Lua Scripts/Components/?.lua;../
 
 require "test"
 
-print(comp.enabled)
+--print(comp.enabled)
 
 comp2 = Chef.Component()
 comp2.enabled = false
