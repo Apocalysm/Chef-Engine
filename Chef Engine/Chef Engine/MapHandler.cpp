@@ -75,7 +75,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 		//Making a vertexarray so it can act as a list of quads
 		//vertexLayers.push_back(new sf::VertexArray(sf::Quads, mapHeight * mapWidth * 4));
 		
-		std::vector<int> mapTileID;
+
 
 		for (size_t i = 0; i < mapHeight; i++)
 		{
@@ -85,6 +85,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 				const Tmx::MapTile tile = tiles->GetTile(j, i);
 				if (tile.tilesetId == -1)
 					continue;
+
 
 				if (std::find(mapTileID.begin(), mapTileID.end(), tile.tilesetId) != mapTileID.end())
 				{
@@ -100,9 +101,9 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 
 				//Get the current layer
-				sf::VertexArray vertexLayer = vertexLayers[tile.tilesetId]->GetVertexArray();
+				sf::VertexArray& vertexLayer = vertexLayers[tile.tilesetId]->GetVertexArray();
 				//Get the quad
-				sf::Vertex* quad = &(vertexLayer)[(i * mapWidth + j) * 4];
+				sf::Vertex* quad = &vertexLayer[(i * mapWidth + j) * 4];
 
 				
 
@@ -148,44 +149,9 @@ void MapHandler::LoadMap(const std::string& fileName)
 			}
 		}
 	}
-
-
-}
-
-void ce::MapHandler::DrawMap(sf::RenderWindow& window)
-{
-	/*
-	for (size_t i = 0; i < tileTextures.size(); i++)
-	{
-		sf::RenderStates* state = new sf::RenderStates;
-		state->texture = &tileTextures[i];
-		states.push_back(state);
-	}
-	*/
-
-	for (auto i : vertexLayers)
-	{
-		/*for (auto j : states)
-		{
-			window.draw(*i, *j);
-		}*/
-		sf::RenderStates s;
-		s.texture = *i->GetTexture();
-		window.draw(*i->GetVertexArray(), s);
-
-		
-	}
-
 	ce::DrawEventManager::AddTmxLayers(vertexLayers);
-
-	/*
-	for (auto it = states.begin(); it != states.end();)
-	{
-		delete (*it);
-
-		it = states.erase(it);
-	}*/
 }
+
 
 void ce::MapHandler::AddMapName(std::string* mapName)
 {

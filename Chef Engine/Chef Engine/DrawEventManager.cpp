@@ -13,7 +13,7 @@ std::map<int, std::map<int, ce::Sprite*>> ce::DrawEventManager::enumToMapSpr;
 std::map<int, std::map<int, ce::Sprite*>> ce::DrawEventManager::enumToMapNewSpr;
 
 // Vector containing layers from Tiled to be drawn
-std::vector<ce::MapTexture>* ce::DrawEventManager::m_tileMapLayers;
+std::vector<ce::MapTexture*> ce::DrawEventManager::m_tileMapLayers;
 
 std::vector<sf::RenderStates> ce::DrawEventManager::renderStates;
 
@@ -22,12 +22,14 @@ DrawEventManager::DrawEventManager()
 {
 }
 
+
 void DrawEventManager::AddSprite(ce::Sprite* sprite)
 {
 	// Adds the sprite component in the map
 	// The key of the outer maps is the sprites draw order and the inner maps key is the sprites objects ID
 	enumToMapNewSpr[sprite->GetDrawOrder()].insert(std::make_pair(sprite->GetGameObject()->GetID(), sprite));
 }
+
 
 void ce::DrawEventManager::RemoveSprite(Sprite* sprite)
 {
@@ -47,17 +49,18 @@ void ce::DrawEventManager::RemoveSprite(Sprite* sprite)
 	}
 }
 
-void ce::DrawEventManager::AddTmxLayers(std::vector<ce::MapTexture>* tileMapLayers)
+
+void ce::DrawEventManager::AddTmxLayers(std::vector<ce::MapTexture*> tileMapLayers)
 {
-	m_tileMapLayers = *tileMapLayers;
+	m_tileMapLayers = tileMapLayers;
 
 	renderStates.clear();
 
 	for (int i = 0; i < m_tileMapLayers.size(); i++)
 	{
 		sf::RenderStates state;
+		state.texture = &m_tileMapLayers[i]->GetTexture();
 		renderStates.push_back(state);
-		renderStates[i].texture = m_tileMapLayers[i].GetTexture();
 	}
 
 	// Adds as many empty SpriteMaps as the size of m_timeMapLayers
@@ -69,6 +72,7 @@ void ce::DrawEventManager::AddTmxLayers(std::vector<ce::MapTexture>* tileMapLaye
 	}
 }
 
+
 void ce::DrawEventManager::Draw(sf::RenderWindow& window)
 {
 	if (!enumToMapSpr.empty())
@@ -77,7 +81,7 @@ void ce::DrawEventManager::Draw(sf::RenderWindow& window)
 		{
 			// Draws the layer that has the same order as tha current order to draw
 			if (outer_it->first < m_tileMapLayers.size())
-				window.draw(m_tileMapLayers[outer_it->first], renderStates[outer_it->first]);
+				window.draw(m_tileMapLayers[outer_it->first]->GetVertexArray(), renderStates[outer_it->first]);
 			
 			// If there is any sprite in the map
 			if (!outer_it->second.empty())

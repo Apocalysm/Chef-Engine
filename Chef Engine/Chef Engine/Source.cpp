@@ -26,8 +26,9 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	ce::MapHandler* map = new ce::MapHandler;
 
+	ce::DrawEventManager* drawManager = new ce::DrawEventManager();
 
-	map->LoadMap("sewers.tmx");
+	map->LoadMap("orthogonal-outside.tmx");
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -37,46 +38,10 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 				window.close();
 		}
 
-		objManager->CallUpdate();
 
-		if (tempTimer == 1)
-		{
-			object->GetTransform()->SetPosition(object->GetTransform()->GetPosition().x + 1, object->GetTransform()->GetPosition().y);
-			object->GetComponent<ce::Sprite>()->SetRotation(object->GetComponent<ce::Sprite>()->GetRotation() + 1);
-			tempTimer = 0;
-		}
-		tempTimer++;
+		window.clear(sf::Color::Cyan);
 
-		if (tempTimer2 == 5 && tempBool)
-		{
-			object2->GetTransform()->SetPosition(object2->GetTransform()->GetPosition().x + 3, object2->GetTransform()->GetPosition().y-5);
-			object2->GetComponent<ce::Sprite>()->SetRotation(object->GetComponent<ce::Sprite>()->GetRotation() -6);
-			tempTimer2 = 0;
-		}
-		tempTimer2++;
-
-		if (tempTimer3 == 1)
-		{
-			object3->GetTransform()->SetPosition(object3->GetTransform()->GetPosition().x -1, object3->GetTransform()->GetPosition().y-10);
-			object3->GetComponent<ce::Sprite>()->SetRotation(object3->GetComponent<ce::Sprite>()->GetRotation() + 7);
-			tempTimer3 = 0;
-		}
-		tempTimer3 = 0;
-
-		if (temptimer4 == 100)
-		{
-			for (auto it = tempVector.begin(); it != tempVector.end();)
-			{
-				(*it)->Destroy();
-				it = tempVector.erase(it);
-			}
-
-			tempVector.clear();
-		}
-		temptimer4++;
-
-		window.clear();
-		map->DrawMap(window);
+		drawManager->Draw(window);
 		window.display();
 
 

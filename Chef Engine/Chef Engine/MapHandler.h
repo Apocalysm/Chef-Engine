@@ -31,7 +31,6 @@ namespace ce
 
 		void LoadMapIndex(const int mapIndex);
 		void LoadMap(const std::string& fileName);
-		void DrawMap(sf::RenderWindow& window);
 		void AddMapName(std::string* mapName);
 		void AddMapNameIndex(int& index, std::string* mapName);
 
@@ -51,6 +50,7 @@ namespace ce
 		std::vector <MapTexture*> vertexLayers;
 		std::vector<sf::RenderStates*> states;
 		std::vector<Tmx::Object*> objects;
+		std::vector<int> mapTileID;
 
 		Tmx::Map* map;
 
