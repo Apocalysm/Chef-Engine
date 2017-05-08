@@ -13,7 +13,7 @@ namespace ce
 
 		static void AddSprite(Sprite* sprite);
 		static void RemoveSprite(Sprite* sprite);
-		static void AddTmxLayers(std::vector<sf::VertexArray>* tileMapLayers, sf::RenderStates state);
+		static void AddTmxLayers(std::vector<sf::VertexArray>* tileMapLayers);
 		void Draw(sf::RenderWindow& window);
 
 	private:
@@ -27,8 +27,8 @@ namespace ce
 		static OrderSpriteMap enumToMapSpr;
 
 		// Vector containing layers from Tiled to be drawn
-		static std::vector<sf::VertexArray> m_tileMapLayers;
+		static std::vector<ce::MapTexture>* m_tileMapLayers;
 
-		static sf::RenderStates renderState;
+		static std::vector<sf::RenderStates> renderStates;
 	};
 }
