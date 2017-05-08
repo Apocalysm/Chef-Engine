@@ -171,18 +171,21 @@ void GameObject::Destroy()
 	ce::Sprite* spr = GetComponentInternal<ce::Sprite>();
 
 	if (spr != nullptr)
+	{
 		ce::DrawEventManager::RemoveSprite(spr);
+		//delete GetComponent<Sprite>()->;
+	}
 
 	// Iterates all of GameObject's components
-	for (auto it = components.begin(); it != components.end(); it++)
+	for (auto it = components.begin(); it != components.end();)
 	{
-		// We delete the object from the vector and the memory
+		// Deletes the component from the vector and the memory
 		delete (*it);
-
 		it = components.erase(it);
 	}
 
 	ce::GameObjectManager::RemoveObject(this);
+	delete this;
 }
 
 void GameObject::DoBind(lua_State * L)
@@ -196,6 +199,9 @@ void GameObject::DoBind(lua_State * L)
 				.addFunction("AddComponent", &GameObject::AddComponent)
 				.addFunction("GetComponent", &GameObject::GetComponent)
 				.addFunction("RemoveComponent", &GameObject::RemoveComponent)
+				.addProperty("name", &GameObject::GetName, &GameObject::SetName)
+				.addProperty("tag", &GameObject::GetTag, &GameObject::SetTag)
+				.addFunction("Destroy", &GameObject::Destroy)
 			.endClass()
 		.endNamespace();
 			

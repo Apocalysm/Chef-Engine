@@ -170,13 +170,13 @@ void ce::MapHandler::DrawMap(sf::RenderWindow& window)
 			window.draw(*i, *j);
 		}*/
 		sf::RenderStates s;
-		s.texture = &i->GetTexture();
-		window.draw(i->GetVertexArray(), s);
+		s.texture = *i->GetTexture();
+		window.draw(*i->GetVertexArray(), s);
 
 		
 	}
 
-	ce::DrawEventManager::
+	ce::DrawEventManager::AddTmxLayers(vertexLayers);
 
 	/*
 	for (auto it = states.begin(); it != states.end();)

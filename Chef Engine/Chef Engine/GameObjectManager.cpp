@@ -33,13 +33,14 @@ void ce::GameObjectManager::RemoveObject(GameObject* object)
 	if (object->isNew)
 	{
 		// Deletes and erases the requested object from the map of new objects
-		delete enumToMapNewObj[layer][ID];
+		//delete enumToMapNewObj[layer][ID];
 		enumToMapNewObj[layer].erase(ID);
+		//enumToMapNewObj[layer].
 	}
 	else
 	{
 		// Deletes and erases the requested object from the map of objects
-		delete enumToMapObj[layer][ID];
+		//delete enumToMapObj[layer][ID];
 		enumToMapObj[layer].erase(ID);
 	}
 }

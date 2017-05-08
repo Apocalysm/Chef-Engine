@@ -9,6 +9,7 @@ namespace ce
 	public:
 		Sprite();
 		Sprite(const std::string& fileName, const int drawOrder);
+		~Sprite();
 
 		void Update();
 
@@ -65,4 +66,3 @@ namespace ce
 		static void DoBind(lua_State* L); 
 	};
 }
-
