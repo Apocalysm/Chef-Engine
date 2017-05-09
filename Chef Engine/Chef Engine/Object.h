@@ -22,9 +22,6 @@ namespace ce
 		std::string GetTag() const;
 		void SetTag(std::string tag);
 
-		// Creates a new instance of the specified Object
-		Object Instantiate(Object object);
-
 		// Destroys the specified Object instance
 		Object Destroy(Object object);
 

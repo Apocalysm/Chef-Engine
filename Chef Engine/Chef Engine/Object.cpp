@@ -1,4 +1,6 @@
 #include "Object.h"
+#include "GameObjectManager.h";
+#include "GameObject.h"
 
 using ce::Object;
 
@@ -37,14 +39,9 @@ void ce::Object::SetTag(std::string tag)
 	this->tag = tag;
 }
 
-
-Object Object::Instantiate(Object object)
-{
-	return object;
-}
-
 Object Object::Destroy(Object object)
 {
+	//ce::GameObjectManager::RemoveObject((ce::GameObject)this);
 	return Object();
 }
 
@@ -56,9 +53,7 @@ void ce::Object::DoBind(lua_State* L)
 				.addConstructor<void(*)(std::string)>()
 				.addProperty("name", &Object::GetName, &Object::SetName)
 				.addProperty("tag", &Object::GetTag, &Object::SetTag)
-				.addFunction("Instantiate", &Object::Instantiate)
 				.addFunction("Destroy", &Object::Destroy)
 			.endClass()
 		.endNamespace();
 }
-

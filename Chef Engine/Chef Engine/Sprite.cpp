@@ -1,22 +1,27 @@
 #include "Sprite.h"
 #include "GameObject.h"
+#include "DrawEventManager.h"
 
 using ce::Sprite;
 
 Sprite::Sprite()
 {
-	
+	sprite = new sf::Sprite();
 }
 
-Sprite::Sprite(const std::string& fileName, const int drawOrder)
+Sprite::Sprite(const std::string& fileName, const int newDrawOrder)
 {
-	// Gets the transform of the owner of this sprite-component
-	//transform = GetGameObject().GetComponent<ce::Transform>();
-	
+	sprite = new sf::Sprite();
 
-	SetSprite(fileName);
+	//SetSprite(fileName);
 
-	m_drawOrder = drawOrder;
+	drawOrder = newDrawOrder;
+}
+
+
+Sprite::~Sprite()
+{
+	delete sprite;
 }
 
 void Sprite::Update()
@@ -81,9 +86,9 @@ void Sprite::SetColor(const int r, const int g, const int b, const int a)
 	sprite->setColor(sf::Color(r, g, b, a));
 }
 
-void Sprite::SetDrawOrder(const int drawOrder)
+void Sprite::SetDrawOrder(const int newDrawOrder)
 {
-	m_drawOrder = drawOrder;
+	drawOrder = newDrawOrder;
 }
 
 sf::Sprite* Sprite::GetSprite() const
@@ -120,7 +125,17 @@ sf::Color Sprite::GetColor() const
 
 int Sprite::GetDrawOrder() const
 {
-	return m_drawOrder;
+	return drawOrder;
+}
+
+void ce::Sprite::SetGameObject(GameObject* gameObject)
+{
+	this->gameObject = gameObject;
+
+	// Gets the transform of the owner of this sprite-component
+	transform = gameObject->GetTransform();
+	
+	ce::DrawEventManager::AddSprite(this);
 }
 
 void Sprite::DoBind(lua_State * L)

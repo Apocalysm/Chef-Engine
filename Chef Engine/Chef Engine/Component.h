@@ -4,13 +4,11 @@
 
 #include <SFML\Graphics.hpp>
 
-
-
 namespace ce
 {
 	class GameObject;
 
-	class Component : public ce::Object
+	class Component
 	{
 		// Befriends the templated Bind function so it can access our protected functions
 		friend void LuaBridgeBinder::Bind<ce::Component>(lua_State*);
@@ -21,7 +19,7 @@ namespace ce
 
 		virtual void Start();
 		// This gets called every frame from the GameObjectManager
-		void Update();
+		virtual void Update();
 
 		// Getter for the 'hash'-variable
 		int GetHashCode() const;
@@ -33,6 +31,7 @@ namespace ce
 
 		// Getter for 'gameObject'-variable
 		GameObject* GetGameObject() const;
+		virtual void SetGameObject(GameObject* gameObject);
 
 		bool operator==(const Component& other);
 
