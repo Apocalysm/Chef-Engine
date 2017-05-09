@@ -135,6 +135,8 @@ namespace ce
 			// Sets the int 'hash' of component to be equal to the types hash_code
 			components.back()->SetHashCode(typeid(dynamic_cast<T*>(components.back())).hash_code());
 
+			t->Start();
+
 			return t;
 		}
 	}
