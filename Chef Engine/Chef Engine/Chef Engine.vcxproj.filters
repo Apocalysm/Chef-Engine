@@ -45,6 +45,10 @@
     <ClCompile Include="Collider.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="MapTexture.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -74,16 +78,13 @@
     <ClInclude Include="DrawEventManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MapHandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LuaBridgeBinder.h">
+    <ClInclude Include="Collider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MapTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Collider.h">
+    <ClInclude Include="CollisionManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

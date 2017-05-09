@@ -73,7 +73,7 @@
     <LibraryPath>..\..\Lua_;..\..\SFML-2.4.2\lib;..\..\tmxparser\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\..\dirent;..\..\Lua_\include;..\..\Lua_Bridge;..\..\SFML-2.4.2\include;..\..\tmxparser\include;..\..\Box2D-master\Box2D;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\dirent;..\..\Lua_\include;..\..\Lua_Bridge;..\..\SFML-2.4.2\include;..\..\tmxparser\include;..\..\Box2D;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\Lua_;..\..\SFML-2.4.2\lib;..\..\tmxparser\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -129,6 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DrawEventManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -143,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collider.h" />
+    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="DrawEventManager.h" />
     <ClInclude Include="GameObject.h" />
