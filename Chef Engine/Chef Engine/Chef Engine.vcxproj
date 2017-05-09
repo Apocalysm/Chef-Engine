@@ -129,9 +129,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Component.cpp" />
-    <ClCompile Include="ComponentRef.cpp" />
     <ClCompile Include="DrawEventManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="LuaComponent.cpp" />
     <ClCompile Include="MapHandler.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="LuaBridgeBinder.cpp" />
@@ -142,10 +142,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
-    <ClInclude Include="ComponentRef.h" />
     <ClInclude Include="DrawEventManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectManager.h" />
+    <ClInclude Include="LuaComponent.h" />
     <ClInclude Include="MapHandler.h" />
     <ClInclude Include="LuaBridgeBinder.h" />
     <ClInclude Include="Object.h" />

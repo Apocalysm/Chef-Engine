@@ -9,6 +9,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Lua Binding">
+      <UniqueIdentifier>{69cb9f04-6bc8-49c5-86da-13febfc7a9fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -30,9 +33,6 @@
     <ClCompile Include="Transform.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="LuaBridgeBinder.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="MapHandler.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
@@ -42,7 +42,12 @@
     <ClCompile Include="DrawEventManager.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentRef.cpp" />
+    <ClCompile Include="LuaBridgeBinder.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaComponent.cpp">
+      <Filter>Lua Binding</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -63,17 +68,17 @@
     <ClInclude Include="MapHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LuaBridgeBinder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Sprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DrawEventManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentRef.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="LuaBridgeBinder.h">
+      <Filter>Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaComponent.h">
+      <Filter>Lua Binding</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

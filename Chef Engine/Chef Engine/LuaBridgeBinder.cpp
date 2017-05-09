@@ -3,6 +3,7 @@
 // All the different classes we want to bind with Lua Bridge
 #include "Object.h"
 #include "Component.h"
+#include "LuaComponent.h"
 
 #include <iostream>
 #include <vector>
