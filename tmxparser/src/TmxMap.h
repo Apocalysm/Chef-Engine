@@ -39,6 +39,7 @@ namespace Tmx
     class ImageLayer;
     class ObjectGroup;
     class Tileset;
+	class Color;
 
     //-------------------------------------------------------------------------
     // Error in handling of the Map class.
@@ -135,7 +136,7 @@ namespace Tmx
         const std::string &GetFilepath() const { return file_path; }
 
         // Get the background color of the map file if any.
-        const std::string &GetBackgroundColor() const { return background_color; }
+        const Tmx::Color *GetBackgroundColor() const { return background_color; }
 
         // Get the version of the map.
         double GetVersion() const { return version; }
@@ -237,7 +238,7 @@ namespace Tmx
         std::string file_name;
         std::string file_path;
 
-        std::string background_color;
+        Tmx::Color* background_color;
 
         double version;
         Tmx::MapOrientation orientation;

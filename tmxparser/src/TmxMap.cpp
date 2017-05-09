@@ -34,6 +34,7 @@
 #include "TmxTileLayer.h"
 #include "TmxObjectGroup.h"
 #include "TmxImageLayer.h"
+#include "TmxColor.h"
 
 using std::vector;
 using std::string;
@@ -43,7 +44,7 @@ namespace Tmx
     Map::Map() 
         : file_name()
         , file_path()
-        , background_color()
+        , background_color(new Color())
         , version(0.0)
         , orientation(TMX_MO_ORTHOGONAL)
         , render_order(TMX_RIGHT_DOWN)
@@ -66,6 +67,8 @@ namespace Tmx
 
     Map::~Map() 
     {
+		delete background_color;
+
         // Iterate through all of the object groups and delete each of them.
         vector< ObjectGroup* >::iterator ogIter;
         for (ogIter = object_groups.begin(); ogIter != object_groups.end(); ++ogIter) 
@@ -216,7 +219,7 @@ namespace Tmx
 
         if (mapElem->Attribute("backgroundcolor"))
         {
-            background_color = mapElem->Attribute("backgroundcolor");
+            background_color->SetColor(mapElem->Attribute("backgroundcolor"));
         }
 
         // Read the orientation

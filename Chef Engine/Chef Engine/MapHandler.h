@@ -7,10 +7,15 @@
 #include <Tmx\TmxImage.h>
 #include <Tmx\TmxTile.h>
 #include <Tmx\TmxMapTile.h>
+#include <Tmx\TmxColor.h>
+
+#include"LuaBridgeBinder.h"
+#include "MapTexture.h"
 
 #include <vector>
 #include <string>
 #include <cassert>
+#include <array>
 
 #include <SFML\Graphics.hpp>
 
@@ -18,30 +23,37 @@ namespace ce
 {
 	class MapHandler
 	{
+		friend void LuaBridgeBinder::Bind<ce::MapHandler>(lua_State*);
+
 	public:
 		MapHandler();
 		~MapHandler();
 
-		void LoadMap(const int mapIndex);
+		void LoadMapIndex(const int mapIndex);
 		void LoadMap(const std::string& fileName);
-		void DrawMap(sf::RenderWindow window);
+		void DrawMap(sf::RenderWindow& window);
 		void AddMapName(std::string* mapName);
-		void AddMapName(int& index, std::string* mapName);
+		void AddMapNameIndex(int& index, std::string* mapName);
+
 		std::vector<std::string*> tileMapNames;
 
 	private:
+		static void DoBind(lua_State* L);
+
 		int mapHeight;
 		int mapWidth;
 		int tileHeight;
 		int tileWidth;
-
+		
+		std::vector<Tmx::Tileset*> tileSets;
+		std::vector<sf::Texture> tileTextures;
 		std::vector<Tmx::TileLayer*> tileLayers;
-		std::vector <sf::VertexArray*> vertexLayers;
+		std::vector <MapTexture*> vertexLayers;
+		std::vector<sf::RenderStates*> states;
+		std::vector<Tmx::Object*> objects;
 
-		Tmx::Tileset* tmxTileSet;
 		Tmx::Map* map;
 
-		sf::Texture tileSetTexture;
 	};
 }
 

@@ -39,11 +39,8 @@
     <ClCompile Include="DrawEventManager.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="LuaBridgeBinder.cpp">
-      <Filter>Lua Binding</Filter>
-    </ClCompile>
-    <ClCompile Include="LuaComponent.cpp">
-      <Filter>Lua Binding</Filter>
+    <ClCompile Include="Collider.cpp">
+      <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -68,11 +65,17 @@
     <ClInclude Include="DrawEventManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LuaBridgeBinder.h">
-      <Filter>Lua Binding</Filter>
+    <ClInclude Include="MapHandler.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LuaComponent.h">
-      <Filter>Lua Binding</Filter>
+    <ClInclude Include="LuaBridgeBinder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MapTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
