@@ -40,6 +40,7 @@ namespace tinyxml2 {
 namespace Tmx 
 {
     class Object;
+	class Color;
     
     //-------------------------------------------------------------------------
     // A class used for holding a list of objects.
@@ -60,14 +61,15 @@ namespace Tmx
         // Get the number of objects in the list.
         int GetNumObjects() const { return objects.size(); }
 
+		//TODO: Tmx::Color
         // Get the color used to display the objects in this group.
-        const std::string &GetColor() const { return color; }
+        const Tmx::Color *GetColor() const { return color; }
 
         // Get the whole list of objects.
         const std::vector< Tmx::Object* > &GetObjects() const { return objects; }
 
     private:
-        std::string color;
+        Tmx::Color* color;
 
         std::vector< Tmx::Object* > objects;
     };

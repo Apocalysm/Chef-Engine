@@ -1,5 +1,5 @@
 # Chef-Engine
-Chef Engine is a game engine made in C++.
+Chef Engine is a game engine made in C++. 
 
 
 The engine is composition-based using components much like those in Unity Engine.

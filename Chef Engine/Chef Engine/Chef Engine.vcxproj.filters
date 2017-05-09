@@ -74,6 +74,15 @@
     <ClInclude Include="DrawEventManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MapHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaBridgeBinder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MapTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Collider.h">
       <Filter>Header Files</Filter>
     </ClInclude>

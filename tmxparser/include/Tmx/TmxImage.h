@@ -35,6 +35,9 @@ namespace tinyxml2 {
 
 namespace Tmx 
 {
+	// Forward declaration for Tmx::Color
+	class Color;
+
     //-------------------------------------------------------------------------
     // A class used for storing information about an image within a tileset.
     //-------------------------------------------------------------------------
@@ -56,14 +59,19 @@ namespace Tmx
         // Get the height of the image.
         int GetHeight() const { return height; }
 
+		// Returns whether the image has a color to specify transparency
+		const bool& HasTransparentColor() const
+		{ return is_transparent; }
+
         // Get the transparent color used in the image.
-        const std::string &GetTransparentColor() const 
+        const Color *GetTransparentColor() const 
         { return transparent_color; }
 
     private:
         std::string source;
         int width;
         int height;
-        std::string transparent_color;
+		bool is_transparent;
+		Tmx::Color* transparent_color;
     };
 }
