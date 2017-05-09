@@ -1,5 +1,4 @@
 #pragma once
-#include "Object.h"
 #include "LuaBridgeBinder.h"
 
 #include <SFML\Graphics.hpp>

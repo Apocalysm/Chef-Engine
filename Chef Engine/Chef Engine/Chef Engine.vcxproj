@@ -135,7 +135,6 @@
     <ClCompile Include="MapHandler.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="LuaBridgeBinder.cpp" />
-    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Transform.cpp" />
@@ -148,7 +147,6 @@
     <ClInclude Include="LuaComponent.h" />
     <ClInclude Include="MapHandler.h" />
     <ClInclude Include="LuaBridgeBinder.h" />
-    <ClInclude Include="Object.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
