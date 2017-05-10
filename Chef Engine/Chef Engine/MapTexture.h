@@ -8,7 +8,7 @@ namespace ce
 class MapTexture
 {
 public:
-		MapTexture(sf::VertexArray* va, const sf::Texture& txt);
+		MapTexture(sf::VertexArray* va, const sf::Texture& texture);
 	~MapTexture();
 
 		sf::VertexArray& GetVertexArray();
@@ -19,6 +19,7 @@ public:
 
 private:
 		sf::VertexArray* vertex_array;
+                
 	const sf::Texture* texture;
 };
 }

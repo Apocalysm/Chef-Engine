@@ -2,10 +2,10 @@
 
 using ce::MapTexture;
 
-MapTexture::MapTexture(sf::VertexArray* va, const sf::Texture& txt) 
+MapTexture::MapTexture(sf::VertexArray* vertex, const sf::Texture& texture) 
 {
 	vertex_array = va;
-	texture = &txt;
+	this->texture = &texture;
 }
 
 

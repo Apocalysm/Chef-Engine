@@ -6,13 +6,24 @@
 #include "GameObjectManager.h"
 #include "DrawEventManager.h"
 
+#include <SFML/Graphics.hpp>
+#include <Tmx\TmxTile.h>
+
 #include <Windows.h>
 #include <typeinfo>
 #include <iostream>
 
-#include <SFML/Graphics.hpp>
-#include <Tmx\TmxTile.h>
-
+/*! \mainpage My Personal Index
+*
+*\section intro_sec Introduction
+*
+* This is the introduction.
+*
+*\section install_sec Installation
+* 
+*\subsection step1 Step 1: Do the thing
+*\subsection step2 Step 2: Do the other thing
+*/
 #if _DEBUG
 int main(int argc, char* argv[])
 #else

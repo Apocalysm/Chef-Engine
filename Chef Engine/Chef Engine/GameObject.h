@@ -28,7 +28,7 @@ namespace ce
 		template<typename T>
 		T* GetComponent();
 
-		// Removes the component of the specified typename if the GameObject is holding one
+		/*! Removes the component of the specified typename if the GameObject is holding one */
 		template<typename T>
 		void RemoveComponent();
 
