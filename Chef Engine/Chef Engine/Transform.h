@@ -3,8 +3,7 @@
 
 namespace ce
 {
-	class Transform :
-		public ce::Component
+	class Transform : public ce::Component
 	{
 	public:
 		Transform();
@@ -18,6 +17,8 @@ namespace ce
 		void SetPosition(const float x, const float y);
 		
 		const sf::Vector2f& GetPosition() const;
+
+        void Move(sf::Vector2f movement);
         #pragma endregion
 
         #pragma region Rotation Methods
@@ -36,8 +37,9 @@ namespace ce
         #pragma endregion
 
 	private:
-		float rotation;
+		
 		sf::Vector2f position;
+        float rotation;
 		sf::Vector2f scale;
 	};
 }

@@ -3,7 +3,7 @@
 #include "Component.h"
 #include "Sprite.h"
 #include "GameObject.h"
-#include "MapTexture.h"
+#include "TileMapLayer.h"
 
 using ce::DrawEventManager;
 
@@ -14,7 +14,7 @@ std::map<ce::DrawEventManager::int64, std::map<ce::DrawEventManager::int64, ce::
 std::map<ce::DrawEventManager::int64, std::map<ce::DrawEventManager::int64, ce::Sprite*>> ce::DrawEventManager::enumToMapNewSpr;
 
 // Vector containing layers from Tiled to be drawn
-std::vector<std::map<int, ce::MapTexture*>> ce::DrawEventManager::m_tileMapLayers;
+std::vector<std::map<int, ce::TileMapLayer*>> ce::DrawEventManager::tileMapLayers;
 
 std::vector<sf::RenderStates> ce::DrawEventManager::renderStates;
 
@@ -51,13 +51,13 @@ void ce::DrawEventManager::RemoveSprite(Sprite* sprite)
 }
 
 
-void ce::DrawEventManager::AddTmxLayers(std::vector<std::map<int, ce::MapTexture*>> tileMapLayers)
+void ce::DrawEventManager::AddTmxLayers(std::vector<std::map<int, ce::TileMapLayer*>> layers)
 {
-	m_tileMapLayers = tileMapLayers;
+	tileMapLayers = layers;
 
 	renderStates.clear();
 
-	for (auto outer_it = m_tileMapLayers.begin(); outer_it != m_tileMapLayers.end(); outer_it++)
+	for (auto outer_it = tileMapLayers.begin(); outer_it != tileMapLayers.end(); outer_it++)
 	{
 		for (auto inner_it = outer_it->begin(); inner_it != outer_it->end(); inner_it++)
 {
@@ -69,7 +69,7 @@ void ce::DrawEventManager::AddTmxLayers(std::vector<std::map<int, ce::MapTexture
 
 	// Adds as many empty SpriteMaps as the size of m_timeMapLayers
 	// This ensures that the layers will be drawn in case there are too few draw orders for sprites
-	for (auto i = 0; i < m_tileMapLayers.size(); i++)
+	for (auto i = 0; i < tileMapLayers.size(); i++)
 	{
 		SpriteMap map;
 		enumToMapSpr.insert(std::make_pair(i, map));
@@ -84,9 +84,9 @@ void ce::DrawEventManager::Draw(sf::RenderWindow& window)
 		for (auto outer_it = enumToMapSpr.begin(); outer_it != enumToMapSpr.end(); outer_it++)
 		{
 			// Draws the layer that has the same order as tha current order to draw
-			if (outer_it->first < m_tileMapLayers.size())
+			if (outer_it->first < tileMapLayers.size())
 			{
-				for (auto layer_it = m_tileMapLayers[outer_it->first].begin(); layer_it != m_tileMapLayers[outer_it->first].end(); layer_it++)
+				for (auto layer_it = tileMapLayers[outer_it->first].begin(); layer_it != tileMapLayers[outer_it->first].end(); layer_it++)
 				{
 					window.draw(layer_it->second->GetVertexArray(), renderStates[layer_it->first]);
 				}

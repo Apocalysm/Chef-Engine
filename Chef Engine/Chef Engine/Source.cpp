@@ -37,6 +37,7 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	ce::MapHandler* map = new ce::MapHandler;
 
+    ce::GameObjectManager* objManager = new ce::GameObjectManager();
 	ce::DrawEventManager* drawManager = new ce::DrawEventManager();
 
 	ce::GameObject* object = new ce::GameObject();
@@ -69,7 +70,7 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		{
-			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0, -1));
+			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0, -0.3));
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		{
@@ -80,12 +81,22 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(-0.3f, 0));
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-			{
-			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0.3f, 0));
-			}
+		{
+		    sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0.3f, 0));
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        {
+            object->GetTransform()->SetScale(object->GetTransform()->GetScale() + sf::Vector2f(0.001f, 0.001f));
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace))
+        {
+            object->GetTransform()->SetScale(object->GetTransform()->GetScale() - sf::Vector2f(0.001f, 0.001f));
+        }
+
+        objManager->CallUpdate();
 
 		window.clear(sf::Color::Cyan);
-
 		drawManager->Draw(window);
 		window.display();
 

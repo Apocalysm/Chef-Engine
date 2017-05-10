@@ -10,7 +10,7 @@
 #include <Tmx\TmxColor.h>
 
 #include"LuaBridgeBinder.h"
-#include "MapTexture.h"
+#include "TileMapLayer.h"
 
 #include <vector>
 #include <map>
@@ -49,7 +49,7 @@ namespace ce
 		std::vector<sf::Texture> tileTextures;
 		std::vector<Tmx::TileLayer*> tileLayers;
 
-		std::vector<std::map<int, MapTexture*>> vertexLayers;
+		std::vector<std::map<int, TileMapLayer*>> tileMapLayers;
 		
 		std::vector<sf::RenderStates*> states;
 		std::vector<Tmx::Object*> objects;

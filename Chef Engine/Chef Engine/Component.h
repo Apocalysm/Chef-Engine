@@ -21,8 +21,8 @@ namespace ce
 		virtual void Update();
 
 		// Getter for the 'hash'-variable
-		int GetHashCode() const;
-		void SetHashCode(int hash);
+		int GetID() const;
+		void SetID(int hash);
 
 		// Getter and setter for the 'enabled'-variable
 		void SetEnabled(bool enabled);
@@ -39,8 +39,10 @@ namespace ce
 		ce::GameObject* gameObject = nullptr;
 
 	private: 
+        static int IDCounter;
+
 		// The hash_code of the Component, is set in AddComponent
-		int hash;
+		int ID;
 
 		// This decides if the Component should be updated for example via the Update method
 		bool enabled = true;

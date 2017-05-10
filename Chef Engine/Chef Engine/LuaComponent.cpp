@@ -1,5 +1,6 @@
 #include "LuaComponent.h"
 
+using ce::LuaComponent;
 
 LuaComponent::LuaComponent()
 {

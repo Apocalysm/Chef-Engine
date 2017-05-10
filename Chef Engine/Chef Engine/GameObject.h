@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 #include <typeinfo>
+#include <utility>
 
 namespace ce
 {
@@ -58,7 +59,7 @@ namespace ce
 		// The amount of different values in the Layers enum
 		static const int LAYER_AMOUNT;
 
-		// Getter and setter for m_active variable
+		// Getter and setter for active variable
 		void SetActive(bool active);
 		bool GetActive() const;
 
@@ -99,7 +100,7 @@ namespace ce
 		std::string tag;
 
 		// If the gameObject should be considered active or not
-		bool m_active;
+		bool active;
 
 		Layers layer;
 
@@ -145,9 +146,9 @@ namespace ce
 			t->SetGameObject(this);
 
 			// Sets the int 'hash' of component to be equal to the types hash_code
-			t->SetHashCode(typeid(t).hash_code()));
+			t->SetID(typeid(t).hash_code());
 	        
-            components.insert(t);
+            components.insert(std::make_pair(t->GetID(), t));
 			
             t->Start();
 
@@ -167,7 +168,7 @@ namespace ce
 		for (auto it = components.begin(); it != components.end(); it++)
 		{
 			// Checks if we find the same hash_code on the two types we are comparing
-			if ((*it).second->GetHashCode() == typeid(T*).hash_code())
+			if ((*it).second->GetID() == typeid(T*).hash_code())
 			{
 				// We return the component and casts it to type T
 				return (T*)(*it).second;

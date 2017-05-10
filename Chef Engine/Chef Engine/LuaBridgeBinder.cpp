@@ -21,12 +21,14 @@ void ce::LuaBridgeBinder::Bind(lua_State* L)
 	T::DoBind(L);
 }
 
+
 // The directory path where we store our .lua-scripts
 const std::string LUA_SCRIPTS_PATH = "Lua Scripts";
 
 // Values of directory entries representing a directory and a file
 const int DIRECTORY_FLAG = (1 << 14);
 const int FILE_FLAG = (1 << 15);
+
 
 // Loads a directory and gets all the .lua-files
 static const std::vector<std::string*> LoadDirectory(const std::string dir_path)
@@ -93,6 +95,7 @@ static const std::vector<std::string*> LoadDirectory(const std::string dir_path)
 	}
 }
 
+
 // Call this to call the Bind method in all classes written here
 void ce::LuaBridgeBinder::BindAll()
 {
@@ -117,6 +120,7 @@ void ce::LuaBridgeBinder::BindAll()
 		LoadLua(L, (**it));
 	}
 }
+
 
 // Loads lua file
 void ce::LuaBridgeBinder::LoadLua(lua_State * L, const std::string & path)

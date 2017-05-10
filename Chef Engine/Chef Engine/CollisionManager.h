@@ -1,5 +1,5 @@
 #pragma once
-#include <Box2D\Box2D.h>
+#include <Box2D/Box2D.h>
 
 namespace ce
 {
@@ -8,7 +8,5 @@ namespace ce
 	public:
 		CollisionManager();
 		~CollisionManager();
-
-		static b2World world;
 	};
 }

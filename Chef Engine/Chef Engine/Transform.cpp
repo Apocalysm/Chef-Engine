@@ -48,6 +48,11 @@ const sf::Vector2f& Transform::GetPosition() const
 	return position;
 }
 
+void ce::Transform::Move(sf::Vector2f movement)
+{
+    position += movement;
+}
+
 
 void Transform::SetRotation(float newRotation)
 {

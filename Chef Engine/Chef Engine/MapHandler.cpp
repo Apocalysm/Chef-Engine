@@ -38,7 +38,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 	{	
 		delete map;
 
-		for (auto outer_it = vertexLayers.begin(); outer_it != vertexLayers.end(); outer_it++)
+		for (auto outer_it = tileMapLayers.begin(); outer_it != tileMapLayers.end(); outer_it++)
 		{
 			for (auto inner_it = outer_it->begin(); inner_it != outer_it->end();inner_it++)
 			{
@@ -46,7 +46,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 			}
 			outer_it->clear();
 		}
-		vertexLayers.clear();
+		tileMapLayers.clear();
 		tileTextures.clear();
 	}
 	
@@ -86,7 +86,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 	for (auto k = 0; k < tileLayers.size(); k++)
 	{
-		vertexLayers.push_back(std::map<int, ce::MapTexture*>());
+		tileMapLayers.push_back(std::map<int, ce::TileMapLayer*>());
 
 		for (size_t i = 0; i < mapHeight; i++)
 		{
@@ -97,13 +97,13 @@ void MapHandler::LoadMap(const std::string& fileName)
 				if (tile.tilesetId == -1)
 					continue;
 
-				if (vertexLayers[k].find(tile.tilesetId) == vertexLayers[k].end())
+				if (tileMapLayers[k].find(tile.tilesetId) == tileMapLayers[k].end())
 				{
-					vertexLayers[k].insert(std::make_pair(tile.tilesetId, new MapTexture(new sf::VertexArray(sf::Quads, mapHeight * mapWidth * 4), tileTextures[tile.tilesetId])));
+					tileMapLayers[k].insert(std::make_pair(tile.tilesetId, new TileMapLayer(new sf::VertexArray(sf::Quads, mapHeight * mapWidth * 4), tileTextures[tile.tilesetId])));
 				}
 				
 				//Get the current layer
-				sf::VertexArray& vertexLayer = vertexLayers[k][tile.tilesetId]->GetVertexArray();
+				sf::VertexArray& vertexLayer = tileMapLayers[k][tile.tilesetId]->GetVertexArray();
 				//Get the quad
 				sf::Vertex* quad = &vertexLayer[(i * mapWidth + j) * 4];
 
@@ -149,7 +149,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 			}
 		}
 	}
-	ce::DrawEventManager::AddTmxLayers(vertexLayers);
+	ce::DrawEventManager::AddTmxLayers(tileMapLayers);
 }
 
 
@@ -173,8 +173,7 @@ void ce::MapHandler::DoBind(lua_State * L)
 				.addConstructor<void(*)(void)>()
 				.addFunction("LoadMap", &MapHandler::LoadMap)
 				.addFunction("LoadMapIndex", &MapHandler::LoadMap)
-				.addFunction("AddMapName", &MapHandler::AddMapName)
-				.addFunction("AddMapNameIndex", &MapHandler::AddMapNameIndex)
+				.addFunction("RegisterMap", &MapHandler::AddMapNameIndex)
 			.endClass()
 		.endNamespace();
 }

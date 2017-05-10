@@ -31,7 +31,7 @@ GameObject::GameObject(std::string name)
 
 	ce::GameObjectManager::AddObject(this);
 
-    m_active = true;
+    this->active = true;
 
     layer = Default;
 }
@@ -44,13 +44,13 @@ GameObject::~GameObject()
 
 void GameObject::SetActive(bool active)
 {
-	m_active = active;
+	this->active = active;
 }
 
 
 bool GameObject::GetActive() const
 {
-	return m_active;
+	return this->active;
 }
 
 

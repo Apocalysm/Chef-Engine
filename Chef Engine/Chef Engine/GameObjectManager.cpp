@@ -21,11 +21,13 @@ ce::GameObjectManager::GameObjectManager()
 	}
 }
 
+
 void ce::GameObjectManager::AddObject(GameObject* object)
 {
 	//newObjects[object->layer].push_back(object)
 	enumToMapNewObj[object->layer].insert(std::make_pair(object->instanceID, object));
 }
+
 
 void ce::GameObjectManager::RemoveObject(GameObject* object)
 {
@@ -47,6 +49,7 @@ void ce::GameObjectManager::RemoveObject(GameObject* object)
 	}
 }
 
+
 void ce::GameObjectManager::CallUpdate()
 {
 	// If there is any object in the map
@@ -62,7 +65,7 @@ void ce::GameObjectManager::CallUpdate()
 				for (auto inner_it = outer_it->second.begin(); inner_it != outer_it->second.end(); inner_it++)
 				{
 					// Updates the object
-					if (inner_it->second->m_active)
+					if (inner_it->second->active)
 						inner_it->second->ComponentUpdate();
 				}
 			}
@@ -81,7 +84,7 @@ void ce::GameObjectManager::CallUpdate()
 				// Iterates through every object in the map
 				for (auto inner_it = outer_it->second.begin(); inner_it != outer_it->second.end(); inner_it++)
 				{
-					if (inner_it->second->m_active)
+					if (inner_it->second->active)
 						// Updates the object
 						inner_it->second->ComponentUpdate();
 

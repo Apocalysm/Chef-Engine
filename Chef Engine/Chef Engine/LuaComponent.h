@@ -4,19 +4,22 @@
 #include <LuaBridge.h>
 #include <memory>
 
-class LuaComponent : public ce::Component
+namespace ce
 {
+    class LuaComponent : public ce::Component
+    {
 
-public:
-    LuaComponent();
-    ~LuaComponent();
+    public:
+        LuaComponent();
+        ~LuaComponent();
 
-    void Start();
-    void Update();
-    
-private:
+        void Start();
+        void Update();
 
-    std::unique_ptr<luabridge::LuaRef> startFunc;
-    std::unique_ptr<luabridge::LuaRef> updateFunc;
-};
+    private:
+
+        std::unique_ptr<luabridge::LuaRef> startFunc;
+        std::unique_ptr<luabridge::LuaRef> updateFunc;
+    };
+}
 
