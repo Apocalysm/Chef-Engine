@@ -1,12 +1,14 @@
 #include "GameObjectManager.h"
+
 #include "GameObject.h"
+
 #include <utility>
 
 // Map with GameObjects 
-std::map<int, std::map<int, ce::GameObject*>> ce::GameObjectManager::enumToMapObj;
+std::map<unsigned long long, std::map<unsigned long long, ce::GameObject*>> ce::GameObjectManager::enumToMapObj;
 
 // Map with GameObjects recently created
-std::map<int,std::map<int, ce::GameObject*>> ce::GameObjectManager::enumToMapNewObj;
+std::map<unsigned long long,std::map<unsigned long long, ce::GameObject*>> ce::GameObjectManager::enumToMapNewObj;
 
 
 ce::GameObjectManager::GameObjectManager()

@@ -32,7 +32,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Component.cpp" />
     <ClCompile Include="LuaBridgeBinder.cpp">
       <Filter>Source Files\Lua Binding</Filter>
     </ClCompile>
@@ -65,6 +64,9 @@
     </ClCompile>
     <ClCompile Include="MapHandler.cpp">
       <Filter>Source Files\Manager Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Component.cpp">
       <Filter>Source Files\Components</Filter>

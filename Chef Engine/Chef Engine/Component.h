@@ -40,15 +40,11 @@ namespace ce
 
 		bool operator==(const Component& other);
 
-	protected: 
-		// Binds all relevant members of this class with LuaBridge
-		static void DoBind(lua_State* L);
-		
+	protected:
 		// The GameObject holding this Component
 		ce::GameObject* gameObject = nullptr;
 
 	private: 
-
 		// The hash_code of the Component, is set in AddComponent
 		int hash;
 

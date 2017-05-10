@@ -9,6 +9,7 @@ Sprite::Sprite()
 	sprite = new sf::Sprite();
 }
 
+
 Sprite::Sprite(const std::string& fileName, const int newDrawOrder)
 {
 	sprite = new sf::Sprite();

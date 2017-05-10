@@ -1,16 +1,17 @@
 #include "DrawEventManager.h"
+
+#include "Component.h"
 #include "Sprite.h"
 #include "GameObject.h"
-#include "Component.h"
 #include "MapTexture.h"
 
 using ce::DrawEventManager;
 
 // Map with Sprites 
-std::map<int, std::map<int, ce::Sprite*>> ce::DrawEventManager::enumToMapSpr;
+std::map<ce::DrawEventManager::int64, std::map<ce::DrawEventManager::int64, ce::Sprite*>> ce::DrawEventManager::enumToMapSpr;
 
 // Map with Sprites recently created
-std::map<int, std::map<int, ce::Sprite*>> ce::DrawEventManager::enumToMapNewSpr;
+std::map<ce::DrawEventManager::int64, std::map<ce::DrawEventManager::int64, ce::Sprite*>> ce::DrawEventManager::enumToMapNewSpr;
 
 // Vector containing layers from Tiled to be drawn
 std::vector<std::map<int, ce::MapTexture*>> ce::DrawEventManager::m_tileMapLayers;
@@ -18,12 +19,12 @@ std::vector<std::map<int, ce::MapTexture*>> ce::DrawEventManager::m_tileMapLayer
 std::vector<sf::RenderStates> ce::DrawEventManager::renderStates;
 
 
-DrawEventManager::DrawEventManager()
+ce::DrawEventManager::DrawEventManager()
 {
 }
 
 
-void DrawEventManager::AddSprite(ce::Sprite* sprite)
+void ce::DrawEventManager::AddSprite(ce::Sprite* sprite)
 {
 	// Adds the sprite component in the map
 	// The key of the outer maps is the sprites draw order and the inner maps key is the sprites objects ID
@@ -50,7 +51,7 @@ void ce::DrawEventManager::RemoveSprite(Sprite* sprite)
 }
 
 
-void ce::DrawEventManager::AddTmxLayers(std::vector<std::map<int, MapTexture*>> tileMapLayers)
+void ce::DrawEventManager::AddTmxLayers(std::vector<std::map<int, ce::MapTexture*>> tileMapLayers)
 {
 	m_tileMapLayers = tileMapLayers;
 
@@ -68,7 +69,7 @@ void ce::DrawEventManager::AddTmxLayers(std::vector<std::map<int, MapTexture*>> 
 
 	// Adds as many empty SpriteMaps as the size of m_timeMapLayers
 	// This ensures that the layers will be drawn in case there are too few draw orders for sprites
-	for (int i = 0; i < m_tileMapLayers.size(); i++)
+	for (auto i = 0; i < m_tileMapLayers.size(); i++)
 	{
 		SpriteMap map;
 		enumToMapSpr.insert(std::make_pair(i, map));

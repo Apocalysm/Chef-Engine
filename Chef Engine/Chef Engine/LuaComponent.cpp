@@ -1,7 +1,6 @@
 #include "LuaComponent.h"
 
 
-
 LuaComponent::LuaComponent()
 {
     
@@ -12,6 +11,7 @@ LuaComponent::~LuaComponent()
 {
 }
 
+
 void LuaComponent::Start()
 {
     if (startFunc != nullptr)
@@ -19,6 +19,7 @@ void LuaComponent::Start()
 
     }
 }
+
 
 void LuaComponent::Update()
 {

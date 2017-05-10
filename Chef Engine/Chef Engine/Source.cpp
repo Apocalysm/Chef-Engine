@@ -73,15 +73,15 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		{
-			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0, 0.3));
+			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0, 0.3f));
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
-			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(-0.3, 0));
+			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(-0.3f, 0));
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 			{
-			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0.3, 0));
+			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0.3f, 0));
 			}
 
 		window.clear(sf::Color::Cyan);

@@ -15,8 +15,10 @@ namespace ce
 		void CallUpdate();
 
 	private:
-		typedef std::map<int, GameObject*> GameObjectMap;
-		typedef std::map<int, GameObjectMap> LayerObjectMap;
+        typedef unsigned long long int64;
+
+		typedef std::map<int64, GameObject*> GameObjectMap;
+		typedef std::map<int64, GameObjectMap> LayerObjectMap;
 
 		// Map with GameObjects 
 		static LayerObjectMap enumToMapObj;

@@ -16,7 +16,7 @@ using ce::LuaBridgeBinder;
 
 // Creates a templated Bind function
 template<typename T>
-void LuaBridgeBinder::Bind(lua_State* L)
+void ce::LuaBridgeBinder::Bind(lua_State* L)
 {
 	T::DoBind(L);
 }
@@ -94,7 +94,7 @@ static const std::vector<std::string*> LoadDirectory(const std::string dir_path)
 }
 
 // Call this to call the Bind method in all classes written here
-void LuaBridgeBinder::BindAll()
+void ce::LuaBridgeBinder::BindAll()
 {
 	// Create a new lua_State and open default Lua-libraries
 	lua_State* L = luaL_newstate();
@@ -102,7 +102,6 @@ void LuaBridgeBinder::BindAll()
 
 
 	// Here you put all the method calls for the classes you want to bind
-	Bind<ce::Component>(L);
 
 	
 	// Gets all the .lua file_paths
@@ -120,7 +119,7 @@ void LuaBridgeBinder::BindAll()
 }
 
 // Loads lua file
-void LuaBridgeBinder::LoadLua(lua_State * L, const std::string & path)
+void ce::LuaBridgeBinder::LoadLua(lua_State * L, const std::string & path)
 {
 	// Checks if we can load the .lua file or not
 	if (luaL_dofile(L, path.c_str()))

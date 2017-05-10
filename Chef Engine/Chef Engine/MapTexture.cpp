@@ -2,27 +2,26 @@
 
 using ce::MapTexture;
 
-MapTexture::MapTexture(sf::VertexArray* vertex, const sf::Texture& texture) 
+MapTexture::MapTexture(sf::VertexArray* vertexArray, const sf::Texture& texture)
 {
-	vertex_array = va;
+	this->vertexArray = vertexArray;
 	this->texture = &texture;
 }
 
 
 MapTexture::~MapTexture()
 {
-	//delete texture;
-	delete vertex_array;
+	delete vertexArray;
 }
 
 sf::VertexArray& MapTexture::GetVertexArray()
 {
-	return *vertex_array;
+	return *vertexArray;
 }
 
-void MapTexture::SetVertexArray(sf::VertexArray& vertex_array)
+void MapTexture::SetVertexArray(sf::VertexArray& vertexArray)
 {
-	this->vertex_array = &vertex_array;
+	this->vertexArray = &vertexArray;
 }
 
 const sf::Texture& MapTexture::GetTexture() const

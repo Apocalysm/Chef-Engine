@@ -1,13 +1,12 @@
-#pragma once
-
 #include "MapHandler.h"
-#include <algorithm>
+
 #include "DrawEventManager.h"
 
 #include <algorithm>
 #include <iostream>
 
 using ce::MapHandler;
+
 
 MapHandler::MapHandler()
 {
@@ -17,6 +16,7 @@ MapHandler::MapHandler()
 MapHandler::~MapHandler()
 {
 }
+
 
 void ce::MapHandler::LoadMapIndex(const int mapIndex)
 {
@@ -29,6 +29,7 @@ void ce::MapHandler::LoadMapIndex(const int mapIndex)
 		}
 	}
 }
+
 
 void MapHandler::LoadMap(const std::string& fileName)
 {
@@ -157,10 +158,12 @@ void ce::MapHandler::AddMapName(std::string* mapName)
 	tileMapNames.push_back(mapName);
 }
 
+
 void ce::MapHandler::AddMapNameIndex(int & index, std::string* mapName)
 {
 	tileMapNames.insert(tileMapNames.begin() + index, mapName);
 }
+
 
 void ce::MapHandler::DoBind(lua_State * L)
 {
