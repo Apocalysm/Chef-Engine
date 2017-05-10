@@ -27,7 +27,7 @@ namespace ce
 		static OrderSpriteMap enumToMapSpr;
 
 		// Vector containing layers from Tiled to be drawn
-		static std::vector<ce::MapTexture>* m_tileMapLayers;
+		static std::vector<MapTexture>* m_tileMapLayers;
 
 		static std::vector<sf::RenderStates> renderStates;
 	};

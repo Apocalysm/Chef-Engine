@@ -3,20 +3,22 @@
 #include <SFML\Graphics\VertexArray.hpp>
 #include <SFML\Graphics\Texture.hpp>
 
-class MapTexture
+namespace ce
 {
-public:
-	MapTexture(const sf::VertexArray* va, const sf::Texture& txt);
-	~MapTexture();
+    class MapTexture
+    {
+    public:
+        MapTexture(const sf::VertexArray* va, const sf::Texture& txt);
+        ~MapTexture();
 
-	const sf::VertexArray& GetVertexArray() const;
-	void SetVertexArray(const sf::VertexArray& va);
+        const sf::VertexArray& GetVertexArray() const;
+        void SetVertexArray(const sf::VertexArray& va);
 
-	const sf::Texture& GetTexture() const;
-	void SetTexture(const sf::Texture& txt);
+        const sf::Texture& GetTexture() const;
+        void SetTexture(const sf::Texture& txt);
 
-private:
-	const sf::VertexArray* vertex_array;
-	const sf::Texture* texture;
-};
-
+    private:
+        const sf::VertexArray* vertex_array;
+        const sf::Texture* texture;
+    };
+}

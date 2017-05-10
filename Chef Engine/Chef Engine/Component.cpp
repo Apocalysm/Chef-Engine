@@ -7,7 +7,6 @@ ce::Component::Component()
 {
 }
 
-
 ce::Component::~Component()
 {
 }
