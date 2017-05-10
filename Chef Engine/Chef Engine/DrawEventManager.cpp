@@ -59,7 +59,7 @@ void ce::DrawEventManager::AddTmxLayers(std::vector<std::map<int, MapTexture*>> 
 	for (auto outer_it = m_tileMapLayers.begin(); outer_it != m_tileMapLayers.end(); outer_it++)
 	{
 		for (auto inner_it = outer_it->begin(); inner_it != outer_it->end(); inner_it++)
-		{
+{
 			sf::RenderStates state;
 			state.texture = &inner_it->second->GetTexture();
 			renderStates.push_back(state);
@@ -90,7 +90,7 @@ void ce::DrawEventManager::Draw(sf::RenderWindow& window)
 					window.draw(layer_it->second->GetVertexArray(), renderStates[layer_it->first]);
 				}
 			}
-
+			
 			// If there is any sprite in the map
 			if (!outer_it->second.empty())
 			{

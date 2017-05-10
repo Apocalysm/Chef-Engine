@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MapHandler.h"
+#include <algorithm>
 #include "DrawEventManager.h"
 
 #include <algorithm>

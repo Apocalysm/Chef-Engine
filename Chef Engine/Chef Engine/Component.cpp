@@ -7,7 +7,6 @@ ce::Component::Component()
 {
 }
 
-
 ce::Component::~Component()
 {
 }
@@ -68,6 +67,7 @@ void ce::Component::DoBind(lua_State * L)
 	luabridge::getGlobalNamespace(L)
 		.beginNamespace("Chef")
 			.beginClass<Component>("Component")
+				.addConstructor<void(*)(void)>()
 				.addProperty("hash_code", &Component::GetHashCode)
 				.addProperty("enabled", &Component::GetEnabled, &Component::SetEnabled)
 				.addProperty("gameObject", &Component::GetGameObject)

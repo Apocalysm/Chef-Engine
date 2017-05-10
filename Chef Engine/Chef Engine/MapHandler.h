@@ -56,6 +56,9 @@ namespace ce
 
 		Tmx::Map* map;
 
+        variable_one
+        variableOne
+
 	};
 }
 

@@ -24,19 +24,27 @@ namespace ce
 		template<typename T>
 		T* AddComponent();
 
-		Component* AddComponent(const int hash);
-
 		// Tries to find the component of the specified typename
 		template<typename T>
 		T* GetComponent();
 
-		Component* GameObject::GetComponent(const int hash);
-
-		// Removes the component of the specified typename if the GameObject is holding one
+		/*! Removes the component of the specified typename if the GameObject is holding one */
 		template<typename T>
 		void RemoveComponent();
 
+		
+		// Adds a component based on the number we send
+		// You will have to create a class where you get the typeid(T)hash_code from all components
+		// This class will be loaded to lua as global ints you can reference
+		// ex. Transform trans = gameObj.AddComponent(transformID);
+		Component* AddComponent(const int hash);
+		
+		// Works as it's counterpart that takes a template type and instead uses the integer-based system explained above
+		Component* GameObject::GetComponent(const int hash);
+
+		// Works as it's counterpart that takes a template type and instead uses the integer-based system explained above
 		void RemoveComponent(const int hash);
+
 
 		// An enumerator for differentiating our GameObjects between layers
 		enum Layers { Default, Player, Enemy, Terrain, UI };
@@ -72,6 +80,9 @@ namespace ce
 		// Getter for instanceID
 		unsigned long long GetID() const;
 
+		// Overloads the == operator to a method
+		bool operator==(const GameObject& other);
+
 	protected:
 		// Binds all relevant members of this class with LuaBridge
 		static void DoBind(lua_State* L);
@@ -81,7 +92,7 @@ namespace ce
 		friend class GameObjectManager;
 
 		// All the components the GameObject is currently holding
-		std::vector<Component*> components;
+		std::map<const int, Component*> components;
 
 		// Updates all the components that our GameObject holds
 		void ComponentUpdate();
@@ -111,7 +122,7 @@ namespace ce
 		template<typename T>
 		T* GetComponentInternal();
 
-		// Tries to find the component of the specified typename
+		// Tries to find the based on an integer
 		Component* GetComponentInternal(const int hash);
 	};
 
@@ -135,12 +146,13 @@ namespace ce
 			// Sets the int 'hash' of component to be equal to the types hash_code
 			components.back()->SetHashCode(typeid(dynamic_cast<T*>(components.back())).hash_code());
 
+			t->Start();
+
 			return t;
 		}
 	}
 
 	
-
 	// Tries to get a component of the specified type from GameObject's vector 'components'
 	template<typename T>
 	T* GameObject::GetComponentInternal()
@@ -152,10 +164,10 @@ namespace ce
 		for (auto it = components.begin(); it != components.end(); it++)
 		{
 			// Checks if we find the same hash_code on the two types we are comparing
-			if ((*it)->GetHashCode() == typeid(T*).hash_code())
+			if ((*it).second->GetHashCode() == typeid(T*).hash_code())
 			{
 				// We return the component and casts it to type T
-				return (T*)(*it);
+				return (T*)(*it).second;
 			}
 		}
 
@@ -163,7 +175,6 @@ namespace ce
 	}
 
 	
-
 	// Uses GetComponentInternal and also writes an error message to the console if we couldn't find anything
 	template<typename T>
 	T* GameObject::GetComponent()

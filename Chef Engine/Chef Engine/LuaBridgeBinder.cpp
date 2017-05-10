@@ -1,8 +1,7 @@
 #include "LuaBridgeBinder.h"
 
 // All the different classes we want to bind with Lua Bridge
-#include "Object.h"
-#include "Component.h"
+#include "LuaComponent.h"
 
 #include <iostream>
 #include <vector>
@@ -12,6 +11,8 @@
 
 // Linking a library through code
 #pragma comment(lib, "lua53.lib")
+
+using ce::LuaBridgeBinder;
 
 // Creates a templated Bind function
 template<typename T>
@@ -70,6 +71,9 @@ static const std::vector<std::string*> LoadDirectory(const std::string dir_path)
 				// Checks if the filename contains .lua
 				if (std::string(ent->d_name).find(".lua") != std::string(ent->d_name).npos)
 				{
+                    // Creates a string for just the name of the file which will be used in DoRequire() later
+                    output.push_back(new std::string(ent->d_name));
+
 					// Adds the name of that file to our vector
 					output.push_back(new std::string(newPath));
 				}
@@ -96,16 +100,20 @@ void LuaBridgeBinder::BindAll()
 	lua_State* L = luaL_newstate();
 	luaL_openlibs(L);
 
+
 	// Here you put all the method calls for the classes you want to bind
-	Bind<ce::Object>(L);
 	Bind<ce::Component>(L);
+
 	
 	// Gets all the .lua file_paths
     std::vector<std::string*> file_paths = LoadDirectory(LUA_SCRIPTS_PATH);
 	
+    //DoRequire(file_paths);
+
 	// Iterates all the file_paths
 	for (auto it = file_paths.begin(); it != file_paths.end(); it++)
 	{
+        it++;
 		// Loads the file using the current iteration of file_path
 		LoadLua(L, (**it));
 	}

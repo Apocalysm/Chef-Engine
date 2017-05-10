@@ -1,5 +1,4 @@
 #pragma once
-#include "Object.h"
 #include "LuaBridgeBinder.h"
 
 #include <SFML\Graphics.hpp>
@@ -21,6 +20,10 @@ namespace ce
 		// This gets called every frame from the GameObjectManager
 		virtual void Update();
 
+        /*! \addtogroup LuaCallable
+        * @{
+        */
+
 		// Getter for the 'hash'-variable
 		int GetHashCode() const;
 		void SetHashCode(int hash);
@@ -32,6 +35,8 @@ namespace ce
 		// Getter for 'gameObject'-variable
 		GameObject* GetGameObject() const;
 		virtual void SetGameObject(GameObject* gameObject);
+
+        /*! @} */
 
 		bool operator==(const Component& other);
 
