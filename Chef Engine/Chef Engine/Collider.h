@@ -1,13 +1,16 @@
 #pragma once
-#include "Box2D\Box2D.h"
+#include <Box2D\Box2D.h>
 
-class Collider
+namespace ce
 {
-public:
-	Collider();
-	~Collider();
+	class Collider
+	{
+	public:
+		Collider();
+		~Collider();
 
-private:
+	private:
 
-};
+	};
+}
 

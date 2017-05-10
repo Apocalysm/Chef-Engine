@@ -55,6 +55,7 @@ namespace ce
 		std::vector<Tmx::Object*> objects;
 
 		Tmx::Map* map;
+
 	};
 }
 
