@@ -86,7 +86,7 @@ void GameObject::ComponentUpdate()
 {
 	for (auto it = components.begin(); it != components.end(); it++)
 	{
-		(*it)->Update();
+		(*it).second->Update();
 	}
 }
 
@@ -100,17 +100,9 @@ ce::Component* GameObject::AddComponent(const int hash)
 // Tries to get a component of the specified type from GameObject's vector 'components'
 ce::Component* GameObject::GetComponentInternal(const int hash)
 {
-	// Iterates all of GameObject's components
-	for (auto it = components.begin(); it != components.end(); it++)
-	{
-		// Checks if we find the same hash_code on the two types we are comparing
-		if ((*it)->GetHashCode() == hash)
-		{
-			return (*it);
-		}
-	}
+	Component* comp = components[hash];
 
-	return nullptr;
+	return comp;
 }
 
 // Uses GetComponentInternal and also writes an error message to the console if we couldn't find anything
@@ -130,16 +122,17 @@ ce::Component* GameObject::GetComponent(const int hash)
 
 void GameObject::RemoveComponent(const int hash)
 {
-	// Iterates all of GameObject's components
-	for (auto it = components.begin(); it != components.end(); it++)
-	{
-		// Checks if we find the same hash_code on the two types we are comparing
-		if ((*it)->GetHashCode() == hash)
-		{
-			// We delete the object from the vector and the memory
-			delete (*it);
+	// delete the object from the vector and the memory
+	delete components[hash];
+}
 
-			it = components.erase(it);
+bool GameObject::operator==(const GameObject& other)
+	{
+	if (this->layer == other.GetLayer())
+		{
+		if (this->instanceID == other.GetID())
+			return true;
+	}
 
 			break;
 		}
@@ -199,9 +192,6 @@ void GameObject::DoBind(lua_State * L)
 				.addFunction("AddComponent", &GameObject::AddComponent)
 				.addFunction("GetComponent", &GameObject::GetComponent)
 				.addFunction("RemoveComponent", &GameObject::RemoveComponent)
-				.addProperty("name", &GameObject::GetName, &GameObject::SetName)
-				.addProperty("tag", &GameObject::GetTag, &GameObject::SetTag)
-				.addFunction("Destroy", &GameObject::Destroy)
 			.endClass()
 		.endNamespace();
 			

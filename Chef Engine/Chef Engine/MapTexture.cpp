@@ -2,15 +2,17 @@
 
 using ce::MapTexture;
 
-MapTexture::MapTexture(sf::VertexArray* va, const sf::Texture& txt) 
+MapTexture::MapTexture(sf::VertexArray* vertex, const sf::Texture& texture) 
 {
 	vertex_array = va;
-	texture = &txt;
+	this->texture = &texture;
 }
 
 
 MapTexture::~MapTexture()
 {
+	//delete texture;
+	delete vertex_array;
 }
 
 sf::VertexArray& MapTexture::GetVertexArray()

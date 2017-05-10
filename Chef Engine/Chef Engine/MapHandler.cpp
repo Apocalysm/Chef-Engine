@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MapHandler.h"
+#include <algorithm>
 #include "DrawEventManager.h"
 
 #include <algorithm>
@@ -33,15 +34,16 @@ void MapHandler::LoadMap(const std::string& fileName)
 {
 	//Check if we alreday have a map drawn
 	if (map != nullptr)
-	{
+	{	
 		delete map;
-		
+
 		for (auto outer_it = vertexLayers.begin(); outer_it != vertexLayers.end(); outer_it++)
 		{
-			for (auto inner_it = outer_it->begin(); inner_it != outer_it->end(); inner_it++)
+			for (auto inner_it = outer_it->begin(); inner_it != outer_it->end();inner_it++)
 			{
 				delete inner_it->second;
 			}
+			outer_it->clear();
 		}
 		vertexLayers.clear();
 		tileTextures.clear();
@@ -84,7 +86,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 	for (auto k = 0; k < tileLayers.size(); k++)
 	{
 		vertexLayers.push_back(std::map<int, ce::MapTexture*>());
-		
+
 		for (size_t i = 0; i < mapHeight; i++)
 		{
 			for (size_t j = 0; j < mapWidth; j++)
@@ -98,7 +100,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 				{
 					vertexLayers[k].insert(std::make_pair(tile.tilesetId, new MapTexture(new sf::VertexArray(sf::Quads, mapHeight * mapWidth * 4), tileTextures[tile.tilesetId])));
 				}
-
+				
 				//Get the current layer
 				sf::VertexArray& vertexLayer = vertexLayers[k][tile.tilesetId]->GetVertexArray();
 				//Get the quad
@@ -110,7 +112,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 				unsigned int tileNumber = tile.id;
 				int tu;
 				int tv;
-				
+								
 				tu = tileNumber % (tileTextures[tile.tilesetId].getSize().x / tileWidth);
 				tv = tileNumber / (tileTextures[tile.tilesetId].getSize().x / tileWidth);
 
@@ -123,7 +125,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 						tu = tileNumber % (tileTextures[k].getSize().x / tileWidth);
 						tv = tileNumber / (tileTextures[k].getSize().x / tileWidth);
 						break;
-					}
+					}	
 				}
 				*/
 
@@ -147,7 +149,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 		}
 	}
 	ce::DrawEventManager::AddTmxLayers(vertexLayers);
-	}
+}
 
 
 void ce::MapHandler::AddMapName(std::string* mapName)
