@@ -38,10 +38,11 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 		for (auto outer_it = vertexLayers.begin(); outer_it != vertexLayers.end(); outer_it++)
 		{
-			for (auto inner_it = outer_it->begin(); inner_it != outer_it->end(); inner_it++)
+			for (auto inner_it = outer_it->begin(); inner_it != outer_it->end();inner_it++)
 			{
 				delete inner_it->second;
 			}
+			outer_it->clear();
 		}
 		vertexLayers.clear();
 		tileTextures.clear();

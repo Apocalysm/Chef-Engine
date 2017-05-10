@@ -11,6 +11,8 @@ MapTexture::MapTexture(sf::VertexArray* va, const sf::Texture& txt)
 
 MapTexture::~MapTexture()
 {
+	//delete texture;
+	delete vertex_array;
 }
 
 sf::VertexArray& MapTexture::GetVertexArray()
