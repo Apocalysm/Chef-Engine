@@ -12,8 +12,8 @@ unsigned long long ce::GameObject::uniqueIDCounter = 0;
 const int ce::GameObject::LAYER_AMOUNT = 6;
 
 GameObject::GameObject()
+	: GameObject("none")
 {
-	GameObject("none");
 }
 
 GameObject::GameObject(std::string name)

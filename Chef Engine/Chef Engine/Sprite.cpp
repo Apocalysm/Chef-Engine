@@ -48,6 +48,8 @@ void Sprite::SetPosition(const float x, const float y)
 void ce::Sprite::SetPosition(const sf::Vector2f newPosition)
 {
 	position = newPosition;
+	
+	Update();
 }
 
 void Sprite::SetScale(const float x, const float y)

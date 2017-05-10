@@ -26,8 +26,17 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	ce::MapHandler* map = new ce::MapHandler;
 
+	ce::DrawEventManager* drawManager = new ce::DrawEventManager();
 
-	map->LoadMap("sewers.tmx");
+	ce::GameObject* object = new ce::GameObject();
+
+	ce::Sprite* sprite = object->AddComponent<ce::Sprite>();
+
+	sprite->SetSprite("Hp mana bar.png");
+	
+	sprite->SetDrawOrder(1);
+
+	map->LoadMap("orthogonal-outside.tmx");
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -37,46 +46,36 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 				window.close();
 		}
 
-		objManager->CallUpdate();
 
-		if (tempTimer == 1)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
-			object->GetTransform()->SetPosition(object->GetTransform()->GetPosition().x + 1, object->GetTransform()->GetPosition().y);
-			object->GetComponent<ce::Sprite>()->SetRotation(object->GetComponent<ce::Sprite>()->GetRotation() + 1);
-			tempTimer = 0;
+			map->LoadMap("sewers.tmx");
 		}
-		tempTimer++;
-
-		if (tempTimer2 == 5 && tempBool)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
-			object2->GetTransform()->SetPosition(object2->GetTransform()->GetPosition().x + 3, object2->GetTransform()->GetPosition().y-5);
-			object2->GetComponent<ce::Sprite>()->SetRotation(object->GetComponent<ce::Sprite>()->GetRotation() -6);
-			tempTimer2 = 0;
+			map->LoadMap("orthogonal-outside.tmx");
 		}
-		tempTimer2++;
 
-		if (tempTimer3 == 1)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		{
-			object3->GetTransform()->SetPosition(object3->GetTransform()->GetPosition().x -1, object3->GetTransform()->GetPosition().y-10);
-			object3->GetComponent<ce::Sprite>()->SetRotation(object3->GetComponent<ce::Sprite>()->GetRotation() + 7);
-			tempTimer3 = 0;
+			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0, -1));
 		}
-		tempTimer3 = 0;
-
-		if (temptimer4 == 100)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		{
-			for (auto it = tempVector.begin(); it != tempVector.end();)
+			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0, 0.3));
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		{
+			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(-0.3, 0));
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 			{
-				(*it)->Destroy();
-				it = tempVector.erase(it);
+			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0.3, 0));
 			}
 
-			tempVector.clear();
-		}
-		temptimer4++;
+		window.clear(sf::Color::Cyan);
 
-		window.clear();
-		map->DrawMap(window);
+		drawManager->Draw(window);
 		window.display();
 
 
