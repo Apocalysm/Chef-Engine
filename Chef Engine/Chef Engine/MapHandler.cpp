@@ -1,8 +1,10 @@
 #pragma once
 
 #include "MapHandler.h"
-#include <algorithm>
 #include "DrawEventManager.h"
+
+#include <algorithm>
+#include <iostream>
 
 using ce::MapHandler;
 
@@ -32,8 +34,17 @@ void MapHandler::LoadMap(const std::string& fileName)
 	//Check if we alreday have a map drawn
 	if (map != nullptr)
 	{
-		
 		delete map;
+		
+		for (auto outer_it = vertexLayers.begin(); outer_it != vertexLayers.end(); outer_it++)
+		{
+			for (auto inner_it = outer_it->begin(); inner_it != outer_it->end(); inner_it++)
+			{
+				delete inner_it->second;
+			}
+		}
+		vertexLayers.clear();
+		tileTextures.clear();
 	}
 	
 	map = new Tmx::Map();
@@ -70,39 +81,28 @@ void MapHandler::LoadMap(const std::string& fileName)
 		tileTextures.push_back(texture);
 	}
 
-	for (auto tiles : tileLayers)
+	for (auto k = 0; k < tileLayers.size(); k++)
 	{
-		//Making a vertexarray so it can act as a list of quads
-		//vertexLayers.push_back(new sf::VertexArray(sf::Quads, mapHeight * mapWidth * 4));
+		vertexLayers.push_back(std::map<int, ce::MapTexture*>());
 		
-		std::vector<int> mapTileID;
-
 		for (size_t i = 0; i < mapHeight; i++)
 		{
 			for (size_t j = 0; j < mapWidth; j++)
 			{
 				//Get the current tile and check if its in the tileset
-				const Tmx::MapTile tile = tiles->GetTile(j, i);
+				const Tmx::MapTile tile = tileLayers[k]->GetTile(j, i);
 				if (tile.tilesetId == -1)
 					continue;
 
-				if (std::find(mapTileID.begin(), mapTileID.end(), tile.tilesetId) != mapTileID.end())
+				if (vertexLayers[k].find(tile.tilesetId) == vertexLayers[k].end())
 				{
-
+					vertexLayers[k].insert(std::make_pair(tile.tilesetId, new MapTexture(new sf::VertexArray(sf::Quads, mapHeight * mapWidth * 4), tileTextures[tile.tilesetId])));
 				}
-
-				else
-				{
-					vertexLayers.push_back(new MapTexture(new sf::VertexArray(sf::Quads, mapHeight * mapWidth * 4), tileTextures[tile.tilesetId]));
-					mapTileID.push_back(tile.tilesetId);
-					
-				}
-
 
 				//Get the current layer
-				sf::VertexArray vertexLayer = vertexLayers[tile.tilesetId]->GetVertexArray();
+				sf::VertexArray& vertexLayer = vertexLayers[k][tile.tilesetId]->GetVertexArray();
 				//Get the quad
-				sf::Vertex* quad = &(vertexLayer)[(i * mapWidth + j) * 4];
+				sf::Vertex* quad = &vertexLayer[(i * mapWidth + j) * 4];
 
 				
 
@@ -110,7 +110,6 @@ void MapHandler::LoadMap(const std::string& fileName)
 				unsigned int tileNumber = tile.id;
 				int tu;
 				int tv;
-				
 				
 				tu = tileNumber % (tileTextures[tile.tilesetId].getSize().x / tileWidth);
 				tv = tileNumber / (tileTextures[tile.tilesetId].getSize().x / tileWidth);
@@ -125,10 +124,9 @@ void MapHandler::LoadMap(const std::string& fileName)
 						tv = tileNumber / (tileTextures[k].getSize().x / tileWidth);
 						break;
 					}
-
-					
 				}
 				*/
+
 				//Define the quads 4 corners
 				quad[0].position = sf::Vector2f(j * tileWidth, i * tileHeight);
 				quad[1].position = sf::Vector2f((j + 1) * tileWidth, i * tileHeight);
@@ -148,44 +146,9 @@ void MapHandler::LoadMap(const std::string& fileName)
 			}
 		}
 	}
-
-
-}
-
-void ce::MapHandler::DrawMap(sf::RenderWindow& window)
-{
-	/*
-	for (size_t i = 0; i < tileTextures.size(); i++)
-	{
-		sf::RenderStates* state = new sf::RenderStates;
-		state->texture = &tileTextures[i];
-		states.push_back(state);
-	}
-	*/
-
-	for (auto i : vertexLayers)
-	{
-		/*for (auto j : states)
-		{
-			window.draw(*i, *j);
-		}*/
-		sf::RenderStates s;
-		s.texture = *i->GetTexture();
-		window.draw(*i->GetVertexArray(), s);
-
-		
-	}
-
 	ce::DrawEventManager::AddTmxLayers(vertexLayers);
+	}
 
-	/*
-	for (auto it = states.begin(); it != states.end();)
-	{
-		delete (*it);
-
-		it = states.erase(it);
-	}*/
-}
 
 void ce::MapHandler::AddMapName(std::string* mapName)
 {

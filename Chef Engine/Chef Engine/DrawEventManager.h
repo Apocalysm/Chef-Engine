@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
 #include <SFML/Graphics.hpp>
+#include "MapTexture.h"
 
 namespace ce
 {
@@ -13,7 +14,7 @@ namespace ce
 
 		static void AddSprite(Sprite* sprite);
 		static void RemoveSprite(Sprite* sprite);
-		static void AddTmxLayers(std::vector<sf::VertexArray>* tileMapLayers);
+		static void AddTmxLayers(std::vector<std::map<int ,MapTexture*>> tileMapLayers);
 		void Draw(sf::RenderWindow& window);
 
 	private:
@@ -27,7 +28,7 @@ namespace ce
 		static OrderSpriteMap enumToMapSpr;
 
 		// Vector containing layers from Tiled to be drawn
-		static std::vector<ce::MapTexture>* m_tileMapLayers;
+		static std::vector<std::map<int, MapTexture*>> m_tileMapLayers;
 
 		static std::vector<sf::RenderStates> renderStates;
 	};
