@@ -18,7 +18,6 @@ GameObject::GameObject()
 {
 }
 
-
 GameObject::GameObject(std::string name)
 { 
 	// Sets the instanceID of the object to the incremented value of uniqueIDCounter
@@ -34,7 +33,16 @@ GameObject::GameObject(std::string name)
     this->active = true;
 
     layer = Default;
-}
+    
+    // Adds references to the Layers we can add to Lua
+    // { Default, Player, Enemy, Terrain, UI}
+    layerRef.push_back(Default);
+    layerRef.push_back(Player);
+    layerRef.push_back(Enemy);
+    layerRef.push_back(Terrain);
+    layerRef.push_back(UI);
+
+}      
 
 
 GameObject::~GameObject()
@@ -197,16 +205,22 @@ void GameObject::Destroy()
 
 void GameObject::DoBind(lua_State * L)
 {
-	luabridge::getGlobalNamespace(L)
+    luabridge::getGlobalNamespace(L)   
+ 
 		.beginNamespace("Chef")
 			.beginClass<GameObject>("GameObject")
 				.addProperty("active", &GameObject::GetActive, &GameObject::SetActive)
-				.addProperty("layer", &GameObject::GetLayer, &GameObject::SetLayer)
+				.addProperty("layer", &GameObject::GetLayer, &GameObject::SetLayer)                   
 				.addProperty("instanceID", &GameObject::GetID)
 				.addFunction("AddComponent", &GameObject::AddComponent)
 				.addFunction("GetComponent", &GameObject::GetComponent)
 				.addFunction("RemoveComponent", &GameObject::RemoveComponent)
 			.endClass()
-		.endNamespace();
+        /*.addVariable("Default", GameObject::layerRef[0], false)
+        .addVariable("Player", GameObject::layerRef[1], false)
+        .addVariable("Enemy", GameObject::layerRef[2], false)
+        .addVariable("Terrain", GameObject::layerRef[3], false)
+        .addVariable("UI", GameObject::layerRef[4], false)*/
+		.endNamespace();       
 }
 

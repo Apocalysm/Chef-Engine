@@ -16,9 +16,14 @@ namespace ce
 		Component();
 		~Component();
 
+        /*!
+        * Start is called on the frame when a script is enabled just before the Update method is Called for the first time.
+        */
 		virtual void Start();
-		// This gets called every frame from the GameObjectManager
-		virtual void Update();
+		
+        // Update gets called every frame from the GameObjectManager
+		/*! Update is called every frame.*/
+        virtual void Update();
 
 		// Getter for the 'hash'-variable
 		int GetID() const;
@@ -45,6 +50,7 @@ namespace ce
 		int ID;
 
 		// This decides if the Component should be updated for example via the Update method
+        /*! Enabled Components are Updated, disabled Components are not.*/
 		bool enabled = true;
 
 		

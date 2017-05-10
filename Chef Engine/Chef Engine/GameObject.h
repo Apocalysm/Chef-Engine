@@ -8,11 +8,20 @@
 #include <typeinfo>
 #include <utility>
 
+/*! \defgroup luaGroup LuaCallable
+*   This group contains all the functions that are callable from Lua scripts.
+*/
+
 namespace ce
 {
 	// Forward declaration
 	class Component;
 	
+    /*! \defgroup GameObjectGroup GameObject
+    *   \ingroup luaGroup
+    *   \brief Base class for all entities in Chef Engine.
+    *   \brief Can hold Components to add more behaviour to it.
+    */
 	class GameObject
 	{
 		// Befriends the templated Bind function so it can access our protected functions
@@ -23,7 +32,28 @@ namespace ce
 	public:
         // Adds a default name 'none' tp the GameObject
 		GameObject();
+
+        /*! \ingroup GameObjectGroup
+        *   \brief Lua Constructor for GameObject
+        *
+        *   Example for using GameObject's constructor:
+        *	\code{.unparsed}
+        *	-- Creates a new GameObject named "Player"
+        *	-- Adds a Sprite Component to it.
+        *
+        *	local ExampleScript = {}
+        *
+        *	ExampleScript:Start = function()
+        *		local gameObj = GameObject("Player")
+        *
+        *		local sprite = GameObject.AddComponent(SpriteID)
+        *	end
+        *
+        *	return ExampleScript
+        *	\endcode
+        */ 
 		GameObject(std::string name);
+
 		~GameObject();
 
 
@@ -51,10 +81,16 @@ namespace ce
 
 		// Works as it's counterpart that takes a template type and instead uses the integer-based system explained above
 		void RemoveComponent(const int hash);
-
+        
 
 		// An enumerator for differentiating our GameObjects between layers
-		enum Layers { Default, Player, Enemy, Terrain, UI };
+        /*! \enum Layers
+            \brief Layers are for sorting objects
+
+         *  Set the class: GameObject::layer variable of your GameObject to one of the available Layers and the GameObject will be sorted under that layer.
+         *  This allows you to find all GameObjects or Sprites in a layer and disable or something else.
+         */
+		enum Layers { Default, Player, Enemy, Terrain, UI};
 
 		// The amount of different values in the Layers enum
 		static const int LAYER_AMOUNT;
@@ -103,6 +139,8 @@ namespace ce
 		bool active;
 
 		Layers layer;
+
+        std::vector<int> layerRef;
 
 		// number to differentiate our different GameObject
         int64 instanceID;
@@ -154,6 +192,8 @@ namespace ce
 
 			return t;
 		}
+
+        return nullptr;
 	}
 
 	
