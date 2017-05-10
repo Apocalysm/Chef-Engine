@@ -5,21 +5,21 @@
 
 namespace ce
 {
-    class MapTexture
-    {
-    public:
-		MapTexture(sf::VertexArray* va, const sf::Texture& texture);
-	    ~MapTexture();
+class MapTexture
+{
+public:
+		MapTexture(sf::VertexArray* va, const sf::Texture& txt);
+	~MapTexture();
 
 		sf::VertexArray& GetVertexArray();
 	    void SetVertexArray(sf::VertexArray& vertexArray);
 
-	    const sf::Texture& GetTexture() const;
+	const sf::Texture& GetTexture() const;
 	    void SetTexture(const sf::Texture& texture);
 
-    private:
+private:
 	    sf::VertexArray* vertexArray;
-	    const sf::Texture* texture;
-    };
+	const sf::Texture* texture;
+};
 }
 
