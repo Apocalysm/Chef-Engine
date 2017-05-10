@@ -13,6 +13,7 @@
 #include "MapTexture.h"
 
 #include <vector>
+#include <map>
 #include <string>
 #include <cassert>
 #include <array>
@@ -47,10 +48,11 @@ namespace ce
 		std::vector<Tmx::Tileset*> tileSets;
 		std::vector<sf::Texture> tileTextures;
 		std::vector<Tmx::TileLayer*> tileLayers;
-		std::vector <MapTexture*> vertexLayers;
+
+		std::vector<std::map<int, MapTexture*>> vertexLayers;
+		
 		std::vector<sf::RenderStates*> states;
 		std::vector<Tmx::Object*> objects;
-		std::vector<int> mapTileID;
 
 		Tmx::Map* map;
 
