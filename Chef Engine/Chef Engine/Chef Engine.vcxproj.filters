@@ -74,9 +74,7 @@
     <ClCompile Include="MapTexture.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionManager.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
