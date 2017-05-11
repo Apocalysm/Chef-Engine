@@ -8,5 +8,7 @@ namespace ce
 	public:
 		CollisionManager();
 		~CollisionManager();
+
+	private:
 	};
 }

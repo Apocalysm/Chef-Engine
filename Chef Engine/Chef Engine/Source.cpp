@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "GameObjectManager.h"
 #include "DrawEventManager.h"
+#include "Collider.h"
 
 #include <SFML/Graphics.hpp>
 #include <Tmx\TmxTile.h>
@@ -44,11 +45,21 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	ce::Sprite* sprite = object->AddComponent<ce::Sprite>();
 
-	sprite->SetSprite("Hp mana bar.png");
+	sprite->SetSprite("image.jpg");
 	
 	sprite->SetDrawOrder(1);
 
-	map->LoadMap("orthogonal-outside.tmx");
+	//sprite->SetOrigin(200.0f, 100.0f);
+	object->GetTransform()->SetScale(3.0f, 3.0f);
+
+	object->GetTransform()->SetPosition(200.0f, 200.0f);
+
+	ce::Collider* collBox = object->AddComponent<ce::Collider>();
+
+	collBox->FitSprite();
+
+	//map->LoadMap("sewers.tmx");
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -59,30 +70,30 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		}
 
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
 			map->LoadMap("sewers.tmx");
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
 			map->LoadMap("orthogonal-outside.tmx");
-		}
+		}*/
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		{
-			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0, -0.3));
+			object->GetTransform()->SetPosition(object->GetTransform()->GetPosition() + sf::Vector2f(0, -0.3));
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		{
-			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0, 0.3f));
+			object->GetTransform()->SetPosition(object->GetTransform()->GetPosition() + sf::Vector2f(0, 0.3f));
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
-			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(-0.3f, 0));
+			object->GetTransform()->SetPosition(object->GetTransform()->GetPosition() + sf::Vector2f(-0.3f, 0));
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		{
-		    sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0.3f, 0));
+			object->GetTransform()->SetPosition(object->GetTransform()->GetPosition() + sf::Vector2f(0.3f, 0));
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
