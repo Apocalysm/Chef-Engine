@@ -1,7 +1,11 @@
 #pragma once
-#include <map>
+#include "TileMapLayer.h"
+
 #include <SFML/Graphics.hpp>
-#include "MapTexture.h"
+
+#include <vector>
+#include <map>
+
 
 namespace ce
 {
@@ -12,24 +16,26 @@ namespace ce
 	public:
 		DrawEventManager();
 
-		static void AddSprite(Sprite* sprite);
+        static void AddSprite(Sprite* sprite);
 		static void RemoveSprite(Sprite* sprite);
-		static void AddTmxLayers(std::vector<std::map<int ,MapTexture*>> tileMapLayers);
+		static void AddTmxLayers(std::vector<std::map<int, ce::TileMapLayer*>> tileMapLayers);
 		void Draw(sf::RenderWindow& window);
 
 	private:
-		typedef std::map<int, Sprite*> SpriteMap;
-		typedef std::map<int, SpriteMap> OrderSpriteMap;
+        typedef unsigned long long int64;
+
+		typedef std::map<int64, Sprite*> SpriteMap;
+		typedef std::map<int64, SpriteMap> OrderSpriteMap;
 
 		// OrderSpriteMap with Sprite components recently created
 		static OrderSpriteMap enumToMapNewSpr;
 
-		// Map with Sprite componenets
+		// Map with Sprite components
 		static OrderSpriteMap enumToMapSpr;
 
 		// Vector containing layers from Tiled to be drawn
-		static std::vector<std::map<int, MapTexture*>> m_tileMapLayers;
-
-		static std::vector<sf::RenderStates> renderStates;
+        static std::vector<std::map<int, ce::TileMapLayer*>> tileMapLayers;
+		
+        static std::vector<sf::RenderStates> renderStates;
 	};
 }

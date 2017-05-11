@@ -13,37 +13,46 @@ namespace ce
 
 		void Update();
 
-		void SetSprite(const std::string &fileName);
 
+        #pragma region Position Methods
 		void SetPosition(const float x, const float y);
 		void SetPosition(const sf::Vector2f newPosition);
 
+        sf::Vector2f GetPosition() const;
+        #pragma endregion
+
+
+        #pragma region Scale Methods
 		void SetScale(const float x, const float y);
 		void SetScale(const sf::Vector2f newScale);
 
-		void SetOrigin(const float x, const float y);
-		void SetOrigin(const sf::Vector2f newOrigin);
+		sf::Vector2f GetScale() const;
+        #pragma endregion 
 
+
+        #pragma region Rotation Methods
 		void SetRotation(const float angle);
+        
+        float GetRotation() const;
+        #pragma endregion 
 
-		void SetColor(const sf::Color color);
+        void SetOrigin(const float x, const float y);
+		void SetOrigin(const sf::Vector2f newOrigin);
+        
+        sf::Vector2f GetOrigin() const;	
+
+        void SetColor(const sf::Color color);
 		void SetColor(const int r, const int g, const int b, const int a);
+		
+        sf::Color GetColor() const;
 
 		void SetDrawOrder(const int drawOrder);
+		
+        int GetDrawOrder() const;
+		
+        void SetSprite(const std::string &fileName);
 
 		sf::Sprite* GetSprite() const;
-
-		sf::Vector2f GetPosition() const;
-
-		sf::Vector2f GetScale() const;
-
-		sf::Vector2f GetOrigin() const;
-
-		float GetRotation() const;
-
-		sf::Color GetColor() const;
-
-		int GetDrawOrder() const;
 
 		void SetGameObject(GameObject* gameObject);
 
@@ -52,6 +61,7 @@ namespace ce
 
 		sf::Sprite* sprite;
 		sf::Texture texture;
+
 		sf::Vector2f position;
 		sf::Vector2f scale;
 		float rotation;

@@ -6,13 +6,24 @@
 #include "GameObjectManager.h"
 #include "DrawEventManager.h"
 
+#include <SFML/Graphics.hpp>
+#include <Tmx\TmxTile.h>
+
 #include <Windows.h>
 #include <typeinfo>
 #include <iostream>
 
-#include <SFML/Graphics.hpp>
-#include <Tmx\TmxTile.h>
-
+/*! \mainpage My Personal Index
+*
+*\section intro_sec Introduction
+*
+* This is the introduction.
+*
+*\section install_sec Installation
+* 
+*\subsection step1 Step 1: Do the thing
+*\subsection step2 Step 2: Do the other thing
+*/
 #if _DEBUG
 int main(int argc, char* argv[])
 #else
@@ -20,12 +31,13 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #endif
 {
 	// Binds all defined classes with LuaBridge
-	LuaBridgeBinder::BindAll();
+	ce::LuaBridgeBinder::BindAll();
 
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Test");
 
 	ce::MapHandler* map = new ce::MapHandler;
 
+    ce::GameObjectManager* objManager = new ce::GameObjectManager();
 	ce::DrawEventManager* drawManager = new ce::DrawEventManager();
 
 	ce::GameObject* object = new ce::GameObject();
@@ -58,23 +70,33 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		{
-			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0, -1));
+			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0, -0.3));
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		{
-			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0, 0.3));
+			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0, 0.3f));
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
-			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(-0.3, 0));
+			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(-0.3f, 0));
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		{
-			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0.3, 0));
-		}
+		    sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0.3f, 0));
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        {
+            object->GetTransform()->SetScale(object->GetTransform()->GetScale() + sf::Vector2f(0.001f, 0.001f));
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace))
+        {
+            object->GetTransform()->SetScale(object->GetTransform()->GetScale() - sf::Vector2f(0.001f, 0.001f));
+        }
+
+        objManager->CallUpdate();
 
 		window.clear(sf::Color::Cyan);
-
 		drawManager->Draw(window);
 		window.display();
 

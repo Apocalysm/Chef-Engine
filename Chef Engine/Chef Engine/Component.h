@@ -1,5 +1,4 @@
 #pragma once
-#include "Object.h"
 #include "LuaBridgeBinder.h"
 
 #include <SFML\Graphics.hpp>
@@ -17,13 +16,18 @@ namespace ce
 		Component();
 		~Component();
 
+        /*!
+        * Start is called on the frame when a script is enabled just before the Update method is Called for the first time.
+        */
 		virtual void Start();
-		// This gets called every frame from the GameObjectManager
-		virtual void Update();
+		
+        // Update gets called every frame from the GameObjectManager
+		/*! Update is called every frame.*/
+        virtual void Update();
 
 		// Getter for the 'hash'-variable
-		int GetHashCode() const;
-		void SetHashCode(int hash);
+		int GetID() const;
+		void SetID(int hash);
 
 		// Getter and setter for the 'enabled'-variable
 		void SetEnabled(bool enabled);
@@ -35,19 +39,18 @@ namespace ce
 
 		bool operator==(const Component& other);
 
-	protected: 
-		// Binds all relevant members of this class with LuaBridge
-		static void DoBind(lua_State* L);
-		
+	protected:
 		// The GameObject holding this Component
 		ce::GameObject* gameObject = nullptr;
 
 	private: 
+        static int IDCounter;
 
 		// The hash_code of the Component, is set in AddComponent
-		int hash;
+		int ID;
 
 		// This decides if the Component should be updated for example via the Update method
+        /*! Enabled Components are Updated, disabled Components are not.*/
 		bool enabled = true;
 
 		

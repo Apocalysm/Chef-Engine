@@ -69,11 +69,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\dirent;..\..\Lua_\include;..\..\Lua_Bridge;..\..\SFML-2.4.2\include;..\..\tmxparser\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\Box2D;..\..\dirent;..\..\Lua_\include;..\..\Lua_Bridge;..\..\SFML-2.4.2\include;..\..\tmxparser\include;..\..\Box2D-master\Box2D;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\Lua_;..\..\SFML-2.4.2\lib;..\..\tmxparser\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\..\dirent;..\..\Lua_\include;..\..\Lua_Bridge;..\..\SFML-2.4.2\include;..\..\tmxparser\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\dirent;..\..\Lua_\include;..\..\Lua_Bridge;..\..\SFML-2.4.2\include;..\..\tmxparser\include;..\..\Box2D;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\Lua_;..\..\SFML-2.4.2\lib;..\..\tmxparser\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -128,27 +128,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DrawEventManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="LuaComponent.cpp" />
     <ClCompile Include="MapHandler.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="LuaBridgeBinder.cpp" />
-    <ClCompile Include="MapTexture.cpp" />
-    <ClCompile Include="Object.cpp" />
+    <ClCompile Include="TileMapLayer.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Collider.h" />
+    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="DrawEventManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectManager.h" />
+    <ClInclude Include="LuaComponent.h" />
     <ClInclude Include="MapHandler.h" />
     <ClInclude Include="LuaBridgeBinder.h" />
-    <ClInclude Include="MapTexture.h" />
-    <ClInclude Include="Object.h" />
+    <ClInclude Include="TileMapLayer.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>

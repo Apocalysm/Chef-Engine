@@ -1,15 +1,17 @@
 #include "GameObject.h"
+
 #include "Component.h"
+#include "Sprite.h"
 #include "GameObjectManager.h"
 #include "DrawEventManager.h"
-#include "Sprite.h"
+
 
 using ce::GameObject;
 
-// Initializes our ID generator
-unsigned long long ce::GameObject::uniqueIDCounter = 0;
+const int GameObject::LAYER_AMOUNT = 6;
 
-const int ce::GameObject::LAYER_AMOUNT = 6;
+// Initializes our ID generator
+unsigned long long GameObject::uniqueIDCounter = 0;
 
 GameObject::GameObject()
 	: GameObject("none")
@@ -27,43 +29,61 @@ GameObject::GameObject(std::string name)
 	transform = AddComponent<ce::Transform>();
 
 	ce::GameObjectManager::AddObject(this);
-}
+
+    this->active = true;
+
+    layer = Default;
+    
+    // Adds references to the Layers we can add to Lua
+    // { Default, Player, Enemy, Terrain, UI}
+    layerRef.push_back(Default);
+    layerRef.push_back(Player);
+    layerRef.push_back(Enemy);
+    layerRef.push_back(Terrain);
+    layerRef.push_back(UI);
+
+}      
+
 
 GameObject::~GameObject()
 {
-	/*if(GetComponentInternal<ce::Sprite>() != nullptr)
-
-	components.clear();*/
 }
+
 
 void GameObject::SetActive(bool active)
 {
-	m_active = active;
+	this->active = active;
 }
+
 
 bool GameObject::GetActive() const
 {
-	return m_active;
+	return this->active;
 }
+
 
 void GameObject::SetLayer(Layers newLayer)
 {
 }
+
 
 int GameObject::GetLayer() const
 {
 	return layer;
 }
 
+
 void GameObject::SetTransform(ce::Transform* transform)
 {
 	this->transform = transform;
 }
 
+
 ce::Transform* GameObject::GetTransform() const
 {
 	return transform;
 }
+
 
 unsigned long long GameObject::GetID() const
 {
@@ -78,40 +98,39 @@ bool ce::GameObject::operator==(const GameObject & other)
 		// This is the same gameobject
 		return true;
 	}
-
 	return false;
 }
+
 
 void GameObject::ComponentUpdate()
 {
 	for (auto it = components.begin(); it != components.end(); it++)
 	{
-		(*it)->Update();
+		it->second->Update();
 	}
 }
+
 
 // Adds a new component of the specified type
 ce::Component* GameObject::AddComponent(const int hash)
 {
-	if(GameObject::GetComponentInternal(hash) == nullptr)
-		return nullptr;
+    if (GameObject::GetComponentInternal(hash) == nullptr)
+    {
+        return nullptr;
+    }
+
+    return nullptr;
 }
+
 
 // Tries to get a component of the specified type from GameObject's vector 'components'
 ce::Component* GameObject::GetComponentInternal(const int hash)
 {
-	// Iterates all of GameObject's components
-	for (auto it = components.begin(); it != components.end(); it++)
-	{
-		// Checks if we find the same hash_code on the two types we are comparing
-		if ((*it)->GetHashCode() == hash)
-		{
-			return (*it);
-		}
-	}
+	Component* comp = components[hash];
 
-	return nullptr;
+	return comp;
 }
+
 
 // Uses GetComponentInternal and also writes an error message to the console if we couldn't find anything
 ce::Component* GameObject::GetComponent(const int hash)
@@ -128,43 +147,39 @@ ce::Component* GameObject::GetComponent(const int hash)
 	return comp;
 }
 
+
 void GameObject::RemoveComponent(const int hash)
 {
-	// Iterates all of GameObject's components
-	for (auto it = components.begin(); it != components.end(); it++)
-	{
-		// Checks if we find the same hash_code on the two types we are comparing
-		if ((*it)->GetHashCode() == hash)
-		{
-			// We delete the object from the vector and the memory
-			delete (*it);
-
-			it = components.erase(it);
-
-			break;
-		}
-	}
+	// delete the object from the vector and the memory
+	delete components[hash];
 }
+
 
 // Getter and setter methods for 'name' variable
 std::string GameObject::GetName() const
 {
 	return name;
 }
+
+
 void GameObject::SetName(std::string name)
 {
 	this->name = name;
 }
+
 
 // Getter and setter methods for 'tag' variable
 std::string GameObject::GetTag() const
 {
 	return tag;
 }
+
+
 void GameObject::SetTag(std::string tag)
 {
 	this->tag = tag;
 }
+
 
 void GameObject::Destroy()
 {
@@ -177,34 +192,35 @@ void GameObject::Destroy()
 	}
 
 	// Iterates all of GameObject's components
-	for (auto it = components.begin(); it != components.end();)
+	for (auto it = components.begin(); it != components.end(); it++)
 	{
 		// Deletes the component from the vector and the memory
-		delete (*it);
-		it = components.erase(it);
+        delete it->second;
 	}
+    components.clear();
 
 	ce::GameObjectManager::RemoveObject(this);
-	delete this;
 }
+
 
 void GameObject::DoBind(lua_State * L)
 {
-	luabridge::getGlobalNamespace(L)
+    luabridge::getGlobalNamespace(L)   
+ 
 		.beginNamespace("Chef")
 			.beginClass<GameObject>("GameObject")
 				.addProperty("active", &GameObject::GetActive, &GameObject::SetActive)
-				.addProperty("layer", &GameObject::GetLayer, &GameObject::SetLayer)
+				.addProperty("layer", &GameObject::GetLayer, &GameObject::SetLayer)                   
 				.addProperty("instanceID", &GameObject::GetID)
 				.addFunction("AddComponent", &GameObject::AddComponent)
 				.addFunction("GetComponent", &GameObject::GetComponent)
 				.addFunction("RemoveComponent", &GameObject::RemoveComponent)
-				.addProperty("name", &GameObject::GetName, &GameObject::SetName)
-				.addProperty("tag", &GameObject::GetTag, &GameObject::SetTag)
-				.addFunction("Destroy", &GameObject::Destroy)
 			.endClass()
-		.endNamespace();
-			
-
+        /*.addVariable("Default", GameObject::layerRef[0], false)
+        .addVariable("Player", GameObject::layerRef[1], false)
+        .addVariable("Enemy", GameObject::layerRef[2], false)
+        .addVariable("Terrain", GameObject::layerRef[3], false)
+        .addVariable("UI", GameObject::layerRef[4], false)*/
+		.endNamespace();       
 }
 

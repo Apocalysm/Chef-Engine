@@ -1,8 +1,7 @@
 #include "LuaBridgeBinder.h"
 
 // All the different classes we want to bind with Lua Bridge
-#include "Object.h"
-#include "Component.h"
+#include "LuaComponent.h"
 
 #include <iostream>
 #include <vector>
@@ -13,12 +12,15 @@
 // Linking a library through code
 #pragma comment(lib, "lua53.lib")
 
+using ce::LuaBridgeBinder;
+
 // Creates a templated Bind function
 template<typename T>
-void LuaBridgeBinder::Bind(lua_State* L)
+void ce::LuaBridgeBinder::Bind(lua_State* L)
 {
 	T::DoBind(L);
 }
+
 
 // The directory path where we store our .lua-scripts
 const std::string LUA_SCRIPTS_PATH = "Lua Scripts";
@@ -26,6 +28,7 @@ const std::string LUA_SCRIPTS_PATH = "Lua Scripts";
 // Values of directory entries representing a directory and a file
 const int DIRECTORY_FLAG = (1 << 14);
 const int FILE_FLAG = (1 << 15);
+
 
 // Loads a directory and gets all the .lua-files
 static const std::vector<std::string*> LoadDirectory(const std::string dir_path)
@@ -70,6 +73,9 @@ static const std::vector<std::string*> LoadDirectory(const std::string dir_path)
 				// Checks if the filename contains .lua
 				if (std::string(ent->d_name).find(".lua") != std::string(ent->d_name).npos)
 				{
+                    // Creates a string for just the name of the file which will be used in DoRequire() later
+                    output.push_back(new std::string(ent->d_name));
+
 					// Adds the name of that file to our vector
 					output.push_back(new std::string(newPath));
 				}
@@ -89,30 +95,35 @@ static const std::vector<std::string*> LoadDirectory(const std::string dir_path)
 	}
 }
 
+
 // Call this to call the Bind method in all classes written here
-void LuaBridgeBinder::BindAll()
+void ce::LuaBridgeBinder::BindAll()
 {
 	// Create a new lua_State and open default Lua-libraries
 	lua_State* L = luaL_newstate();
 	luaL_openlibs(L);
 
+
 	// Here you put all the method calls for the classes you want to bind
-	Bind<ce::Object>(L);
-	Bind<ce::Component>(L);
+
 	
 	// Gets all the .lua file_paths
     std::vector<std::string*> file_paths = LoadDirectory(LUA_SCRIPTS_PATH);
 	
+    //DoRequire(file_paths);
+
 	// Iterates all the file_paths
 	for (auto it = file_paths.begin(); it != file_paths.end(); it++)
 	{
+        it++;
 		// Loads the file using the current iteration of file_path
 		LoadLua(L, (**it));
 	}
 }
 
+
 // Loads lua file
-void LuaBridgeBinder::LoadLua(lua_State * L, const std::string & path)
+void ce::LuaBridgeBinder::LoadLua(lua_State * L, const std::string & path)
 {
 	// Checks if we can load the .lua file or not
 	if (luaL_dofile(L, path.c_str()))
