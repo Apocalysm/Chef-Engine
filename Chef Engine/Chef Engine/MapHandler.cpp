@@ -1,6 +1,7 @@
 #include "MapHandler.h"
-
 #include "DrawEventManager.h"
+#include "GameObject.h"
+#include "Sprite.h"
 
 #include <algorithm>
 #include <iostream>
@@ -18,6 +19,7 @@ MapHandler::~MapHandler()
 }
 
 
+//Load map with an index number
 void ce::MapHandler::LoadMapIndex(const int mapIndex)
 {
 	std::string* mapString = tileMapNames[mapIndex];
@@ -31,6 +33,7 @@ void ce::MapHandler::LoadMapIndex(const int mapIndex)
 }
 
 
+//Load map with its file name
 void MapHandler::LoadMap(const std::string& fileName)
 {
 	//Check if we alreday have a map drawn
@@ -61,8 +64,6 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 	tileSets = map->GetTilesets();
 	tileLayers = map->GetTileLayers();
-
-	objectGroups = map->GetObjectGroups();
 	
 	// Load in all the texture to the specific tile map
 	for (size_t i = 0; i < tileSets.size(); i++)
@@ -98,6 +99,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 				const Tmx::MapTile tile = tileLayers[k]->GetTile(j, i);
 				if (tile.tilesetId == -1)
 					continue;
+
 
 				if (tileMapLayers[k].find(tile.tilesetId) == tileMapLayers[k].end())
 				{
@@ -151,25 +153,56 @@ void MapHandler::LoadMap(const std::string& fileName)
 			}
 		}
 	}
-
-	/*for (size_t i = 0; i < objectGroups.size; i++)
-	{
-		//objects.p
-	}*/
-
-	ce::DrawEventManager::AddTmxLayers(vertexLayers);
+	ce::DrawEventManager::AddTmxLayers(tileMapLayers);
 }
 
 
-void ce::MapHandler::AddMapName(std::string* mapName)
-{
-	tileMapNames.push_back(mapName);
-}
 
-
-void ce::MapHandler::AddMapNameIndex(int & index, std::string* mapName)
+void ce::MapHandler::RegisterMap(int  index, std::string* mapName)
 {
 	tileMapNames.insert(tileMapNames.begin() + index, mapName);
+}
+
+
+void ce::MapHandler::LoadObject()
+{
+	std::vector<Tmx::ObjectGroup*> layers = map->GetObjectGroups();; 
+
+	for (auto i = 0; i < layers.size(); i++)
+	{
+
+		for (size_t j = 0; j < layers[i]->GetNumObjects(); j++)
+		{
+
+			const Tmx::Object* object = layers[i]->GetObject(j);
+
+			ce::GameObject* gameObject = new ce::GameObject(object->GetName());
+
+			ce::Sprite* spriteObject = new Sprite();
+
+			spriteObject->SetDrawOrder(layers[i]->GetParseOrder());
+
+			spriteObject->SetRotation(object->GetRot());
+
+			spriteObject->SetPosition(object->GetX(), object->GetY());
+
+			if (object->GetGid() != 0)
+			{
+				sf::Sprite sprite;
+				sprite.setTextureRect()
+			}
+
+			else if (object->GetPolygon() != nullptr)
+			{
+
+			}
+
+			else if(object->GetPolyline() != nullptr)
+			{
+
+			}
+		}
+	}
 }
 
 
@@ -181,7 +214,7 @@ void ce::MapHandler::DoBind(lua_State * L)
 				.addConstructor<void(*)(void)>()
 				.addFunction("LoadMap", &MapHandler::LoadMap)
 				.addFunction("LoadMapIndex", &MapHandler::LoadMap)
-				.addFunction("RegisterMap", &MapHandler::AddMapNameIndex)
+				.addFunction("RegisterMap", &MapHandler::RegisterMap)
 			.endClass()
 		.endNamespace();
 }

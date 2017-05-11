@@ -49,6 +49,11 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	sprite->SetDrawOrder(1);
 
 	map->LoadMap("orthogonal-outside.tmx");
+
+	std::string* mapName = new std::string("orthogonal-outside.tmx");
+
+	map->RegisterMap(0, mapName);
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -65,7 +70,7 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
-			map->LoadMap("orthogonal-outside.tmx");
+			map->LoadMapIndex(0);
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
