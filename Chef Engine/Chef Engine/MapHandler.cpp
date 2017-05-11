@@ -189,12 +189,19 @@ void ce::MapHandler::LoadObject()
 			if (object->GetGid() != 0)
 			{
 				sf::Sprite sprite;
-				sprite.setTextureRect()
+				
+				for (size_t k = 0; k < tileTextures.size(); k++)
+				{
+					if (object->GetGid() > tileSets[k]->GetFirstGid + tileSets[k]->GetTiles().size())
+					{
+
+					}
+				}
 			}
 
 			else if (object->GetPolygon() != nullptr)
 			{
-
+				std::cout << object->GetPolygon()  << std::endl;
 			}
 
 			else if(object->GetPolyline() != nullptr)

@@ -54,6 +54,8 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	map->RegisterMap(0, mapName);
 
+	map->LoadObject();
+
 	while (window.isOpen())
 	{
 		sf::Event event;
