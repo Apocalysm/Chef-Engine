@@ -59,6 +59,8 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 	tileSets = map->GetTilesets();
 	tileLayers = map->GetTileLayers();
+
+	objectGroups = map->GetObjectGroups();
 	
 	// Load in all the texture to the specific tile map
 	for (size_t i = 0; i < tileSets.size(); i++)
@@ -147,6 +149,12 @@ void MapHandler::LoadMap(const std::string& fileName)
 			}
 		}
 	}
+
+	/*for (size_t i = 0; i < objectGroups.size; i++)
+	{
+		//objects.p
+	}*/
+
 	ce::DrawEventManager::AddTmxLayers(vertexLayers);
 }
 

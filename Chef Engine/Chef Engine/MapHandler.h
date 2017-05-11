@@ -48,11 +48,10 @@ namespace ce
 		std::vector<Tmx::Tileset*> tileSets;
 		std::vector<sf::Texture> tileTextures;
 		std::vector<Tmx::TileLayer*> tileLayers;
-
-		std::vector<std::map<int, MapTexture*>> vertexLayers;
-		
+		std::vector<std::map<int, MapTexture*>> vertexLayers;		
 		std::vector<sf::RenderStates*> states;
 		std::vector<Tmx::Object*> objects;
+		std::vector<Tmx::ObjectGroup*> objectGroups;
 
 		Tmx::Map* map;
 
