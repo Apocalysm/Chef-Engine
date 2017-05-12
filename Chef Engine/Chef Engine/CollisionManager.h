@@ -8,7 +8,11 @@ namespace ce
 	public:
 		CollisionManager();
 		~CollisionManager();
+		static b2World* GetWorld();
+		
 
 	private:
+		b2Vec2 gravity;
+		static b2World* world;
 	};
 }

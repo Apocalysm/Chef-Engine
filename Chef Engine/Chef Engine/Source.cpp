@@ -58,6 +58,17 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	collBox->FitSprite();
 
+
+	/*b2Vec2 gravity(0.0f, 0.0f);
+	b2World world(gravity);
+	b2BodyDef bodyDef;
+	bodyDef.position.Set(100.0f, 100.0f);
+	b2Body* body = world.CreateBody(&bodyDef);*/
+
+	sf::CircleShape shape(50);
+
+
+
 	//map->LoadMap("sewers.tmx");
 
 	while (window.isOpen())

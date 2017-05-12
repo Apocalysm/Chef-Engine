@@ -1,6 +1,7 @@
 #include "Collider.h"
 #include "GameObject.h"
 #include "Sprite.h"
+#include "CollisionManager.h"
 
 using ce::Collider;
 
@@ -20,7 +21,7 @@ void ce::Collider::Update()
 {
 	if (fitSprite)
 	{
-		b2Vec2 vertices[4];
+		/*b2Vec2 vertices[4];
 
 		vertices[0].Set(transform->GetPosition().x - spriteOrigin.x,
 			transform->GetPosition().y - spriteOrigin.y);
@@ -34,7 +35,7 @@ void ce::Collider::Update()
 		vertices[3].Set(transform->GetPosition().x + spriteSizeX * transScale.x - spriteOrigin.x,
 			transform->GetPosition().y - spriteOrigin.y);
 
-		shape.Set(vertices, 4);
+		shape.Set(vertices, 4);*/
 	}
 }
 
@@ -48,7 +49,7 @@ void ce::Collider::FitSprite()
 	spriteSizeY = sprite->GetSprite()->getTexture()->getSize().y;
 	spriteOrigin = sprite->GetOrigin();
 
-	b2Vec2 vertices[4];
+	/*b2Vec2 vertices[4];
 
 	vertices[0].Set(transPos.x - spriteOrigin.x,
 					transPos.y - spriteOrigin.y);
@@ -62,9 +63,18 @@ void ce::Collider::FitSprite()
 	vertices[3].Set(transPos.x + spriteSizeX * transScale.x - spriteOrigin.x,
 					transPos.y - spriteOrigin.y);
 
-	shape.Set(vertices, 4);
+	shape.Set(vertices, 4);*/
 
-	ce::GameObject* object1 = new ce::GameObject();
+	b2Vec2 spriteCenter = b2Vec2(transPos.x + spriteSizeX / 2 - spriteOrigin.y,
+		transPos.y + spriteSizeY / 2 - spriteOrigin.y);
+
+	transRot = (transform->GetRotation() * PI) / 180;
+
+	shape.SetAsBox(spriteSizeX / 2, spriteSizeY / 2, spriteCenter, transRot);
+
+	body->CreateFixture(&shape, 0.0f);
+
+	/*ce::GameObject* object1 = new ce::GameObject();
 	ce::GameObject* object2 = new ce::GameObject();
 	ce::GameObject* object3 = new ce::GameObject();
 	ce::GameObject* object4 = new ce::GameObject();
@@ -86,7 +96,7 @@ void ce::Collider::FitSprite()
 	sprite1->SetSprite("dot.png");
 	sprite2->SetSprite("dot.png");
 	sprite3->SetSprite("dot.png");
-	sprite4->SetSprite("dot.png");
+	sprite4->SetSprite("dot.png");*/
 }
 
 
@@ -95,4 +105,7 @@ void ce::Collider::SetGameObject(GameObject * gameObject)
 	transform = gameObject->GetTransform();
 	transPos = transform->GetPosition();
 	transScale = transform->GetScale();
+
+	bodyDef.position.Set(transPos.x, transPos.y);
+	body = CollisionManager::GetWorld()->CreateBody(&bodyDef);
 }
