@@ -64,7 +64,6 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     ce::LuaComponent* newComponent = object->AddLuaComponent(L, new std::string("Lua Scripts\\Components\\NewComponent.lua"), new std::string("NewComponent"));
 
 	map->LoadMap("orthogonal-outside.tmx");
-
 	while (window.isOpen())
 	{
 		sf::Event event;

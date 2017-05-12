@@ -32,8 +32,8 @@ namespace ce
 
 		void LoadMapIndex(const int mapIndex);
 		void LoadMap(const std::string& fileName);
-		void AddMapName(std::string* mapName);
-		void AddMapNameIndex(int& index, std::string* mapName);
+		void RegisterMap(int index, std::string* mapName);
+		virtual void LoadObject();
 
 		std::vector<std::string*> tileMapNames;
 
@@ -52,8 +52,6 @@ namespace ce
 		std::vector<std::map<int, TileMapLayer*>> tileMapLayers;
 		
 		std::vector<sf::RenderStates*> states;
-		std::vector<Tmx::Object*> objects;
-
 		Tmx::Map* map;
 
 	};

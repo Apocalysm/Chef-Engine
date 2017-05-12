@@ -1,6 +1,7 @@
 #include "MapHandler.h"
-
 #include "DrawEventManager.h"
+#include "GameObject.h"
+#include "Sprite.h"
 
 #include <algorithm>
 #include <iostream>
@@ -18,6 +19,7 @@ MapHandler::~MapHandler()
 }
 
 
+//Load map with an index number
 void ce::MapHandler::LoadMapIndex(const int mapIndex)
 {
 	std::string* mapString = tileMapNames[mapIndex];
@@ -31,6 +33,7 @@ void ce::MapHandler::LoadMapIndex(const int mapIndex)
 }
 
 
+//Load map with its file name
 void MapHandler::LoadMap(const std::string& fileName)
 {
 	//Check if we alreday have a map drawn
@@ -97,6 +100,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 				if (tile.tilesetId == -1)
 					continue;
 
+
 				if (tileMapLayers[k].find(tile.tilesetId) == tileMapLayers[k].end())
 				{
 					tileMapLayers[k].insert(std::make_pair(tile.tilesetId, new TileMapLayer(new sf::VertexArray(sf::Quads, mapHeight * mapWidth * 4), tileTextures[tile.tilesetId])));
@@ -153,15 +157,52 @@ void MapHandler::LoadMap(const std::string& fileName)
 }
 
 
-void ce::MapHandler::AddMapName(std::string* mapName)
+
+void ce::MapHandler::RegisterMap(int  index, std::string* mapName)
 {
-	tileMapNames.push_back(mapName);
+	tileMapNames.insert(tileMapNames.begin() + index, mapName);
 }
 
 
-void ce::MapHandler::AddMapNameIndex(int & index, std::string* mapName)
+void ce::MapHandler::LoadObject()
 {
-	tileMapNames.insert(tileMapNames.begin() + index, mapName);
+	std::vector<Tmx::ObjectGroup*> layers = map->GetObjectGroups();; 
+
+	for (auto i = 0; i < layers.size(); i++)
+	{
+
+		for (size_t j = 0; j < layers[i]->GetNumObjects(); j++)
+		{
+
+			const Tmx::Object* object = layers[i]->GetObject(j);
+
+			ce::GameObject* gameObject = new ce::GameObject(object->GetName());
+
+			ce::Sprite* spriteObject = new Sprite();
+
+			spriteObject->SetDrawOrder(layers[i]->GetParseOrder());
+
+			spriteObject->SetRotation(object->GetRot());
+
+			spriteObject->SetPosition(object->GetX(), object->GetY());
+
+			if (object->GetGid() != 0)
+			{
+				sf::Sprite sprite;
+				sprite.setTextureRect()
+			}
+
+			else if (object->GetPolygon() != nullptr)
+			{
+
+			}
+
+			else if(object->GetPolyline() != nullptr)
+			{
+
+			}
+		}
+	}
 }
 
 
@@ -173,7 +214,7 @@ void ce::MapHandler::DoBind(lua_State * L)
 				.addConstructor<void(*)(void)>()
 				.addFunction("LoadMap", &MapHandler::LoadMap)
 				.addFunction("LoadMapIndex", &MapHandler::LoadMap)
-				.addFunction("RegisterMap", &MapHandler::AddMapNameIndex)
+				.addFunction("RegisterMap", &MapHandler::RegisterMap)
 			.endClass()
 		.endNamespace();
 }
