@@ -8,6 +8,7 @@ int ce::Component::IDCounter = 0;
 
 ce::Component::Component()
 {
+    isNew = true;
 }
 
 
@@ -47,6 +48,16 @@ void ce::Component::SetEnabled(bool enabled)
 bool ce::Component::GetEnabled() const
 {
 	return enabled;
+}
+
+void ce::Component::SetIsNew(bool isNew)
+{
+    this->isNew = isNew;
+}
+
+bool ce::Component::GetIsNew() const
+{
+    return isNew;
 }
 
 

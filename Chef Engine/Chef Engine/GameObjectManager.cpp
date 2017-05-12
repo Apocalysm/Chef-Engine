@@ -62,12 +62,17 @@ void ce::GameObjectManager::CallUpdate()
 			if (!outer_it->second.empty())
 			{
 				// Iterates through every object in the map
-				for (auto inner_it = outer_it->second.begin(); inner_it != outer_it->second.end(); inner_it++)
-				{
-					// Updates the object
-					if (inner_it->second->active)
-						inner_it->second->ComponentUpdate();
-				}
+                for (auto inner_it = outer_it->second.begin(); inner_it != outer_it->second.end(); inner_it++)
+                {
+                    // Updates the object
+                    if (inner_it->second->active)
+                    {
+                        //Calls Start methods of all the object's components
+                        inner_it->second->ComponentStart();
+                        //Calls Update methods of all the object's components
+                        inner_it->second->ComponentUpdate();
+                    }
+                }
 			}
 		}
 	}
@@ -84,10 +89,13 @@ void ce::GameObjectManager::CallUpdate()
 				// Iterates through every object in the map
 				for (auto inner_it = outer_it->second.begin(); inner_it != outer_it->second.end(); inner_it++)
 				{
-					if (inner_it->second->active)
-						// Updates the object
-						inner_it->second->ComponentUpdate();
-
+                    if (inner_it->second->active)
+                    {
+                        //Calls Start methods of all the object's components
+                        inner_it->second->ComponentStart();
+                        //Calls Update methods of all the object's components
+                        inner_it->second->ComponentUpdate();
+                    }
 					inner_it->second->isNew = false;
 
 					// Adds the new object to the other map since it isn't new anymore
