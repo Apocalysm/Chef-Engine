@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="Collider.h" />
     <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="Common.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="DrawEventManager.h" />
     <ClInclude Include="GameObject.h" />

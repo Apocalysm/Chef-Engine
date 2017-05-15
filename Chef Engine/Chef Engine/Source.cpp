@@ -6,6 +6,7 @@
 #include "GameObjectManager.h"
 #include "DrawEventManager.h"
 #include "Collider.h"
+#include "CollisionManager.h"
 
 #include <SFML/Graphics.hpp>
 #include <Tmx\TmxTile.h>
@@ -40,6 +41,7 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
     ce::GameObjectManager* objManager = new ce::GameObjectManager();
 	ce::DrawEventManager* drawManager = new ce::DrawEventManager();
+	ce::CollisionManager* collManager = new ce::CollisionManager();
 
 	ce::GameObject* object = new ce::GameObject();
 
@@ -58,6 +60,14 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	collBox->FitSprite();
 
+	ce::GameObject* object2 = new ce::GameObject();
+	ce::Sprite* sprite2 = object2->AddComponent<ce::Sprite>();
+	sprite2->SetSprite("image.jpg");
+	sprite->SetDrawOrder(1);
+	object2->GetTransform()->SetPosition(500.0f, 500.0f);
+	ce::Collider* collBox2 = object2->AddComponent<ce::Collider>();
+	collBox2->FitSprite();
+
 
 	/*b2Vec2 gravity(0.0f, 0.0f);
 	b2World world(gravity);
@@ -65,7 +75,6 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	bodyDef.position.Set(100.0f, 100.0f);
 	b2Body* body = world.CreateBody(&bodyDef);*/
 
-	sf::CircleShape shape(50);
 
 
 
@@ -117,6 +126,7 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         }
 
         objManager->CallUpdate();
+		collManager->UpdateCollision();
 
 		window.clear(sf::Color::Cyan);
 		drawManager->Draw(window);
