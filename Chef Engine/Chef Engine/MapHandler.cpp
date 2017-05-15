@@ -186,7 +186,7 @@ void ce::MapHandler::LoadObject()
 
 			spriteObject->SetPosition(object->GetX(), object->GetY());
 
-			if (object->GetGid() != 0)
+			/*if (object->GetGid() != 0)
 			{
 				sf::Sprite sprite;
 				sprite.setTextureRect()
@@ -200,7 +200,7 @@ void ce::MapHandler::LoadObject()
 			else if(object->GetPolyline() != nullptr)
 			{
 
-			}
+			}*/
 		}
 	}
 }

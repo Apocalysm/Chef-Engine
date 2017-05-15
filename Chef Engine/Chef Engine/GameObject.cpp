@@ -133,51 +133,6 @@ namespace ce
         }
     }
 
-
-    // Adds a new component of the specified type
-    Component* GameObject::AddComponent(const int hash)
-    {
-        if (GameObject::GetComponentInternal(hash) == nullptr)
-        {
-            return nullptr;
-        }
-
-        return nullptr;
-    }
-
-
-    // Tries to get a component of the specified type from GameObject's vector 'components'
-    Component* GameObject::GetComponentInternal(const int hash)
-    {
-        Component* comp = components[hash];
-
-        return comp;
-    }
-
-
-    // Uses GetComponentInternal and also writes an error message to the console if we couldn't find anything
-    Component* GameObject::GetComponent(const int hash)
-    {
-        Component* comp = GetComponentInternal(hash);
-
-        if (comp == nullptr)
-        {
-            std::cerr << "Could not find component" << std::endl;
-
-            return nullptr;
-        }
-
-        return comp;
-    }
-
-
-    void GameObject::RemoveComponent(const int hash)
-    {
-        // delete the object from the vector and the memory
-        delete components[hash];
-    }
-
-
     // Getter and setter methods for 'name' variable
     std::string GameObject::GetName() const
     {
@@ -224,35 +179,34 @@ namespace ce
 
         GameObjectManager::RemoveObject(this);
     }
-
-
-    void GameObject::DoBind(lua_State * L)
-    {
-        luabridge::getGlobalNamespace(L)
- 
-            .beginNamespace("Chef")
-                .beginClass<GameObject>("GameObject")
-                    .addProperty("active", &GameObject::GetActive, &GameObject::SetActive)
-                    .addProperty("layer", &GameObject::GetLayer, &GameObject::SetLayer)
-                    .addProperty("instanceID", &GameObject::GetID)
-                    .addFunction("AddComponent", &GameObject::AddComponent)
-                    .addFunction("GetComponent", &GameObject::GetComponent)
-                    .addFunction("RemoveComponent", &GameObject::RemoveComponent)           
-                    /*.addVariable("Default", &GameObject::layerRef[0], false)
-                    .addVariable("Player", &GameObject::layerRef[1], false)
-                    .addVariable("Enemy", &GameObject::layerRef[2], false)
-                    .addVariable("Terrain", &GameObject::layerRef[3], false)
-                    .addVariable("UI", &GameObject::layerRef[4], false)*/
-                .endClass()
-            .endNamespace();
-    }
-
-
+    
+    
     LuaComponent* GameObject::AddLuaComponent(lua_State* L, const std::string* scriptPath, const std::string* tableName)
     {
         LuaComponent* newComponent = AddComponent<LuaComponent>();
         newComponent->LoadScript(L, scriptPath, tableName);
 
         return newComponent;
+    }
+
+    void GameObject::DoBind(lua_State * L)
+    {
+        luabridge::getGlobalNamespace(L)
+            .beginNamespace("Chef")
+                .beginClass<GameObject>("GameObject")
+                    .addProperty("active", &GameObject::GetActive, &GameObject::SetActive)
+                    .addProperty("layer", &GameObject::GetLayer, &GameObject::SetLayer)
+                    .addProperty("instanceID", &GameObject::GetID)
+                    .addFunction("AddComponent", &GameObject::AddComponent)
+                    .addFunction("AddLuaComponent", )
+                    .addFunction("GetComponent", &GameObject::GetComponent)
+                    .addFunction("RemoveComponent", &GameObject::RemoveComponent)           
+                    /*.addData("Default", &GameObject::layerRef[0], false)
+                    .addData("Player", &GameObject::layerRef[1], false)
+                    .addData("Enemy", &GameObject::layerRef[2], false)
+                    .addData("Terrain", &GameObject::layerRef[3], false)
+                    .addData("UI", &GameObject::layerRef[4], false)*/
+                .endClass()
+            .endNamespace();
     }
 }

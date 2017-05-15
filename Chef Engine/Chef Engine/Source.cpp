@@ -38,9 +38,6 @@ int main(int argc, char* argv[])
 int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #endif
 {
-	// Binds all defined classes with LuaBridge
-	//ce::LuaBridgeBinder::BindAll();
-
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Test");
 
     window.setFramerateLimit(60);
@@ -62,6 +59,9 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     luaL_openlibs(L);
 
     ce::LuaComponent* newComponent = object->AddLuaComponent(L, new std::string("Lua Scripts\\Components\\NewComponent.lua"), new std::string("NewComponent"));
+
+    // Binds all defined classes with LuaBridge
+    ce::LuaBridgeBinder::BindAll();
 
 	map->LoadMap("orthogonal-outside.tmx");
 	while (window.isOpen())

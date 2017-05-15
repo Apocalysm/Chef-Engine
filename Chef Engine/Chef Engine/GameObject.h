@@ -75,19 +75,6 @@ namespace ce
 		// Removes the component of the specified typename if the GameObject is holding one
 		template<typename T>
 		void RemoveComponent();
-
-
-		// Adds a component based on the number we send
-		// You will have to create a class where you get the typeid(T)hash_code from all components
-		// This class will be loaded to lua as global ints you can reference
-		// ex. Transform trans = gameObj.AddComponent(transformID);
-		Component* AddComponent(const int hash);
-
-		// Works as it's counterpart that takes a template type and instead uses the integer-based system explained above
-		Component* GameObject::GetComponent(const int hash);
-
-		// Works as it's counterpart that takes a template type and instead uses the integer-based system explained above
-		void RemoveComponent(const int hash);
         
 
 		// An enumerator for differentiating our GameObjects between layers

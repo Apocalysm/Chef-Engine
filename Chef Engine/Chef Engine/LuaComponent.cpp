@@ -3,11 +3,12 @@
 #include <iostream>
 
 using ce::LuaComponent;
+ 
 
-
-LuaComponent::LuaComponent()
+LuaComponent::LuaComponent(luabridge::LuaRef ref)
 {
-}       
+    *instance = ref;
+}
 
 
 LuaComponent::~LuaComponent()
@@ -43,13 +44,14 @@ void LuaComponent::LoadScript(lua_State* L, const std::string* scriptPath, const
 
     // Gets the specified table to see if it exists, if not, we get an error
     luabridge::LuaRef table = luabridge::getGlobal(L, tableName->c_str());
+
     if (!table.isTable())
     {
         std::cerr << lua_tostring(L, -1) << std::endl;
     }
 
 
-    // Checks if "Start" is a function in the Lua Script
+    // Checks if a function called "Start" exists in the table 
     if (table["Start"].isFunction())
     {
         // If it is, we add it to the startFunc pointer
@@ -57,19 +59,19 @@ void LuaComponent::LoadScript(lua_State* L, const std::string* scriptPath, const
     }
     else
     {
-        // If it is not, we set it to null so the Start method in this class will ignore it
+        // If not, we make sure it's pointing to null
         startFunc = nullptr;
     }
 
-    // We repeat the same actions with the Update function as we did with Start just above
+    // Checks if a function called "Update" exists in the table 
     if (table["Update"].isFunction())
     {
+        // If it is, we add it to the updateFunc pointer
         updateFunc = std::make_unique<luabridge::LuaRef>(table["Update"]);
     }
     else
     {
+        // If not, we make sure it's pointing to null
         updateFunc = nullptr;
     }
-
-
 }

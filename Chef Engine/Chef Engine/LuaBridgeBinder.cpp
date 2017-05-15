@@ -1,5 +1,7 @@
 #include "LuaBridgeBinder.h"
 
+#include "LuaComponent.h"
+
 // All the different classes we want to bind with Lua Bridge
 
 
@@ -134,4 +136,10 @@ void ce::LuaBridgeBinder::LoadLua(lua_State * L, const std::string & path)
 		std::cerr << lua_tostring(L, -1) << std::endl;
 		assert(false);
 	}
+}
+
+
+void ce::LuaBridgeBinder::RegisterComponent(luabridge::LuaRef ref)
+{
+    ce::LuaComponent* luaComp = new ce::LuaComponent(ref);
 }

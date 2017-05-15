@@ -1,8 +1,9 @@
 package.path = package.path .. ";../Chef Engine/Lua Scripts/Components/?.lua;../Chef Engine/Lua Scripts/?.lua;"
 
-require "test"
+require "NewComponent"
 
---print(comp.enabled)
+object = GameObject("LuaObject")
 
-comp2 = Chef.Component()
-comp2.enabled = false
+comp = NewComponent.Create(103, "name", false)
+
+object.AddLuaComponent(comp)
