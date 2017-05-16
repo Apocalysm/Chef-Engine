@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="45" height="31" tilewidth="16" tileheight="16" nextobjectid="39">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="45" height="31" tilewidth="16" tileheight="16" nextobjectid="58">
  <properties>
   <property name="enemyTint" type="color" value="#ffa33636"/>
  </properties>
@@ -333,12 +333,12 @@
   </object>
   <object id="10" gid="282" x="413.333" y="225.333" width="16" height="16"/>
   <object id="11" gid="282" x="421.667" y="218" width="16" height="16"/>
-  <object id="12" gid="2147483930" x="423" y="235.333" width="16" height="16"/>
+  <object id="12" gid="2147483930" x="419" y="232" width="16" height="16"/>
   <object id="13" gid="282" x="5" y="70" width="16" height="16"/>
   <object id="14" gid="282" x="-3.66667" y="80.3333" width="16" height="16"/>
-  <object id="16" gid="283" x="538" y="418.333" width="16" height="16"/>
+  <object id="16" gid="2147483931" x="364" y="374.333" width="16" height="16"/>
   <object id="17" gid="283" x="407.667" y="462" width="16" height="16"/>
-  <object id="18" gid="283" x="417" y="473.667" width="16" height="16"/>
+  <object id="18" gid="283" x="412.333" y="468.334" width="16" height="16"/>
   <object id="19" gid="283" x="402.667" y="469" width="16" height="16"/>
   <object id="21" gid="2147483930" x="683.333" y="260.5" width="16" height="16"/>
   <object id="22" gid="282" x="692.167" y="269.167" width="16" height="16"/>
@@ -351,7 +351,7 @@
   <object id="29" gid="282" x="9.0835" y="356.167" width="16" height="16"/>
   <object id="30" gid="282" x="11.9165" y="385" width="16" height="16"/>
   <object id="31" gid="282" x="54.2495" y="378.5" width="16" height="16"/>
-  <object id="32" gid="2147483930" x="2.4165" y="364.5" width="16" height="16"/>
+  <object id="32" name="flipped" gid="2147483930" x="2.4165" y="364.5" width="16" height="16"/>
   <object id="33" gid="2147483930" x="41.5835" y="382.833" width="16" height="16"/>
   <object id="34" type="Sign" gid="257" x="670.667" y="87" width="16" height="16">
    <properties>

@@ -1,7 +1,7 @@
 #include "Sprite.h"
 
 #include "GameObject.h"
-#include "DrawEventManager.h"
+
 
 using ce::Sprite;
 
@@ -43,6 +43,11 @@ void Sprite::SetSprite(const std::string& fileName)
 	sprite->setTexture(texture);
 
 	sprite->setPosition(transform->GetPosition());
+}
+
+void ce::Sprite::SetRealSprite(sf::Sprite * sprite)
+{
+	this->sprite = sprite;
 }
 
 

@@ -2,6 +2,10 @@
 #include "DrawEventManager.h"
 #include "GameObject.h"
 #include "Sprite.h"
+#include <Tmx\TmxPolygon.h>
+#include <Tmx\TmxPolyline.h>
+#include <Tmx\TmxEllipse.h>
+
 
 #include <algorithm>
 #include <iostream>
@@ -32,6 +36,9 @@ void ce::MapHandler::LoadMapIndex(const int mapIndex)
 	}
 }
 
+const unsigned FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
+const unsigned FLIPPED_VERTICALLY_FLAG = 0x40000000;
+const unsigned FLIPPED_DIAGONALLY_FLAG = 0x20000000;
 
 //Load map with its file name
 void MapHandler::LoadMap(const std::string& fileName)
@@ -103,7 +110,8 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 				if (tileMapLayers[k].find(tile.tilesetId) == tileMapLayers[k].end())
 				{
-					tileMapLayers[k].insert(std::make_pair(tile.tilesetId, new TileMapLayer(new sf::VertexArray(sf::Quads, mapHeight * mapWidth * 4), tileTextures[tile.tilesetId])));
+					tileMapLayers[k].insert(std::make_pair(tile.tilesetId, 
+						new TileMapLayer(new sf::VertexArray(sf::Quads, mapHeight * mapWidth * 4), tileTextures[tile.tilesetId])));
 				}
 				
 				//Get the current layer
@@ -121,19 +129,6 @@ void MapHandler::LoadMap(const std::string& fileName)
 				tu = tileNumber % (tileTextures[tile.tilesetId].getSize().x / tileWidth);
 				tv = tileNumber / (tileTextures[tile.tilesetId].getSize().x / tileWidth);
 
-				/*
-				for (size_t k = 0; k < tileTextures.size(); k++)
-				{
-					//tile.gid >= tileSets[k]->GetFirstGid() + tileSets[k]->GetTiles().size()
-					if (tile.gid > tileSets[k]->GetFirstGid() + tileSets[k]->GetTiles().size())
-					{
-						tu = tileNumber % (tileTextures[k].getSize().x / tileWidth);
-						tv = tileNumber / (tileTextures[k].getSize().x / tileWidth);
-						break;
-					}	
-				}
-				*/
-
 				//Define the quads 4 corners
 				quad[0].position = sf::Vector2f(j * tileWidth, i * tileHeight);
 				quad[1].position = sf::Vector2f((j + 1) * tileWidth, i * tileHeight);
@@ -142,8 +137,12 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 				std::array<size_t, 4> texOrder = { 0, 1, 2, 3 };
 
-				if (tile.flippedHorizontally)
+				if (tile.flippedDiagonally)
+					texOrder = { 2,3,0,1 };
+				else if (tile.flippedHorizontally)
 					texOrder = { 1,0,3,2 };
+				else if (tile.flippedVertically)
+					texOrder = { 3,2,1,0 };
 				//Define its 4 corners in the texture coordinates
 				quad[texOrder[0]].texCoords = sf::Vector2f(tu * tileWidth, tv * tileHeight);
 				quad[texOrder[1]].texCoords = sf::Vector2f((tu + 1) * tileWidth, tv * tileHeight);
@@ -157,51 +156,135 @@ void MapHandler::LoadMap(const std::string& fileName)
 }
 
 
-
+//Adding the name of a map and where in the vector it should be.
 void ce::MapHandler::RegisterMap(int  index, std::string* mapName)
 {
 	tileMapNames.insert(tileMapNames.begin() + index, mapName);
 }
 
 
+//Loading in all the obect in the map and chech what sort of an object it is. 
 void ce::MapHandler::LoadObject()
 {
 	std::vector<Tmx::ObjectGroup*> layers = map->GetObjectGroups();; 
 
+	//Looping through all the object layers  
 	for (auto i = 0; i < layers.size(); i++)
 	{
+		auto objectsVector = layers[i]->GetObjects();
+		 
+		std::sort(objectsVector.begin(), objectsVector.end(), [](Tmx::Object* a, Tmx::Object* b) { return a->GetY() < b->GetY(); });
 
-		for (size_t j = 0; j < layers[i]->GetNumObjects(); j++)
+		for (size_t j = 0; j < objectsVector.size(); j++)
 		{
-
-			const Tmx::Object* object = layers[i]->GetObject(j);
+			const Tmx::Object* object = objectsVector.at(j);
 
 			ce::GameObject* gameObject = new ce::GameObject(object->GetName());
 
-			ce::Sprite* spriteObject = new Sprite();
+			//Check what type the object is
+			switch (object->GetPrimitiveType())
+			{
+				case Tmx::TMX_PT_POLYGON:
+				{
 
-			spriteObject->SetDrawOrder(layers[i]->GetParseOrder());
+						break;
+				}
+				case Tmx::TMX_PT_POLYLINE:
+				{
+					break;
+				}
 
-			spriteObject->SetRotation(object->GetRot());
+				case Tmx::TMX_PT_ELLIPSE:
+				{
+					break;
+				}
+				
+				//Check if the object is an rect or a sprite object
+				case Tmx::TMX_PT_NONE:
+				{
+					//Check if the object is part of an tileset
+					if (object->GetGid() != 0)
+					{
+						ce::Sprite* spriteComponent = gameObject->AddComponent<ce::Sprite>();
 
-			spriteObject->SetPosition(object->GetX(), object->GetY());
+						spriteComponent->SetDrawOrder(layers[i]->GetParseOrder());
+
+						spriteComponent->SetRotation(object->GetRot());
+
+						spriteComponent->SetPosition(object->GetX(), object->GetY());
+
+
+						for (int k = tileSets.size() - 1; k >= 0; k--)
+						{
+							Tmx::Tileset* ts = tileSets[k];
+
+							bool flipped_horizontally = (object->GetGid() & FLIPPED_HORIZONTALLY_FLAG);
+							bool flipped_vertically = (object->GetGid() & FLIPPED_VERTICALLY_FLAG);
+							bool flipped_diagonally = (object->GetGid() & FLIPPED_DIAGONALLY_FLAG);
+
+							int unflippedGid = object->GetGid() & ~(FLIPPED_VERTICALLY_FLAG | FLIPPED_HORIZONTALLY_FLAG | FLIPPED_DIAGONALLY_FLAG);
+
+							if (ts->GetFirstGid() <= unflippedGid)
+							{
+								int localID = unflippedGid - ts->GetFirstGid();
+
+
+								int tu = localID % (tileTextures[k].getSize().x / tileWidth);
+								int tv = localID / (tileTextures[k].getSize().x / tileWidth);
+
+								sf::Sprite* sprite = new sf::Sprite;
+								sprite->setTexture(tileTextures[k]);
+								sprite->setTextureRect(sf::IntRect(tu * object->GetWidth(), tv * object->GetHeight(), object->GetWidth(), object->GetHeight()));
+								
+								if (flipped_diagonally)
+									sprite->setTextureRect(sf::IntRect(tu * (object->GetWidth() + 1) - 1, tv * (object->GetHeight() + 1) + 5, -object->GetWidth(), -object->GetHeight()));
+								else if(flipped_vertically)
+									sprite->setTextureRect(sf::IntRect(tu * object->GetWidth(), tv * (object->GetHeight() + 1) + 5 , object->GetWidth(), -object->GetHeight()));
+								else if (flipped_horizontally)
+									sprite->setTextureRect(sf::IntRect(tu * (object->GetWidth() + 1) - 1, tv * object->GetHeight(), -object->GetWidth(), object->GetHeight()));
+
+								sprite->setOrigin(0, tileHeight);
+								spriteComponent->SetRealSprite(sprite);
+
+								break;
+							}
+						}
+
+					}
+					else
+					{
+						// This is a rect!
+						sf::RectangleShape* rectShape = new sf::RectangleShape;
+						rectShape->setSize(sf::Vector2f(object->GetWidth(), object->GetHeight()));
+						rectShape->setPosition(sf::Vector2f(object->GetX(), object->GetY()));
+						rectShape->setRotation(object->GetRot());
+
+						break;
+					}
+
+			}
+
+
+			default:
+				break;
+			}
 
 			if (object->GetGid() != 0)
 			{
 				sf::Sprite sprite;
 				
-				for (size_t k = 0; k < tileTextures.size(); k++)
+				/*for (size_t k = 0; k < tileTextures.size(); k++)
 				{
 					if (object->GetGid() > tileSets[k]->GetFirstGid + tileSets[k]->GetTiles().size())
 					{
 
 					}
-				}
+				}*/
 			}
 
 			else if (object->GetPolygon() != nullptr)
 			{
-				std::cout << object->GetPolygon()  << std::endl;
+
 			}
 
 			else if(object->GetPolyline() != nullptr)

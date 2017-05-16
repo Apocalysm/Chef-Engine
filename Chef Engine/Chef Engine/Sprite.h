@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "Transform.h"
+#include "DrawEventManager.h"
 
 namespace ce
 {
@@ -51,6 +52,7 @@ namespace ce
         int GetDrawOrder() const;
 		
         void SetSprite(const std::string &fileName);
+		void SetRealSprite(sf::Sprite* sprite); 
 
 		sf::Sprite* GetSprite() const;
 

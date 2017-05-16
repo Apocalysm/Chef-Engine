@@ -89,6 +89,7 @@ namespace Tmx
         gid = objectElem->IntAttribute("gid");
         rotation = objectElem->IntAttribute("rotation");
         objectElem->QueryBoolAttribute("visible", &visible);
+		primitivetype = TMX_PT_NONE;
 
         // Read the ellipse of the object if there are any.
         const tinyxml2::XMLNode *ellipseNode = objectNode->FirstChildElement("ellipse");
@@ -97,7 +98,8 @@ namespace Tmx
             if (ellipse != 0)
                 delete ellipse;
 
-            ellipse = new Ellipse(x,y,width,height);            
+            ellipse = new Ellipse(x,y,width,height);    
+			primitivetype = TMX_PT_ELLIPSE;
         }
 
         // Read the Polygon and Polyline of the object if there are any.
@@ -109,6 +111,7 @@ namespace Tmx
 
             polygon = new Polygon();
             polygon->Parse(polygonNode);
+			primitivetype = TMX_PT_POLYGON;
         }
         const tinyxml2::XMLNode *polylineNode = objectNode->FirstChildElement("polyline");
         if (polylineNode)
@@ -118,6 +121,7 @@ namespace Tmx
 
             polyline = new Polyline();
             polyline->Parse(polylineNode);
+			primitivetype = TMX_PT_POLYLINE;
         }
 
         // Read the properties of the object.
