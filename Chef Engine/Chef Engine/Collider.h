@@ -15,23 +15,27 @@ namespace ce
 
 		void Update();
 
-		void SetupTMX(const sf::RectangleShape rectShape);
+		void SetupTMX(sf::RectangleShape* rectShape);
 
-		void SetupFitSprite();
+		void SetFitSprite(bool fitSprite);
 
-		void SetPosition(const float x, const float y);
+		void SetSize(const float x, const float y);
 
-		void SetRotation(const float angle);
-
-		void SetScale(const float x, const float y);
+		sf::Vector2f GetSize() const;
 
 		void SetOrigin(const float x, const float y);
 
-		void SetGameObject(GameObject* gameObject);
+		sf::Vector2f GetOrigin() const;
 
 		void SetIsTrigger(const bool isTrigger);
 
 		bool GetIsTrigger() const;
+
+		void SetGameObject(GameObject* gameObject);
+
+		virtual void OnCollision(GameObject* other);
+
+		virtual void OnTrigger(GameObject* other);
 
 
 	private:
@@ -40,9 +44,13 @@ namespace ce
 		bool fitSprite;
 		bool isTrigger;
 		bool isNew;
-		sf::RectangleShape shape;
+		sf::FloatRect fRect;
+		sf::RectangleShape* shape;
 		sf::Sprite* sprite;
 		sf::Vector2f size;
+		sf::Vector2f deltaPos;
+		sf::Vector2f lastPos;
+		ce::Transform* transform;
 
 		//b2BodyDef bodyDef;
 		//b2Body* body;

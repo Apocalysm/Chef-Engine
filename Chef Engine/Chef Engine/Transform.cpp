@@ -30,6 +30,12 @@ void Transform::Start()
 }
 
 
+void ce::Transform::Update()
+{
+	velocity = position - lastPos;
+}
+
+
 // Overload for SetPosition with floats instead of a sf::Vector2f
 void Transform::SetPosition(const float x, const float y)
 {
@@ -39,6 +45,7 @@ void Transform::SetPosition(const float x, const float y)
 
 void Transform::SetPosition(const sf::Vector2f& newPosition)
 {
+	lastPos = position;
 	position = newPosition;
 }
 
@@ -48,9 +55,29 @@ const sf::Vector2f& Transform::GetPosition() const
 	return position;
 }
 
+
 void ce::Transform::Move(sf::Vector2f movement)
 {
+	lastPos = position;
     position += movement;
+}
+
+
+const sf::Vector2f ce::Transform::GetLastPos() const
+{
+	return lastPos;
+}
+
+
+const sf::Vector2f ce::Transform::GetVelocity() const
+{
+	return velocity;
+}
+
+
+void ce::Transform::ResetVelocity()
+{
+	velocity = sf::Vector2f(0.0f, 0.0f);
 }
 
 

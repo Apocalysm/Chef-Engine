@@ -17,8 +17,8 @@ namespace ce
 		~CollisionManager();
 		//static b2World* GetWorld();
 
-		void AddCollider(ce::Collider* collider);
-		void RemoveCollider(ce::Collider* collider);
+		static void AddCollider(ce::Collider* collider);
+		static void RemoveCollider(ce::Collider* collider);
 
 		void UpdateCollision();
 		
@@ -27,8 +27,8 @@ namespace ce
 		// Map with colliders
 		static std::map<Common::uint64, ce::Collider*> intToRectangles;
 
-		// Map with colliders recently created
-		static std::map<Common::uint64, ce::Collider*> intToNewRectangles;
+		//// Map with colliders recently created
+		//static std::map<Common::uint64, ce::Collider*> intToNewRectangles;
 
 		/*b2Vec2 gravity;
 		static b2World* world;*/
