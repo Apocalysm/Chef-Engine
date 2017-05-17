@@ -44,6 +44,8 @@ namespace ce
 		sf::Vector2f GetScale() const;
         #pragma endregion
 
+		void SetGameObject(GameObject* gameObject);
+
 	private:
 		
 		sf::Vector2f position;

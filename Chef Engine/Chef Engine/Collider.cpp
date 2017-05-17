@@ -6,7 +6,7 @@
 using ce::Collider;
 
 
-Collider::Collider()// : transPos(sf::Vector2f(0.0f, 0.0f)), transScale(sf::Vector2f(0.0f, 0.0f)), spriteOrigin(sf::Vector2f(0.0f, 0.0f))
+Collider::Collider() : transPos(sf::Vector2f(0.0f, 0.0f)), transScale(sf::Vector2f(0.0f, 0.0f)), spriteOrigin(sf::Vector2f(0.0f, 0.0f))
 {
 	fitSprite = false;
 	isNew = true;
@@ -15,7 +15,6 @@ Collider::Collider()// : transPos(sf::Vector2f(0.0f, 0.0f)), transScale(sf::Vect
 
 Collider::~Collider()
 {
-	delete sprite;
 }
 
 
@@ -23,7 +22,7 @@ void ce::Collider::Update()
 {
 	if (fitSprite)
 	{
-		fRect = sprite->getGlobalBounds();
+		//fRect = sprite->getGlobalBounds();
 
 		/*shape.setPosition(sprite->getPosition());
 		shape.setRotation(sprite->getRotation());
@@ -48,39 +47,35 @@ void ce::Collider::Update()
 	}
 	else
 	{
-		fRect = shape->getGlobalBounds();
+		//fRect = shape->getGlobalBounds();
 	}
 
 	/*deltaPos = transform->GetPosition() - lastPos;
 	lastPos = transform->GetPosition();*/
 	
-	/*if (body->GetContactList()->contact->IsTouching())
-		gameObject->GetTransform()->SetPosition(body->GetPosition().x, body->GetPosition().y);
-	else
-	{
-		b2Vec2 transformPos;
-		transformPos.x = gameObject->GetTransform()->GetPosition().x;
-		transformPos.y = gameObject->GetTransform()->GetPosition().y;
-		body->SetTransform(transformPos, gameObject->GetTransform()->GetRotation());
-	}*/
+	b2Vec2 transformPos;
+	transformPos.x = transform->GetPosition().x;
+	transformPos.y = transform->GetPosition().y;
+	//body->SetTransform(transformPos, transform->GetRotation());
+	body->SetTransform(body->GetPosition(), transform->GetRotation());
 }
 
 
 void ce::Collider::SetupTMX(sf::RectangleShape* rectShape)
 {
-	fRect = rectShape->getGlobalBounds();
+	//fRect = rectShape->getGlobalBounds();
 }
 
 
-void ce::Collider::SetFitSprite(bool fitSprite)
+void ce::Collider::SetFitSprite(bool fitSprite, bool dynamic)
 {
 	this->fitSprite = fitSprite;
 
 	if (fitSprite)
 	{
-		sprite = gameObject->GetComponent<ce::Sprite>()->GetSprite();
+		/*sprite = gameObject->GetComponent<ce::Sprite>()->GetSprite();
 
-		fRect = sprite->getGlobalBounds();
+		fRect = sprite->getGlobalBounds();*/
 
 		/*size.x = sprite->getTexture()->getSize().x;
 		size.y = sprite->getTexture()->getSize().y;
@@ -93,17 +88,17 @@ void ce::Collider::SetFitSprite(bool fitSprite)
 	}
 	else
 	{
-		shape->setPosition(transform->GetPosition());
+		/*shape->setPosition(transform->GetPosition());
 		shape->setRotation(transform->GetRotation());
 		shape->setScale(transform->GetScale());
 
-		fRect = shape->getGlobalBounds();
+		fRect = shape->getGlobalBounds();*/
 	}
 
-	/*sprite = gameObject->GetComponent<ce::Sprite>();
+	sprite = gameObject->GetComponent<ce::Sprite>();
 	spriteSizeX = sprite->GetSprite()->getTexture()->getSize().x;
 	spriteSizeY = sprite->GetSprite()->getTexture()->getSize().y;
-	spriteOrigin = sprite->GetOrigin();*/
+	spriteOrigin = sprite->GetOrigin();
 
 	/*b2Vec2 vertices[4];
 
@@ -121,14 +116,33 @@ void ce::Collider::SetFitSprite(bool fitSprite)
 
 	shape.Set(vertices, 4);*/
 
-	/*b2Vec2 spriteCenter = b2Vec2(transPos.x + spriteSizeX / 2 - spriteOrigin.y,
+	if(dynamic)
+		bodyDef.type = b2_dynamicBody;
+
+	bodyDef.position.Set(transPos.x, transPos.y);
+	body = CollisionManager::GetWorld()->CreateBody(&bodyDef);
+
+	transPos = transform->GetPosition();
+
+	b2Vec2 spriteCenter = b2Vec2(transPos.x + spriteSizeX / 2 - spriteOrigin.x,
 		transPos.y + spriteSizeY / 2 - spriteOrigin.y);
 
 	transRot = (transform->GetRotation() * PI) / 180;
 
-	shape.SetAsBox(spriteSizeX / 2, spriteSizeY / 2, spriteCenter, transRot);
+	shape.SetAsBox(spriteSizeX / 2, spriteSizeY / 2);
 
-	body->CreateFixture(&shape, 0.0f);*/
+	body->SetLinearDamping(0.1f);
+
+	if (dynamic)
+	{
+		fixtureDef.shape = &shape;
+		fixtureDef.density = 1.0f;
+		fixtureDef.friction = 0.3f;
+
+		body->CreateFixture(&fixtureDef);
+	}
+	else
+		body->CreateFixture(&shape, 0.0f);
 
 	/*ce::GameObject* object1 = new ce::GameObject();
 	ce::GameObject* object2 = new ce::GameObject();
@@ -156,29 +170,29 @@ void ce::Collider::SetFitSprite(bool fitSprite)
 }
 
 
-void ce::Collider::SetSize(const float x, const float y)
-{
-	size = sf::Vector2f(x, y);
-	shape->setSize(size);
-}
-
-
-sf::Vector2f ce::Collider::GetSize() const
-{
-	return shape->getSize();
-}
-
-
-void ce::Collider::SetOrigin(float x, float y)
-{
-	shape->setOrigin(x, y);
-}
-
-
-sf::Vector2f ce::Collider::GetOrigin() const
-{
-	return shape->getOrigin();
-}
+//void ce::Collider::SetSize(const float x, const float y)
+//{
+//	size = sf::Vector2f(x, y);
+//	shape->setSize(size);
+//}
+//
+//
+//sf::Vector2f ce::Collider::GetSize() const
+//{
+//	return shape->getSize();
+//}
+//
+//
+//void ce::Collider::SetOrigin(float x, float y)
+//{
+//	shape->setOrigin(x, y);
+//}
+//
+//
+//sf::Vector2f ce::Collider::GetOrigin() const
+//{
+//	return shape->getOrigin();
+//}
 
 
 void ce::Collider::SetIsTrigger(bool isTrigger)
@@ -199,16 +213,13 @@ void ce::Collider::SetGameObject(GameObject * gameObject)
 
 	transform = gameObject->GetTransform();
 
-	lastPos = transform->GetPosition();
+	//lastPos = transform->GetPosition();
 
 	ce::CollisionManager::AddCollider(this);
 
-	/*transform = gameObject->GetTransform();
+	transform = gameObject->GetTransform();
 	transPos = transform->GetPosition();
-	transScale = transform->GetScale();
-
-	bodyDef.position.Set(transPos.x, transPos.y);
-	body = CollisionManager::GetWorld()->CreateBody(&bodyDef);*/
+	transScale = transform->GetScale();;
 }
 
 

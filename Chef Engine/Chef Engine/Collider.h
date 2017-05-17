@@ -17,7 +17,7 @@ namespace ce
 
 		void SetupTMX(sf::RectangleShape* rectShape);
 
-		void SetFitSprite(bool fitSprite);
+		void SetFitSprite(bool fitSprite, bool dynamic);
 
 		void SetSize(const float x, const float y);
 
@@ -40,31 +40,33 @@ namespace ce
 
 	private:
 		friend class CollisionManager;
+		friend class Transform;
 
 		bool fitSprite;
 		bool isTrigger;
 		bool isNew;
-		sf::FloatRect fRect;
-		sf::RectangleShape* shape;
-		sf::Sprite* sprite;
-		sf::Vector2f size;
-		sf::Vector2f deltaPos;
-		sf::Vector2f lastPos;
-		ce::Transform* transform;
-
-		//b2BodyDef bodyDef;
-		//b2Body* body;
-		//b2PolygonShape shape;
-		////std::vector<b2Vec2> vertices;
-		//ce::Sprite* sprite;
+		//sf::FloatRect fRect;
+		//sf::RectangleShape* shape;
+		//sf::Sprite* sprite;
+		//sf::Vector2f size;
+		//sf::Vector2f deltaPos;
+		//sf::Vector2f lastPos;
 		//ce::Transform* transform;
-		//sf::Vector2f& transPos;
-		//sf::Vector2f& transScale;
-		//float transRot;
-		//float spriteSizeX;
-		//float spriteSizeY;
-		//sf::Vector2f& spriteOrigin;
 
-		//const double PI = 3.141592653589793;
+		b2BodyDef bodyDef;
+		b2Body* body;
+		b2PolygonShape shape;
+		b2FixtureDef fixtureDef;
+		//std::vector<b2Vec2> vertices;
+		ce::Sprite* sprite;
+		ce::Transform* transform;
+		sf::Vector2f transPos;
+		sf::Vector2f& transScale;
+		float transRot;
+		float spriteSizeX;
+		float spriteSizeY;
+		sf::Vector2f spriteOrigin;
+
+		const double PI = 3.141592653589793;
 	};
 }

@@ -1,4 +1,6 @@
 #include "Transform.h"
+#include "GameObject.h"
+#include "Collider.h"
 
 
 using ce::Transform;
@@ -6,7 +8,8 @@ using ce::Transform;
 // Default Constructor
 Transform::Transform()
 {
-	SetPosition(0, 0);
+	//SetPosition(0, 0);
+	position = sf::Vector2f(0.0f, 0.0f);
 	SetRotation(0);
 	SetScale(1, 1);
 }
@@ -33,13 +36,20 @@ void Transform::Start()
 void ce::Transform::Update()
 {
 	velocity = position - lastPos;
+	lastPos = position;
 }
 
 
 // Overload for SetPosition with floats instead of a sf::Vector2f
 void Transform::SetPosition(const float x, const float y)
 {
-	SetPosition(sf::Vector2f(x, y));
+	/*if (gameObject->GetComponent<ce::Collider>() != NULL)
+	{
+		b2Vec2 pos = b2Vec2(x, y);
+		gameObject->GetComponent<ce::Collider>()->body->SetTransform(pos, rotation);
+	}
+	else*/
+		SetPosition(sf::Vector2f(x, y));
 }
 
 
@@ -58,8 +68,15 @@ const sf::Vector2f& Transform::GetPosition() const
 
 void ce::Transform::Move(sf::Vector2f movement)
 {
-	lastPos = position;
-    position += movement;
+	if (gameObject->GetComponent<ce::Collider>() != NULL)
+	{
+		gameObject->GetComponent<ce::Collider>()->body->ApplyForce(b2Vec2(movement.x, movement.y), gameObject->GetComponent<ce::Collider>()->body->GetWorldCenter(), true);
+	}
+	else
+	{
+		lastPos = position;
+		position += movement;
+	}
 }
 
 
@@ -119,3 +136,7 @@ void Transform::SetScale(const sf::Vector2f& newScale)
 }
 
 
+void ce::Transform::SetGameObject(GameObject * gameObject)
+{
+	this->gameObject = gameObject;
+}
