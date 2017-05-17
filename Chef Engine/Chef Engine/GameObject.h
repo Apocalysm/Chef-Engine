@@ -1,4 +1,5 @@
 #pragma once
+#include "LuaComponent.h"
 #include "Transform.h"
 
 #include <vector>
@@ -14,7 +15,7 @@
 
 namespace ce
 {
-	// Forward declaration
+	// Forward declaration to Component since Component includes GameObject
 	class Component;
 	
     /*! \defgroup GameObjectGroup GameObject
@@ -54,12 +55,18 @@ namespace ce
         */ 
 		GameObject(std::string name);
 
+        /*! \example GameObject_Constructor_Example.lua
+        *   This is an example of doing example code.
+        */
 		~GameObject();
 
 
 		// Adds a new component to the GameObject based on the typename in the method call
 		template<typename T> 
         T* AddComponent();
+
+        // Adds specifically a Lua Component and loads the correct script and table
+        ce::LuaComponent* AddLuaComponent(lua_State* L, const std::string* scriptPath, const std::string* tableName);
 
 		// Tries to find the component of the specified typename
 		template<typename T>
@@ -75,7 +82,7 @@ namespace ce
 		// This class will be loaded to lua as global ints you can reference
 		// ex. Transform trans = gameObj.AddComponent(transformID);
 		Component* AddComponent(const int hash);
-		
+
 		// Works as it's counterpart that takes a template type and instead uses the integer-based system explained above
 		Component* GameObject::GetComponent(const int hash);
 
@@ -153,6 +160,9 @@ namespace ce
 
 		Transform* transform;
 	    
+        // Calls the Start method on all the Components that are marked is new / was created this frame
+        void ComponentStart();
+
         // Updates all the components that our GameObject holds
 		void ComponentUpdate();
 		
@@ -173,7 +183,10 @@ namespace ce
 	T* ce::GameObject::AddComponent()
 	{
 		// Makes sure that this method only takes types derived from ce::Component
-		static_assert((std::is_base_of<ce::Component, T>::value), "Type <T> of GameObject.AddComponent<>() must be of type ce::Component");
+		//static_assert((std::is_base_of<ce::Component, T>::value), "Type <T> of GameObject.AddComponent<>() must be of type ce::Component");
+
+        if (!std::is_base_of<ce::Component, T>::value)
+            std::cerr << "Type <T> of GameObject.AddComponent<>() must be of type ce::Component" << std::endl;
 
 		// First checks if we don't already have a component of this type on the GameObject
 		if (GameObject::GetComponentInternal<T>() == nullptr)
@@ -187,8 +200,6 @@ namespace ce
 			t->SetID(typeid(t).hash_code());
 	        
             components.insert(std::make_pair(t->GetID(), t));
-			
-            t->Start();
 
 			return t;
 		}

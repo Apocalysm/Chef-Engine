@@ -12,7 +12,7 @@ namespace ce
 		Sprite(const std::string& fileName, const int drawOrder);
 		~Sprite();
 
-		void Update();
+		void Update() override;
 
 
         #pragma region Position Methods

@@ -13,16 +13,21 @@
 #include <typeinfo>
 #include <iostream>
 
-/*! \mainpage My Personal Index
+
+/*! \mainpage Main Page
 *
 *\section intro_sec Introduction
 *
-* This is the introduction.
+* This is an introduction for Chef Engine.
 *
-*\section install_sec Installation
+*
+*\section install_sec How to install Chef Engine
 * 
 *\subsection step1 Step 1: Do the thing
 *\subsection step2 Step 2: Do the other thing
+*\subsection step3 Step 3: Now do the first thing and the second thing at the same time.
+*
+* Now you're finished!
 */
 #if _DEBUG
 int main(int argc, char* argv[])
@@ -31,9 +36,11 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #endif
 {
 	// Binds all defined classes with LuaBridge
-	ce::LuaBridgeBinder::BindAll();
+	//ce::LuaBridgeBinder::BindAll();
 
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Test");
+
+    window.setFramerateLimit(60);
 
 	ce::MapHandler* map = new ce::MapHandler;
 

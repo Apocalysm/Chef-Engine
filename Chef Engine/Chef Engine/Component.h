@@ -32,6 +32,9 @@ namespace ce
 		// Getter and setter for the 'enabled'-variable
 		void SetEnabled(bool enabled);
 		bool GetEnabled() const;
+        
+        void SetIsNew(bool isNew);
+        bool GetIsNew() const;
 
 		// Getter for 'gameObject'-variable
 		GameObject* GetGameObject() const;
@@ -48,6 +51,9 @@ namespace ce
 
 		// The hash_code of the Component, is set in AddComponent
 		int ID;
+
+        // If we just created the Component
+        bool isNew;
 
 		// This decides if the Component should be updated for example via the Update method
         /*! Enabled Components are Updated, disabled Components are not.*/
