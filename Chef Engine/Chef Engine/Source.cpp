@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "GameObjectManager.h"
 #include "DrawEventManager.h"
+#include "Camera.h"
 
 #include <SFML/Graphics.hpp>
 #include <Tmx\TmxTile.h>
@@ -38,9 +39,7 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	// Binds all defined classes with LuaBridge
 	//ce::LuaBridgeBinder::BindAll();
 
-	sf::RenderWindow window(sf::VideoMode(1280, 720), "Test");
 
-    window.setFramerateLimit(60);
 
 	ce::MapHandler* map = new ce::MapHandler;
 
@@ -49,18 +48,24 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	ce::GameObject* object = new ce::GameObject();
 
-	ce::Sprite* sprite = object->AddComponent<ce::Sprite>();
+	object->SetName("RandomObject");
 
-	sprite->SetSprite("Hp mana bar.png");
-	
+	ce::Sprite* sprite = object->AddComponent<ce::Sprite>();
+	sprite->SetSprite("Player.png");
 	sprite->SetDrawOrder(1);
 
+	ce::Camera* camera = object->AddComponent<ce::Camera>();
+	camera->SetSize(sf::Vector2f(69, 420));
+	camera->SetFollow(true);
+
+	sf::RenderWindow window(sf::VideoMode(camera->GetSize().x, camera->GetSize().y), "Test");
+
+	window.setFramerateLimit(60);
+
+
 	map->LoadMap("orthogonal-outside.tmx");
-
 	std::string* mapName = new std::string("orthogonal-outside.tmx");
-
 	map->RegisterMap(0, mapName);
-
 	map->LoadObject();
 
 	while (window.isOpen())
@@ -84,19 +89,20 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		{
-			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0, -0.3));
+			object->GetTransform()->Move( sf::Vector2f(0, -1));
+			
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		{
-			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0, 0.3f));
+			object->GetTransform()->Move( sf::Vector2f(0, 1));
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
-			sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(-0.3f, 0));
+			object->GetTransform()->Move( sf::Vector2f(-1, 0));
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		{
-		    sprite->SetPosition(sprite->GetPosition() + sf::Vector2f(0.3f, 0));
+			object->GetTransform()->Move( sf::Vector2f(1, 0));
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
@@ -109,12 +115,10 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         }
 
         objManager->CallUpdate();
-
+		window.setView(camera->GetView());
 		window.clear(sf::Color::Cyan);
 		drawManager->Draw(window);
 		window.display();
-
-
 	}
 
 	return 0;
