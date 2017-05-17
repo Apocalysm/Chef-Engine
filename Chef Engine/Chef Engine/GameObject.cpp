@@ -2,6 +2,8 @@
 
 #include "Component.h"
 #include "Sprite.h"
+#include "Collider.h"
+
 #include "GameObjectManager.h"
 #include "DrawEventManager.h"
 
@@ -31,18 +33,11 @@ namespace ce
 
         GameObjectManager::AddObject(this);
 
+        this->name = name;
+
         this->active = true;
 
         layer = Default;
-
-        // Adds references to the Layers we can add to Lua
-        // { Default, Player, Enemy, Terrain, UI}
-        layerRef.push_back(Default);
-        layerRef.push_back(Player);
-        layerRef.push_back(Enemy);
-        layerRef.push_back(Terrain);
-        layerRef.push_back(UI);
-
     }
 
 
@@ -179,14 +174,65 @@ namespace ce
 
         GameObjectManager::RemoveObject(this);
     }
-    
-    
-    LuaComponent* GameObject::AddLuaComponent(lua_State* L, const std::string* scriptPath, const std::string* tableName)
-    {
-        LuaComponent* newComponent = AddComponent<LuaComponent>();
-        newComponent->LoadScript(L, scriptPath, tableName);
 
-        return newComponent;
+    // Creates a new LuaComponent and adds it to this GameObject
+    void GameObject::AddLuaComponent(luabridge::LuaRef ref)
+    {
+        if (!ref.isTable())
+        {
+            std::cerr << lua_tostring(ref.state(), -1) << std::endl;
+            assert(false);
+        }
+        // Checks if the ref has a variable "ID"
+        if (!ref["ID"].isNumber())
+        {
+            std::cerr << lua_tostring(ref.state(), -1) << std::endl;
+            assert(false);
+        }
+
+        if (!luaComponents[ref["ID"]])
+        {
+            // Creates a new LuaComponent with the ref we passed as an argument
+            LuaComponent* newComponent = new LuaComponent(ref);
+
+            // Sets the component's gameObject reference
+            newComponent->SetGameObject(this);
+
+            // Checks if there exists a "component" in our ref
+            if (ref["component"].isNil())
+            {
+                std::cerr << lua_tostring(ref.state(), -1) << std::endl;
+                assert(false);
+            }
+            // Sets the lua scripts component reference
+            ref["component"] = newComponent;
+
+            // Adds the new Lua Component to this GameObject
+            luaComponents.insert(std::make_pair(ref["ID"], newComponent));
+        }
+    }
+    
+    // Gets a LuaComponent and returns that components specified LuaRef
+    luabridge::LuaRef GameObject::GetLuaComponent(int ID)
+    {
+        // Checks if there is an element on index "ID" 
+        if (luaComponents[ID]->ref->isTable())
+        {
+            return *luaComponents[ID]->ref;
+        }
+    }
+
+    // Removes LuaComponent from the luaComponents map
+    void GameObject::RemoveLuaComponent(int ID)
+    {
+        // Checks if there is an element on index "ID" 
+        if (luaComponents[ID])
+        {                    
+            delete luaComponents[ID];
+        
+            luaComponents.erase(ID);
+        }
+
     }
 
     void GameObject::DoBind(lua_State * L)
@@ -194,18 +240,35 @@ namespace ce
         luabridge::getGlobalNamespace(L)
             .beginNamespace("Chef")
                 .beginClass<GameObject>("GameObject")
+                    .addConstructor<void (*) (std::string)>()
+                
                     .addProperty("active", &GameObject::GetActive, &GameObject::SetActive)
                     .addProperty("layer", &GameObject::GetLayer, &GameObject::SetLayer)
                     .addProperty("instanceID", &GameObject::GetID)
-                    .addFunction("AddComponent", &GameObject::AddComponent)
-                    .addFunction("AddLuaComponent", )
-                    .addFunction("GetComponent", &GameObject::GetComponent)
-                    .addFunction("RemoveComponent", &GameObject::RemoveComponent)           
-                    /*.addData("Default", &GameObject::layerRef[0], false)
-                    .addData("Player", &GameObject::layerRef[1], false)
-                    .addData("Enemy", &GameObject::layerRef[2], false)
-                    .addData("Terrain", &GameObject::layerRef[3], false)
-                    .addData("UI", &GameObject::layerRef[4], false)*/
+                    .addProperty("name", &GameObject::GetName, &GameObject::SetName)
+
+                    .addFunction("AddLuaComponent", &GameObject::AddLuaComponent)
+                    .addFunction("GetComponent", &GameObject::GetLuaComponent)
+                    .addFunction("RemoveLuaComponent", &GameObject::RemoveLuaComponent)  
+
+                    .addFunction("AddTransform", &GameObject::AddComponent<ce::Transform>)
+                    .addFunction("GetTransform", &GameObject::GetComponent<ce::Transform>)
+                    .addFunction("RemoveTransform", &GameObject::RemoveComponent<ce::Transform>)
+
+                    .addFunction("AddSprite", &GameObject::AddComponent<ce::Sprite>)
+                    .addFunction("GetSprite", &GameObject::GetComponent<ce::Sprite>)
+                    .addFunction("RemoveSprite", &GameObject::RemoveComponent<ce::Sprite>)
+                    
+                    .addFunction("AddCollider", &GameObject::AddComponent<ce::Collider>)
+                    .addFunction("GetCollider", &GameObject::GetComponent<ce::Collider>)
+                    .addFunction("RemoveCollider", &GameObject::RemoveComponent<ce::Collider>)
+                    
+                    /*.addStaticData("Default", Default, false)
+                    .addStaticData("Player", Player, false)
+                    .addStaticData("Enemy", Enemy, false)
+                    .addStaticData("Terrain", Terrain, false)
+                    .addStaticData("UI", UI, false)*/
+
                 .endClass()
             .endNamespace();
     }

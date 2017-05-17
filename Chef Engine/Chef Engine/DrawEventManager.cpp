@@ -44,9 +44,6 @@ void ce::DrawEventManager::RemoveSprite(Sprite* sprite)
 			enumToMapNewSpr[sprite->drawOrder].erase(ID);
 		else
 			enumToMapSpr[sprite->drawOrder].erase(ID);
-
-		// Deletes the components sprite
-		delete sprite->sprite;
 	}
 }
 

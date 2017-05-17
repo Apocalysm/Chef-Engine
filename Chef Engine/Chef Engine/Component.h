@@ -25,9 +25,9 @@ namespace ce
 		/*! Update is called every frame.*/
         virtual void Update();
 
-		// Getter for the 'hash'-variable
+		// Getter for the 'ID'-variable
 		int GetID() const;
-		void SetID(int hash);
+		void SetID(int ID);
 
 		// Getter and setter for the 'enabled'-variable
 		void SetEnabled(bool enabled);
@@ -47,9 +47,9 @@ namespace ce
 		ce::GameObject* gameObject = nullptr;
 
 	private: 
-        static int IDCounter;
+        friend class GameObject;
 
-		// The hash_code of the Component, is set in AddComponent
+		// The ID of the Component, is set in AddComponent
 		int ID;
 
         // If we just created the Component

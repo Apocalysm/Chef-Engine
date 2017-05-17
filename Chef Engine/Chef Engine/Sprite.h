@@ -73,6 +73,6 @@ namespace ce
 		ce::Transform* transform;
 
 		// Bridges parts of this script to Lua
-		static void DoBind(lua_State* L); 
+		static void DoBind(lua_State* L);
 	};
 }

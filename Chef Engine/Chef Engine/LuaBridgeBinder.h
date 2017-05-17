@@ -1,8 +1,11 @@
 #pragma once
 #include <lua.hpp>
 #include <LuaBridge.h>
+
 #include <vector>
+#include <map>
 #include <string>
+
 
 namespace ce
 {
@@ -18,10 +21,14 @@ namespace ce
 
 	private:
         // Loads a Lua 
-		static void LoadLua(lua_State* L, const std::string& path);
+		static void LoadLua(lua_State* L, const std::string& table, const std::string& path);
 
-        void RegisterComponent(luabridge::LuaRef ref);
+        static void RegisterComponent(luabridge::LuaRef ref);
         
+        // This is for registering components from lua
+        static int componentIDCounter;
+
+        //static std::map<luabridge::LuaRef
 	};
 }
 

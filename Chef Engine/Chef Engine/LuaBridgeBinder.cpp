@@ -1,9 +1,8 @@
 #include "LuaBridgeBinder.h"
 
-#include "LuaComponent.h"
-
 // All the different classes we want to bind with Lua Bridge
-
+#include "GameObject.h"
+#include "LuaComponent.h"
 
 // dirent.h Allows us to read directories easier
 #include <dirent.h>
@@ -11,10 +10,9 @@
 #include <iostream>
 #include <vector>
 
-
-
 // Linking a library through code
 #pragma comment(lib, "lua53.lib")
+
 
 using ce::LuaBridgeBinder;
 
@@ -29,10 +27,15 @@ void ce::LuaBridgeBinder::Bind(lua_State* L)
 // The directory path where we store our .lua-scripts
 const std::string LUA_SCRIPTS_PATH = "Lua Scripts";
 
+// The folder that needs to be placed in Lua Scripts to register components
+const std::string LUA_COMPONENTS_PATH = "Lua Scripts\\Components";
+
 // Values of directory entries representing a directory and a file
 const int DIRECTORY_FLAG = (1 << 14);
 const int FILE_FLAG = (1 << 15);
 
+// Initializes static variable
+int ce::LuaBridgeBinder::componentIDCounter = 0;
 
 // Loads a directory and gets all the .lua-files
 static const std::vector<std::string*> LoadDirectory(const std::string dir_path)
@@ -46,7 +49,7 @@ static const std::vector<std::string*> LoadDirectory(const std::string dir_path)
 	std::vector<std::string*> output;
 
 	// First we check if we can open the directory path
-	if ((dir = opendir(dir_path.c_str())) != nullptr)
+    if ((dir = opendir(dir_path.c_str())) != nullptr)
 	{
 		// Prints all the files and directories within directory
 		while ((ent = readdir(dir)) != nullptr)
@@ -55,7 +58,7 @@ static const std::vector<std::string*> LoadDirectory(const std::string dir_path)
 			std::string newPath = dir_path;
 			newPath.append("\\");
 			newPath.append(ent->d_name);
-				
+			
 			// Checks if the directory entry is a directory
 			if (ent->d_type == DIRECTORY_FLAG)
 			{	
@@ -77,8 +80,12 @@ static const std::vector<std::string*> LoadDirectory(const std::string dir_path)
 				// Checks if the filename contains .lua
 				if (std::string(ent->d_name).find(".lua") != std::string(ent->d_name).npos)
 				{
-                    // Creates a string for just the name of the file which will be used in DoRequire() later
-                    output.push_back(new std::string(ent->d_name));
+                    // Creates a string for just the name of the file/component which we use later to register it
+                    std::string fileName = ent->d_name;
+                    // Removes the .lua part
+                    fileName.erase(fileName.end() - 4, fileName.end());
+                    
+                    output.push_back(new std::string(fileName));
 
 					// Adds the name of that file to our vector
 					output.push_back(new std::string(newPath));
@@ -109,7 +116,8 @@ void ce::LuaBridgeBinder::BindAll()
 
 
 	// Here you put all the method calls for the classes you want to bind
-
+    Bind<ce::GameObject>(L);
+    Bind<ce::LuaComponent>(L);
 	
 	// Gets all the .lua file_paths
     std::vector<std::string*> file_paths = LoadDirectory(LUA_SCRIPTS_PATH);
@@ -119,16 +127,18 @@ void ce::LuaBridgeBinder::BindAll()
 	// Iterates all the file_paths
 	for (auto it = file_paths.begin(); it != file_paths.end(); it++)
 	{
+		// Loads the file using the current file and tablename
+		LoadLua(L, (**it), (**(it + 1)));
+
         it++;
-		// Loads the file using the current iteration of file_path
-		LoadLua(L, (**it));
 	}
 }
 
 
 // Loads lua file
-void ce::LuaBridgeBinder::LoadLua(lua_State * L, const std::string & path)
+void ce::LuaBridgeBinder::LoadLua(lua_State * L, const std::string & tableName, const std::string & path)
 {
+
 	// Checks if we can load the .lua file or not
 	if (luaL_dofile(L, path.c_str()))
 	{
@@ -136,10 +146,26 @@ void ce::LuaBridgeBinder::LoadLua(lua_State * L, const std::string & path)
 		std::cerr << lua_tostring(L, -1) << std::endl;
 		assert(false);
 	}
+
+    // Checks if we placed this file in the Components folder
+    if (std::string(path).find(LUA_COMPONENTS_PATH) != std::string(path).npos)
+    {
+        luabridge::LuaRef table = luabridge::getGlobal(L, tableName.c_str());
+        RegisterComponent(table);
+    }
 }
 
+// Registers a lua script component's ID
+void ce::LuaBridgeBinder::RegisterComponent(luabridge::LuaRef table)
+{    
+    // Checks if there is an "ID" in the lua script
+    if (!table["ID"].isNumber())
+    {
+        std::cerr << lua_tostring(table.state(), -1);
+        assert(false);
+    }
+    // Registers the ID via our counter that we increment, 
+    // thus creating a unique ID for each lua component
+    table["ID"] = componentIDCounter++;
 
-void ce::LuaBridgeBinder::RegisterComponent(luabridge::LuaRef ref)
-{
-    ce::LuaComponent* luaComp = new ce::LuaComponent(ref);
 }

@@ -1,34 +1,27 @@
 NewComponent = {
-health = 100,
-tag = "default",
-isDead = false
+ID = -1,
+--component,
+yesNo = "yes"
 }
 
-function NewComponent.Create(hp, tag, isDead)
-	local output = {}
-	setmetatable(output, NewComponent)
-	
-	output.health = hp
-	output.tag = tag
-	output.isDead = isDead
-	
-	print(output.isDead)
-	print(output.tag)
-	print(output.health)
-	
-	-- Saves a LuaRef of output in C++ that calls Start/Update
-	Chef.RegisterComponent(output);
+
+function NewComponent.Create()
+	local output = Chef.LoadComponent(NewComponent)
 	
 	return output
 end
 
+
 -- Used for initialization
-NewComponent.Start = function(NewComponent.Create())
-	print("Start")
+function NewComponent.Start()	
+	--print("Starting NewComponent")
+	--print(NewComponent.ID)
 end
 
+
 --Gets called every frame
-NewComponent.Update = function()
-	print("Updating")
-	print(NewComponent.tag)
+function NewComponent.Update()	
+	--print("Updating NewComponent")
+	--print(NewComponent.ID)
 end
+

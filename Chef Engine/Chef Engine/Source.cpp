@@ -47,19 +47,6 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     ce::GameObjectManager* objManager = new ce::GameObjectManager();
 	ce::DrawEventManager* drawManager = new ce::DrawEventManager();
 
-	ce::GameObject* object = new ce::GameObject();
-
-	//auto* sprite = object->AddComponent<ce::GameObjectManager>();
-
-	//sprite->SetSprite("ThreeByThree.png");*/
-	
-	//sprite->SetDrawOrder(1);
-
-    lua_State* L = luaL_newstate();
-    luaL_openlibs(L);
-
-    ce::LuaComponent* newComponent = object->AddLuaComponent(L, new std::string("Lua Scripts\\Components\\NewComponent.lua"), new std::string("NewComponent"));
-
     // Binds all defined classes with LuaBridge
     ce::LuaBridgeBinder::BindAll();
 

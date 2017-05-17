@@ -4,7 +4,6 @@
 
 #include <typeinfo>
 
-int ce::Component::IDCounter = 0;
 
 ce::Component::Component()
 {
@@ -73,7 +72,7 @@ void ce::Component::SetGameObject(GameObject * gameObject)
 }
 
 
-// The == operator of Component compares the hash of the component
+// The == operator of Component compares the ID of the component
 bool ce::Component::operator==(const Component& other)
 {
 	if (this->ID == other.ID)

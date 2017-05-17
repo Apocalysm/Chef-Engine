@@ -60,13 +60,11 @@ namespace ce
         */
 		~GameObject();
 
-
+        
+        #pragma region Component Methods
 		// Adds a new component to the GameObject based on the typename in the method call
 		template<typename T> 
         T* AddComponent();
-
-        // Adds specifically a Lua Component and loads the correct script and table
-        ce::LuaComponent* AddLuaComponent(lua_State* L, const std::string* scriptPath, const std::string* tableName);
 
 		// Tries to find the component of the specified typename
 		template<typename T>
@@ -74,8 +72,18 @@ namespace ce
 
 		// Removes the component of the specified typename if the GameObject is holding one
 		template<typename T>
-		void RemoveComponent();
-        
+		void RemoveComponent(T* component);
+        #pragma endregion
+
+        #pragma region LuaComponent Methods
+        // Creates and adds a LuaComponent by passing a LuaRef into it
+        void AddLuaComponent(luabridge::LuaRef ref);
+
+        luabridge::LuaRef GetLuaComponent(int ID);
+
+        void RemoveLuaComponent(int ID);
+      
+        #pragma endregion
 
 		// An enumerator for differentiating our GameObjects between layers
         /*! \enum Layers
@@ -124,6 +132,8 @@ namespace ce
 		// All the components the GameObject is currently holding
 		std::map<int, Component*> components;
 
+        std::map<int, ce::LuaComponent*> luaComponents;
+
 		std::string name;
 
 		// Specifies what kind of Object this is
@@ -133,8 +143,6 @@ namespace ce
 		bool active;
 
 		Layers layer;
-
-        std::vector<int> layerRef;
 
 		// number to differentiate our different GameObject
         int64 instanceID;
@@ -156,9 +164,6 @@ namespace ce
         // Tries to find the component of the specified typename
 		template<typename T>
 		T* GetComponentInternal();
-
-		// Tries to find the based on an integer
-		Component* GetComponentInternal(const int hash);
 
         // Binds all relevant members of this class with LuaBridge
         static void DoBind(lua_State* L);
@@ -183,7 +188,7 @@ namespace ce
 
 			t->SetGameObject(this);
 
-			// Sets the int 'hash' of component to be equal to the types hash_code
+			// Sets the int 'ID' of component to be equal to the types ID
 			t->SetID(typeid(t).hash_code());
 	        
             components.insert(std::make_pair(t->GetID(), t));
@@ -205,7 +210,7 @@ namespace ce
 		// Iterates all of GameObject's components
 		for (auto it = components.begin(); it != components.end(); it++)
 		{
-			// Checks if we find the same hash_code on the two types we are comparing
+			// Checks if we find the same ID on the two types we are comparing
 			if ((*it).second->GetID() == typeid(T*).hash_code())
 			{
 				// We return the component and casts it to type T
@@ -233,7 +238,7 @@ namespace ce
 
 
 	template<typename T>
-	void ce::GameObject::RemoveComponent()
+	void ce::GameObject::RemoveComponent(T* component)
 	{
 		// Makes sure that this method only takes types derived from ce::Component
 		static_assert((std::is_base_of<ce::Component, T>::value), "Type <T> of GameObject.RemoveComponent<>() must be of type ce::Component");
@@ -241,11 +246,11 @@ namespace ce
 		// Iterates all of GameObject's components
 		for (auto it = components.begin(); it != components.end(); it++)
 		{
-			// Checks if we find the same hash_code on the two types we are comparing
-			if ((*it)->hash == typeid(T*).hash_code())
+			// Checks if we find the same ID on the two types we are comparing
+			if (it->second->GetID() == component->GetID())
 			{
 				// We delete the object from the vector and the memory
-				delete (*it);
+				delete it->second;
 
 				it = components.erase(it);
 				

@@ -7,7 +7,7 @@ using ce::LuaComponent;
 
 LuaComponent::LuaComponent(luabridge::LuaRef ref)
 {
-    *instance = ref;
+    *this->ref = ref;
 }
 
 
@@ -74,4 +74,44 @@ void LuaComponent::LoadScript(lua_State* L, const std::string* scriptPath, const
         // If not, we make sure it's pointing to null
         updateFunc = nullptr;
     }
+}
+
+luabridge::LuaRef LuaComponent::LoadComponent(luabridge::LuaRef component)
+{
+    luabridge::LuaRef newComponent = luabridge::newTable(component.state());
+    
+    for (auto pair : getKeyValueMap(component))
+    {
+        newComponent[pair.first] = pair.second;
+    }
+
+    return newComponent;
+}
+
+std::unordered_map<std::string, luabridge::LuaRef> LuaComponent::getKeyValueMap(const luabridge::LuaRef& table)
+{
+    std::unordered_map<std::string, luabridge::LuaRef> result;
+    if (table.isNil()) { return result; }
+
+    auto L = table.state();
+    push(L, table); // push table
+
+    lua_pushnil(L);  // push nil, so lua_next removes it from stack and puts (k, v) on stack
+    while (lua_next(L, -2) != 0) { // -2, because we have table at -1
+        if (lua_isstring(L, -2)) { // only store stuff with string keys
+            result.emplace(lua_tostring(L, -2), luabridge::LuaRef::fromStack(L, -1));
+        }
+        lua_pop(L, 1); // remove value, keep key for lua_next
+    }
+
+    lua_pop(L, 1); // pop table
+    return result;
+}
+
+void ce::LuaComponent::DoBind(lua_State * L)
+{
+   luabridge::getGlobalNamespace(L)
+        .beginNamespace("Chef")
+            .addFunction("LoadComponent", &LuaComponent::LoadComponent)
+        .endNamespace();
 }
