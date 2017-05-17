@@ -183,14 +183,6 @@ void GameObject::SetTag(std::string tag)
 
 void GameObject::Destroy()
 {
-	ce::Sprite* spr = GetComponentInternal<ce::Sprite>();
-
-	if (spr != nullptr)
-	{
-		ce::DrawEventManager::RemoveSprite(spr);
-		//delete GetComponent<Sprite>()->;
-	}
-
 	// Iterates all of GameObject's components
 	for (auto it = components.begin(); it != components.end(); it++)
 	{
@@ -200,6 +192,8 @@ void GameObject::Destroy()
     components.clear();
 
 	ce::GameObjectManager::RemoveObject(this);
+
+	delete this;
 }
 
 

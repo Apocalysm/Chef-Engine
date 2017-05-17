@@ -23,6 +23,7 @@ Sprite::Sprite(const std::string& fileName, const int newDrawOrder)
 
 Sprite::~Sprite()
 {
+	ce::DrawEventManager::RemoveSprite(this);
 	delete sprite;
 }
 
@@ -47,6 +48,7 @@ void Sprite::SetSprite(const std::string& fileName)
 
 void ce::Sprite::SetRealSprite(sf::Sprite * sprite)
 {
+	delete this->sprite; 
 	this->sprite = sprite;
 }
 

@@ -14,7 +14,7 @@ namespace ce
 
 	public:
 		Component();
-		~Component();
+		virtual ~Component();
 
         /*!
         * Start is called on the frame when a script is enabled just before the Update method is Called for the first time.
