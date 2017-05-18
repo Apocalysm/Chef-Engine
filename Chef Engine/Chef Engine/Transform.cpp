@@ -68,15 +68,15 @@ const sf::Vector2f& Transform::GetPosition() const
 
 void ce::Transform::Move(sf::Vector2f movement)
 {
-	if (gameObject->GetComponent<ce::Collider>() != NULL)
+	/*if (gameObject->GetComponent<ce::Collider>() != NULL)
 	{
 		gameObject->GetComponent<ce::Collider>()->body->ApplyForce(b2Vec2(movement.x, movement.y), gameObject->GetComponent<ce::Collider>()->body->GetWorldCenter(), true);
 	}
 	else
-	{
+	{*/
 		lastPos = position;
 		position += movement;
-	}
+	//}
 }
 
 

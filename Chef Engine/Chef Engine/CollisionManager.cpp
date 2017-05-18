@@ -51,12 +51,19 @@ void ce::CollisionManager::RemoveCollider(ce::Collider* collider)
 
 void ce::CollisionManager::UpdateCollision()
 {
-	world->Step(1, 8, 3);
+	world->Step(1, 8, 300);
 
 	for (auto it = intToRectangles.begin(); it != intToRectangles.end(); it++)
 	{
-		it->second->transform->SetPosition(it->second->body->GetPosition().x,
-										   it->second->body->GetPosition().y);
+		it->second->transform->SetPosition(it->second->body->GetPosition().x + it->second->sprite->GetOrigin().x,
+										   it->second->body->GetPosition().y + it->second->sprite->GetOrigin().y);
+		/*it->second->transform->SetPosition(it->second->body->GetPosition().x,
+			it->second->body->GetPosition().y);*/
+
+		if (it->second->fitSprite)
+		{
+			it->second->gameObject->GetComponent<ce::Sprite>()->Update();
+		}
 	}
 
 	//for (auto it = intToRectangles.begin(); it != intToRectangles.end(); it++)

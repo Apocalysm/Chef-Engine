@@ -19,14 +19,6 @@ namespace ce
 
 		void SetFitSprite(bool fitSprite, bool dynamic);
 
-		void SetSize(const float x, const float y);
-
-		sf::Vector2f GetSize() const;
-
-		void SetOrigin(const float x, const float y);
-
-		sf::Vector2f GetOrigin() const;
-
 		void SetIsTrigger(const bool isTrigger);
 
 		bool GetIsTrigger() const;

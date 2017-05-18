@@ -52,7 +52,7 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	
 	sprite->SetDrawOrder(1);
 
-	//sprite->SetOrigin(200.0f, 100.0f);
+	//sprite->SetOrigin(82.5f, 69.0f);
 
 	object->GetTransform()->SetPosition(200.0f, 200.0f);
 
@@ -98,41 +98,50 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
-			//object->GetTransform()->SetPosition(object->GetTransform()->GetPosition() + sf::Vector2f(-10.0f, 0));
-			object->GetTransform()->Move(sf::Vector2f(-3000.0f, 0.0f));
+			object->GetTransform()->SetPosition(object->GetTransform()->GetPosition() + sf::Vector2f(-10.0f, 0));
+			//object->GetTransform()->Move(sf::Vector2f(-3000.0f, 0.0f));
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		{
-			//object->GetTransform()->SetPosition(object->GetTransform()->GetPosition() + sf::Vector2f(10.0f, 0));
-			object->GetTransform()->Move(sf::Vector2f(3000.0f, 0.0f));
+			object->GetTransform()->SetPosition(object->GetTransform()->GetPosition() + sf::Vector2f(10.0f, 0));
+			//object->GetTransform()->Move(sf::Vector2f(3000.0f, 0.0f));
         }
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		{
-			//object->GetTransform()->SetPosition(object->GetTransform()->GetPosition() + sf::Vector2f(0, -10.0f));
-			object->GetTransform()->Move(sf::Vector2f(0.0f, -3000.0f));
+			object->GetTransform()->SetPosition(object->GetTransform()->GetPosition() + sf::Vector2f(0, -10.0f));
+			//object->GetTransform()->Move(sf::Vector2f(0.0f, -3000.0f));
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		{
-			//object->GetTransform()->SetPosition(object->GetTransform()->GetPosition() + sf::Vector2f(0, 10.0f));
-			object->GetTransform()->Move(sf::Vector2f(0.0f, 3000.0f));
+			object->GetTransform()->SetPosition(object->GetTransform()->GetPosition() + sf::Vector2f(0, 10.0f));
+			//object->GetTransform()->Move(sf::Vector2f(0.0f, 3000.0f));
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+		{
+			object->GetTransform()->Rotate(5.0f);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+		{
+			object->GetTransform()->Rotate(-5.0f);
 		}
 
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
-			object2->GetTransform()->SetPosition(object2->GetTransform()->GetPosition() + sf::Vector2f(-5.0f, 0));
+			object2->GetTransform()->SetPosition(object2->GetTransform()->GetPosition() + sf::Vector2f(-10.0f, 0));
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
-			object2->GetTransform()->SetPosition(object2->GetTransform()->GetPosition() + sf::Vector2f(5.0f, 0));
+			object2->GetTransform()->SetPosition(object2->GetTransform()->GetPosition() + sf::Vector2f(10.0f, 0));
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		{
-			object2->GetTransform()->SetPosition(object2->GetTransform()->GetPosition() + sf::Vector2f(0, -5.0f));
+			object2->GetTransform()->SetPosition(object2->GetTransform()->GetPosition() + sf::Vector2f(0, -10.0f));
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
-			object2->GetTransform()->SetPosition(object2->GetTransform()->GetPosition() + sf::Vector2f(0, 5.0f));
+			object2->GetTransform()->SetPosition(object2->GetTransform()->GetPosition() + sf::Vector2f(0, 10.0f));
 		}
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))

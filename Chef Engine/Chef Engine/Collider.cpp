@@ -47,23 +47,23 @@ void ce::Collider::Update()
 	}
 	else
 	{
-		//fRect = shape->getGlobalBounds();
 	}
-
-	/*deltaPos = transform->GetPosition() - lastPos;
-	lastPos = transform->GetPosition();*/
 	
-	b2Vec2 transformPos;
+	/*b2Vec2 transformPos;
 	transformPos.x = transform->GetPosition().x;
 	transformPos.y = transform->GetPosition().y;
-	//body->SetTransform(transformPos, transform->GetRotation());
-	body->SetTransform(body->GetPosition(), transform->GetRotation());
+	transRot = (transform->GetRotation() * PI) / 180;
+	body->SetTransform(transformPos, transRot);*/
+
+	b2Vec2 spritePos = b2Vec2(sprite->GetSprite()->getPosition().x - sprite->GetOrigin().x,
+							  sprite->GetSprite()->getPosition().y - sprite->GetOrigin().y);
+	transRot = (transform->GetRotation() * PI) / 180;
+	body->SetTransform(spritePos, transRot);
 }
 
 
 void ce::Collider::SetupTMX(sf::RectangleShape* rectShape)
 {
-	//fRect = rectShape->getGlobalBounds();
 }
 
 
@@ -124,17 +124,31 @@ void ce::Collider::SetFitSprite(bool fitSprite, bool dynamic)
 
 	transPos = transform->GetPosition();
 
-	b2Vec2 spriteCenter = b2Vec2(transPos.x + spriteSizeX / 2 - spriteOrigin.x,
-		transPos.y + spriteSizeY / 2 - spriteOrigin.y);
+	/*b2Vec2 spriteCenter = b2Vec2(transPos.x + spriteSizeX / 2 - spriteOrigin.x,
+		transPos.y + spriteSizeY / 2 - spriteOrigin.y);*/
+
+	b2Vec2 center = b2Vec2(-spriteSizeX / 2 + spriteOrigin.x, -spriteSizeY / 2 + spriteOrigin.y);
 
 	transRot = (transform->GetRotation() * PI) / 180;
 
 	shape.SetAsBox(spriteSizeX / 2, spriteSizeY / 2);
+	//shape.SetAsBox(spriteSizeX / 2, spriteSizeY / 2, center, transRot);
 
-	body->SetLinearDamping(0.1f);
+	//body->SetLinearDamping(0.1f);
+
+	body->SetSleepingAllowed(false);
+
+	b2MassData* massData = new b2MassData();
+	body->GetMassData(massData);
+	massData->center.Set(center.x, center.y);
+	body->SetMassData(massData);
+
+
 
 	if (dynamic)
 	{
+		body->SetFixedRotation(true);
+
 		fixtureDef.shape = &shape;
 		fixtureDef.density = 1.0f;
 		fixtureDef.friction = 0.3f;
@@ -144,55 +158,8 @@ void ce::Collider::SetFitSprite(bool fitSprite, bool dynamic)
 	else
 		body->CreateFixture(&shape, 0.0f);
 
-	/*ce::GameObject* object1 = new ce::GameObject();
-	ce::GameObject* object2 = new ce::GameObject();
-	ce::GameObject* object3 = new ce::GameObject();
-	ce::GameObject* object4 = new ce::GameObject();
-
-	object1->GetTransform()->SetPosition(transform->GetPosition().x - spriteOrigin.x,
-										transform->GetPosition().y - spriteOrigin.y);
-	object2->GetTransform()->SetPosition(transform->GetPosition().x - spriteOrigin.x,
-										transform->GetPosition().y + spriteSizeY  * transScale.y - spriteOrigin.y);
-	object3->GetTransform()->SetPosition(transform->GetPosition().x + spriteSizeX * transScale.x - spriteOrigin.x,
-										transform->GetPosition().y + spriteSizeY * transScale.y - spriteOrigin.y);
-	object4->GetTransform()->SetPosition(transform->GetPosition().x + spriteSizeX * transScale.x - spriteOrigin.x,
-										transform->GetPosition().y - spriteOrigin.y);
-
-	ce::Sprite* sprite1 = object1->AddComponent<ce::Sprite>();
-	ce::Sprite* sprite2 = object2->AddComponent<ce::Sprite>();
-	ce::Sprite* sprite3 = object3->AddComponent<ce::Sprite>();
-	ce::Sprite* sprite4 = object4->AddComponent<ce::Sprite>();
-
-	sprite1->SetSprite("dot.png");
-	sprite2->SetSprite("dot.png");
-	sprite3->SetSprite("dot.png");
-	sprite4->SetSprite("dot.png");*/
+	body->SetMassData(massData);
 }
-
-
-//void ce::Collider::SetSize(const float x, const float y)
-//{
-//	size = sf::Vector2f(x, y);
-//	shape->setSize(size);
-//}
-//
-//
-//sf::Vector2f ce::Collider::GetSize() const
-//{
-//	return shape->getSize();
-//}
-//
-//
-//void ce::Collider::SetOrigin(float x, float y)
-//{
-//	shape->setOrigin(x, y);
-//}
-//
-//
-//sf::Vector2f ce::Collider::GetOrigin() const
-//{
-//	return shape->getOrigin();
-//}
 
 
 void ce::Collider::SetIsTrigger(bool isTrigger)
@@ -212,8 +179,6 @@ void ce::Collider::SetGameObject(GameObject * gameObject)
 	this->gameObject = gameObject;
 
 	transform = gameObject->GetTransform();
-
-	//lastPos = transform->GetPosition();
 
 	ce::CollisionManager::AddCollider(this);
 
