@@ -55,16 +55,17 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	sprite->SetDrawOrder(1);
 
 	ce::Camera* camera = object->AddComponent<ce::Camera>();
-	camera->SetSize(sf::Vector2f(69, 420));
+	camera->SetSize(sf::Vector2f(50, 50));
 	camera->SetFollow(true);
 
-	sf::RenderWindow window(sf::VideoMode(camera->GetSize().x, camera->GetSize().y), "Test");
+	sf::RenderWindow window(sf::VideoMode(1000, 1000), "Test");
 
 	window.setFramerateLimit(60);
+    float count = 10;
+    float timer = 0;
 
-
-	map->LoadMap("orthogonal-outside.tmx");
-	std::string* mapName = new std::string("orthogonal-outside.tmx");
+	map->LoadMap("RefferenceMap.tmx");
+	std::string* mapName = new std::string("RefferenceMap.tmx");
 	map->RegisterMap(0, mapName);
 	map->LoadObject();
 
@@ -76,34 +77,37 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
-
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		{
-			map->LoadMap("sewers.tmx");
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		{
-			map->LoadMapIndex(0);
-		}
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		{
-			object->GetTransform()->Move( sf::Vector2f(0, -1));
-			
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		{
-			object->GetTransform()->Move( sf::Vector2f(0, 1));
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		{
-			object->GetTransform()->Move( sf::Vector2f(-1, 0));
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		{
-			object->GetTransform()->Move( sf::Vector2f(1, 0));
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        {
+            map->LoadMap("sewers.tmx");
         }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        {
+            map->LoadMapIndex(0);
+        }
+        
+        if (timer >= count)
+        {          
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+            {
+                object->GetTransform()->Move(sf::Vector2f(0, -1));
+                timer = 0;
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+            {
+                object->GetTransform()->Move(sf::Vector2f(0, 1)); timer = 0;
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+            {
+                object->GetTransform()->Move(sf::Vector2f(-1, 0)); timer = 0;
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+            {
+                object->GetTransform()->Move(sf::Vector2f(1, 0)); timer = 0;
+            }
+        }
+        else
+            timer += 1;
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
         {
