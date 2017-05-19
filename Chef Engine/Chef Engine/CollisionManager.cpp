@@ -55,10 +55,10 @@ void ce::CollisionManager::UpdateCollision()
 
 	for (auto it = intToRectangles.begin(); it != intToRectangles.end(); it++)
 	{
-		it->second->transform->SetPosition(it->second->body->GetPosition().x + it->second->sprite->GetOrigin().x,
-										   it->second->body->GetPosition().y + it->second->sprite->GetOrigin().y);
-		/*it->second->transform->SetPosition(it->second->body->GetPosition().x,
-			it->second->body->GetPosition().y);*/
+		/*it->second->transform->SetPosition(it->second->body->GetPosition().x + it->second->sprite->GetOrigin().x,
+										   it->second->body->GetPosition().y + it->second->sprite->GetOrigin().y);*/
+		it->second->transform->SetPosition(it->second->body->GetPosition().x,
+			it->second->body->GetPosition().y);
 
 		if (it->second->fitSprite)
 		{

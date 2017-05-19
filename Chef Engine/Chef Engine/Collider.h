@@ -53,7 +53,7 @@ namespace ce
 		ce::Sprite* sprite;
 		ce::Transform* transform;
 		sf::Vector2f transPos;
-		sf::Vector2f& transScale;
+		sf::Vector2f transScale;
 		float transRot;
 		float spriteSizeX;
 		float spriteSizeY;

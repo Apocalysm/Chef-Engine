@@ -55,10 +55,29 @@ void ce::Collider::Update()
 	transRot = (transform->GetRotation() * PI) / 180;
 	body->SetTransform(transformPos, transRot);*/
 
-	b2Vec2 spritePos = b2Vec2(sprite->GetSprite()->getPosition().x - sprite->GetOrigin().x,
-							  sprite->GetSprite()->getPosition().y - sprite->GetOrigin().y);
+	/*b2Vec2 spritePos = b2Vec2(sprite->GetSprite()->getPosition().x - sprite->GetOrigin().x,
+							  sprite->GetSprite()->getPosition().y - sprite->GetOrigin().y);*/
+
+	b2Vec2 spritePos = b2Vec2(sprite->GetSprite()->getPosition().x,
+							  sprite->GetSprite()->getPosition().y);
+
+
 	transRot = (transform->GetRotation() * PI) / 180;
+
+	transScale = transform->GetScale();
+
 	body->SetTransform(spritePos, transRot);
+
+	//std::cout << body->GetLocalCenter().x << " " << body->GetLocalCenter().y << std::endl;
+	std::cout << shape.m_centroid.x << " " << shape.m_centroid.y << std::endl;
+
+	ce::GameObject* obj = new ce::GameObject();
+	ce::Sprite* spr = obj->AddComponent<ce::Sprite>();
+	spr->SetSprite("dot.png");
+	spr->SetDrawOrder(3);
+	obj->GetTransform()->SetPosition(body->GetFixtureList()->GetAABB(0).GetCenter().x,
+		body->GetFixtureList()->GetAABB(0).GetCenter().y);
+
 }
 
 
@@ -123,27 +142,30 @@ void ce::Collider::SetFitSprite(bool fitSprite, bool dynamic)
 	body = CollisionManager::GetWorld()->CreateBody(&bodyDef);
 
 	transPos = transform->GetPosition();
+	transScale = transform->GetScale();
+	transRot = (transform->GetRotation() * PI) / 180;
 
 	/*b2Vec2 spriteCenter = b2Vec2(transPos.x + spriteSizeX / 2 - spriteOrigin.x,
 		transPos.y + spriteSizeY / 2 - spriteOrigin.y);*/
 
-	b2Vec2 center = b2Vec2(-spriteSizeX / 2 + spriteOrigin.x, -spriteSizeY / 2 + spriteOrigin.y);
+	b2Vec2 center = b2Vec2((-spriteSizeX / 2) * transScale.x + spriteOrigin.x,
+						   (-spriteSizeY / 2) * transScale.y + spriteOrigin.y);
+
+	//body->GetLocalCenter().Set(1.0f, 1.0f);
+
+	std::cout << body->GetLocalCenter().x << " " << body->GetLocalCenter().y << std::endl;
 
 	transRot = (transform->GetRotation() * PI) / 180;
 
-	shape.SetAsBox(spriteSizeX / 2, spriteSizeY / 2);
+	shape.SetAsBox(spriteSizeX * transScale.x / 2, spriteSizeY * transScale.y / 2);
+
+	//shape.SetAsBox(spriteSizeX * transScale.x / 2, spriteSizeY * transScale.y / 2, center, transRot);
+
 	//shape.SetAsBox(spriteSizeX / 2, spriteSizeY / 2, center, transRot);
 
 	//body->SetLinearDamping(0.1f);
 
 	body->SetSleepingAllowed(false);
-
-	b2MassData* massData = new b2MassData();
-	body->GetMassData(massData);
-	massData->center.Set(center.x, center.y);
-	body->SetMassData(massData);
-
-
 
 	if (dynamic)
 	{
@@ -158,7 +180,33 @@ void ce::Collider::SetFitSprite(bool fitSprite, bool dynamic)
 	else
 		body->CreateFixture(&shape, 0.0f);
 
-	body->SetMassData(massData);
+	ce::GameObject* obj = new ce::GameObject();
+	ce::Sprite* spr = obj->AddComponent<ce::Sprite>();
+	spr->SetSprite("dot.png");
+	spr->SetDrawOrder(3);
+	obj->GetTransform()->SetPosition(body->GetFixtureList()->GetAABB(0).GetCenter().x,
+									 body->GetFixtureList()->GetAABB(0).GetCenter().y);
+
+	/*ce::GameObject* obj2 = new ce::GameObject();
+	ce::Sprite* spr2 = obj2->AddComponent<ce::Sprite>();
+	spr2->SetSprite("dot.png");
+	spr2->SetDrawOrder(3);
+	obj2->GetTransform()->SetPosition(body->GetFixtureList()->GetAABB(1).GetCenter().x,
+		body->GetFixtureList()->GetAABB(1).GetCenter().y);
+
+	ce::GameObject* obj3 = new ce::GameObject();
+	ce::Sprite* spr3 = obj3->AddComponent<ce::Sprite>();
+	spr3->SetSprite("dot.png");
+	spr3->SetDrawOrder(3);
+	obj3->GetTransform()->SetPosition(body->GetFixtureList()->GetAABB(2).GetCenter().x,
+		body->GetFixtureList()->GetAABB(2).GetCenter().y);
+
+	ce::GameObject* obj4 = new ce::GameObject();
+	ce::Sprite* spr4 = obj4->AddComponent<ce::Sprite>();
+	spr4->SetSprite("dot.png");
+	spr4->SetDrawOrder(3);
+	obj4->GetTransform()->SetPosition(body->GetFixtureList()->GetAABB(3).GetCenter().x,
+		body->GetFixtureList()->GetAABB(3).GetCenter().y);*/
 }
 
 
