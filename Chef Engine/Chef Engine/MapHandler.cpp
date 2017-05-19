@@ -11,6 +11,10 @@
 #include <iostream>
 
 using ce::MapHandler;
+int MapHandler::mapWidth;
+int MapHandler::mapHeight;
+int MapHandler::tileWidth;
+int MapHandler::tileHeight;
 
 
 MapHandler::MapHandler()
@@ -283,6 +287,12 @@ void ce::MapHandler::LoadObject()
 {
 }
 
+sf::Vector2i ce::MapHandler::GetMapSize()
+{
+	
+	return sf::Vector2i(mapWidth * tileWidth, mapHeight * tileHeight);
+}
+
 
 void ce::MapHandler::DoBind(lua_State * L)
 {
@@ -293,6 +303,7 @@ void ce::MapHandler::DoBind(lua_State * L)
 				.addFunction("LoadMap", &MapHandler::LoadMap)
 				.addFunction("LoadMapIndex", &MapHandler::LoadMap)
 				.addFunction("RegisterMap", &MapHandler::RegisterMap)
+				.addStaticFunction("GetMapSize", &MapHandler::GetMapSize)
 			.endClass()
 		.endNamespace();
 }

@@ -50,15 +50,19 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	object->SetName("RandomObject");
 
+	object->GetTransform()->SetPosition(150, 150);
+
 	ce::Sprite* sprite = object->AddComponent<ce::Sprite>();
 	sprite->SetSprite("Player.png");
 	sprite->SetDrawOrder(1);
 
 	ce::Camera* camera = object->AddComponent<ce::Camera>();
-	camera->SetSize(sf::Vector2f(50, 50));
+	camera->SetSize(sf::Vector2f(125, 125));
 	camera->SetFollow(true);
+	//camera->SetZoom(0.001);
 
-	sf::RenderWindow window(sf::VideoMode(1000, 1000), "Test");
+
+	sf::RenderWindow window(sf::VideoMode(1280, 720), "Test");
 
 	window.setFramerateLimit(60);
     float count = 10;
@@ -105,6 +109,11 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
             {
                 object->GetTransform()->Move(sf::Vector2f(1, 0)); timer = 0;
             }
+
+			/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+			{
+				camera->SetZoom(0.001);
+			}*/
         }
         else
             timer += 1;

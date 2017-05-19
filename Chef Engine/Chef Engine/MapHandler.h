@@ -35,16 +35,17 @@ namespace ce
 		void LoadMap(const std::string& fileName);
 		void RegisterMap(int index, std::string* mapName);
 		virtual void LoadObject();
+		static sf::Vector2i GetMapSize();
 
 		std::vector<std::string*> tileMapNames;
 
 	private:
 		static void DoBind(lua_State* L);
 
-		int mapHeight;
-		int mapWidth;
-		int tileHeight;
-		int tileWidth;
+		static int mapHeight;
+		static int mapWidth;
+		static int tileHeight;
+		static int tileWidth;
 		
 		std::vector<Tmx::Tileset*> tileSets;
 		std::vector<Tmx::TileLayer*> tileLayers;
