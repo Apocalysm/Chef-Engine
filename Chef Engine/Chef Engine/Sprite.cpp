@@ -46,7 +46,7 @@ void Sprite::SetSprite(const std::string& fileName)
 	sprite->setPosition(transform->GetPosition());
 }
 
-void ce::Sprite::ChangeSprite(sf::Sprite * sprite)
+void ce::Sprite::ChangeSprite(sf::Sprite* sprite)
 {
 	delete this->sprite; 
 	this->sprite = sprite;

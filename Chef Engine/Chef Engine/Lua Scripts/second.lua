@@ -12,4 +12,4 @@ object.transform.position = Chef.Vector2f(640, 360)
 sprite = object:AddSprite()
 sprite:SetSprite("player.png")
 
-sprite.scale = Chef.Vector2f(10, 10)
+object:GetSprite().scale = Chef.Vector2f(10, 10)

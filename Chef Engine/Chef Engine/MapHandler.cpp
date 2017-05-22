@@ -241,7 +241,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 								sprite->setTextureRect(sf::IntRect(tu * (object->GetWidth() + 1) - 1, tv * object->GetHeight(), -object->GetWidth(), object->GetHeight()));
 
 							sprite->setOrigin(0, tileHeight);
-							spriteComponent->SetRealSprite(sprite);
+							spriteComponent->ChangeSprite(sprite);
 
 							break;
 						}

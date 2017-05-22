@@ -49,6 +49,8 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     // Binds all defined classes with LuaBridge
     ce::LuaBridgeBinder::BindAll();
 
+    ce::GameObject* object = new ce::GameObject();
+
 	object->SetName("RandomObject");
 
 	object->GetTransform()->SetPosition(150, 150);

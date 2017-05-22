@@ -56,7 +56,7 @@ namespace ce
 		
         void SetSprite(const std::string &fileName);
 
-        void ChangeSprite(const sf::Sprite & sprite);
+        void ChangeSprite(sf::Sprite* sprite);
 
 		sf::Sprite* GetSprite() const;
 
