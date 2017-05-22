@@ -14,22 +14,16 @@
 #include <typeinfo>
 #include <iostream>
 
-
-/*! \mainpage Main Page
-*
-*\section intro_sec Introduction
-*
-* This is an introduction for Chef Engine.
-*
-*
-*\section install_sec How to install Chef Engine
-* 
-*\subsection step1 Step 1: Do the thing
-*\subsection step2 Step 2: Do the other thing
-*\subsection step3 Step 3: Now do the first thing and the second thing at the same time.
-*
-* Now you're finished!
-*/
+//////////////////////////////////////////////
+///   \mainpage Main Page
+///
+///   This is documentation for how to use Lua scripts with Chef Engine.
+///    
+///   In the 'Modules' category, you will find a number of tutorials on how to use Lua with Chef Engine.\n
+///   This includes things such as: 'How to create and use your own Component type in Lua' and 'Using the main loop in Lua'.\n
+///   These tutorials show code examples and what the code does.\n
+///   If you, as a designer, feels something is missing from these tutorials, ask me, Oskar, and I will fix it ASAP!
+//////////////////////////////////////////////
 #if _DEBUG
 int main(int argc, char* argv[])
 #else
