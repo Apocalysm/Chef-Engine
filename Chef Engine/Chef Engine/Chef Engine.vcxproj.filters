@@ -2,16 +2,16 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Collider.cpp">
-      <Filter>Source Files\Lua Binding\Components</Filter>
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Sprite.cpp">
-      <Filter>Source Files\Lua Binding\Components</Filter>
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
-      <Filter>Source Files\Lua Binding\Components</Filter>
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Component.cpp">
-      <Filter>Source Files\Lua Binding\Components</Filter>
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="LuaBridgeBinder.cpp">
       <Filter>Source Files\Lua Binding</Filter>
@@ -41,9 +41,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>Source Files\Lua Binding\Components</Filter>
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Math.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SFMLKeyboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -90,6 +93,9 @@
     <ClInclude Include="Math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SFMLKeyboard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -113,7 +119,7 @@
     <Filter Include="Source Files\Lua Binding">
       <UniqueIdentifier>{272328c9-a5a0-40b1-936d-c5698a40a49c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Lua Binding\Components">
+    <Filter Include="Source Files\Components">
       <UniqueIdentifier>{a9f9481f-8dcf-4668-bb0b-12d164cb086a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
