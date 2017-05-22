@@ -128,9 +128,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 				sf::VertexArray& vertexLayer = tileMapLayers[k][tile.tilesetId]->GetVertexArray();
 				//Get the quad
 				sf::Vertex* quad = &vertexLayer[(i * mapWidth + j) * 4];
-
 				
-
 				//Find the position in the tileset texture
 				unsigned int tileNumber = tile.id;
 				int tu;
