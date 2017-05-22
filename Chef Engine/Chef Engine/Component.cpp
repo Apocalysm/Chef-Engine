@@ -5,9 +5,10 @@
 #include <typeinfo>
 
 
-ce::Component::Component()
+ce::Component::Component() :
+    isNew(true), gameObject(nullptr), enabled(true)
 {
-    isNew = true;
+
 }
 
 
@@ -28,7 +29,7 @@ void ce::Component::Update()
 
 int ce::Component::GetID() const
 {
-	return ID;
+	return this->ID;
 }
 
 
@@ -46,7 +47,7 @@ void ce::Component::SetEnabled(bool enabled)
 
 bool ce::Component::GetEnabled() const
 {
-	return enabled;
+	return this->enabled;
 }
 
 void ce::Component::SetIsNew(bool isNew)
@@ -56,7 +57,7 @@ void ce::Component::SetIsNew(bool isNew)
 
 bool ce::Component::GetIsNew() const
 {
-    return isNew;
+    return this->isNew;
 }
 
 
@@ -81,4 +82,16 @@ bool ce::Component::operator==(const Component& other)
 	}
 
 	return false;
+}
+
+void ce::Component::DoBind(lua_State* L)
+{
+    luabridge::getGlobalNamespace(L)
+        .beginNamespace("Chef")
+            .beginClass<ce::Component>("Component")
+                .addConstructor<void (*) (void)>()
+                .addProperty("gameObject", &Component::GetGameObject)
+                .addProperty("enabled", &Component::GetEnabled, &Component::SetEnabled)
+            .endClass()
+        .endNamespace();
 }

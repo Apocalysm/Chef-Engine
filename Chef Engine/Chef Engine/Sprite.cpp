@@ -8,6 +8,7 @@ using ce::Sprite;
 Sprite::Sprite()
 {
 	sprite = new sf::Sprite();
+    std::cout << "wow" << std::endl;
 }
 
 
@@ -40,9 +41,14 @@ void Sprite::SetSprite(const std::string& fileName)
 {
 	texture.loadFromFile(fileName);
 
-	sprite->setTexture(texture);
+    sprite->setTexture(texture);
 
 	sprite->setPosition(transform->GetPosition());
+}
+
+void Sprite::ChangeSprite(const sf::Sprite& sprite)
+{
+    *this->sprite = sprite;
 }
 
 
@@ -168,9 +174,10 @@ void Sprite::DoBind(lua_State * L)
 {
 	luabridge::getGlobalNamespace(L)
 		.beginNamespace("Chef")
-			.beginClass<Sprite>("Sprite")
+			.deriveClass<Sprite, Component>("Sprite")
 				.addConstructor<void(*)(void)>()
-				.addProperty("sprite", &Sprite::GetSprite, &SetSprite)
+                .addFunction("SetSprite", &Sprite::SetSprite)
+				.addProperty("sprite", &Sprite::GetSprite, &Sprite::ChangeSprite)
 				.addProperty("position", &Sprite::GetPosition, &Sprite::SetPosition)
 				.addProperty("scale", &Sprite::GetScale, &Sprite::SetScale)
 				.addProperty("rotation", &Sprite::GetRotation, &Sprite::SetRotation)

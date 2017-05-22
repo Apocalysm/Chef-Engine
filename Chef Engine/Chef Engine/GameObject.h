@@ -77,7 +77,7 @@ namespace ce
 
         #pragma region LuaComponent Methods
         // Creates and adds a LuaComponent by passing a LuaRef into it
-        void AddLuaComponent(luabridge::LuaRef ref);
+        luabridge::LuaRef AddLuaComponent(luabridge::LuaRef ref);
 
         luabridge::LuaRef GetLuaComponent(int ID);
 
@@ -132,7 +132,7 @@ namespace ce
 		// All the components the GameObject is currently holding
 		std::map<int, Component*> components;
 
-        std::map<int, ce::LuaComponent*> luaComponents;
+        std::map<int, LuaComponent*> luaComponents;
 
 		std::string name;
 

@@ -106,10 +106,19 @@ namespace ce
         for (auto it = components.begin(); it != components.end(); it++)
         {
             // We also check if the Component is tagged as 'new' so we know it's the first time it's run
-            if (it->second->GetIsNew() && it->second->GetEnabled())
+            if (it->second->isNew && it->second->enabled)
             {
                 it->second->Start();
-                it->second->SetIsNew(false);
+                it->second->isNew = false;
+            }
+        }
+        // Does the same thing for luaComponents
+        for (auto it = luaComponents.begin(); it != luaComponents.end(); it++)
+        {                     
+            if (it->second->isNew && it->second->enabled)
+            {
+                it->second->Start();
+                it->second->isNew = false;
             }
         }
     }
@@ -120,6 +129,14 @@ namespace ce
         // Iterates through all of the components this GameObject is holding
         // and calls the Update method on them
         for (auto it = components.begin(); it != components.end(); it++)
+        {
+            if (it->second->GetEnabled())
+            {
+                it->second->Update();
+            }
+        }
+        // Does the same thing for luaComponents
+        for (auto it = luaComponents.begin(); it != luaComponents.end(); it++)
         {
             if (it->second->GetEnabled())
             {
@@ -176,7 +193,7 @@ namespace ce
     }
 
     // Creates a new LuaComponent and adds it to this GameObject
-    void GameObject::AddLuaComponent(luabridge::LuaRef ref)
+    luabridge::LuaRef GameObject::AddLuaComponent(luabridge::LuaRef ref)
     {
         if (!ref.isTable())
         {
@@ -190,35 +207,39 @@ namespace ce
             assert(false);
         }
 
-        if (!luaComponents[ref["ID"]])
+        int id = ref["ID"];
+         
+        if (luaComponents.find(id) == luaComponents.end())
         {
             // Creates a new LuaComponent with the ref we passed as an argument
-            LuaComponent* newComponent = new LuaComponent(ref);
+            LuaComponent* newComponent = new ce::LuaComponent(ref);
 
             // Sets the component's gameObject reference
             newComponent->SetGameObject(this);
 
-            // Checks if there exists a "component" in our ref
-            if (ref["component"].isNil())
-            {
-                std::cerr << lua_tostring(ref.state(), -1) << std::endl;
-                assert(false);
-            }
-            // Sets the lua scripts component reference
-            ref["component"] = newComponent;
+            // Passes this GameObject and the new luaComponent back to our new component instance in Lua
+            luabridge::LuaRef newRef = ref["Create"](newComponent);
+
+            // Sets the LuaComponent's ref to the newly created one
+            newComponent->ref = newRef;
 
             // Adds the new Lua Component to this GameObject
-            luaComponents.insert(std::make_pair(ref["ID"], newComponent));
+            luaComponents.insert(std::make_pair(id, newComponent));
+
+            // Sends the newRef back into Lua
+            return newRef;
         }
+        std::cerr << "You sadly can't add the same component type twice to a GameObject. Yet..." << std::endl;
+        assert(false);
     }
     
     // Gets a LuaComponent and returns that components specified LuaRef
     luabridge::LuaRef GameObject::GetLuaComponent(int ID)
     {
         // Checks if there is an element on index "ID" 
-        if (luaComponents[ID]->ref->isTable())
+        if (luaComponents[ID]->ref.isTable())
         {
-            return *luaComponents[ID]->ref;
+            return luaComponents[ID]->ref;
         }
     }
 
@@ -232,7 +253,6 @@ namespace ce
         
             luaComponents.erase(ID);
         }
-
     }
 
     void GameObject::DoBind(lua_State * L)
@@ -246,9 +266,10 @@ namespace ce
                     .addProperty("layer", &GameObject::GetLayer, &GameObject::SetLayer)
                     .addProperty("instanceID", &GameObject::GetID)
                     .addProperty("name", &GameObject::GetName, &GameObject::SetName)
+                    .addProperty("transform", &GameObject::GetTransform)
 
                     .addFunction("AddLuaComponent", &GameObject::AddLuaComponent)
-                    .addFunction("GetComponent", &GameObject::GetLuaComponent)
+                    .addFunction("GetLuaComponent", &GameObject::GetLuaComponent)
                     .addFunction("RemoveLuaComponent", &GameObject::RemoveLuaComponent)  
 
                     .addFunction("AddTransform", &GameObject::AddComponent<ce::Transform>)

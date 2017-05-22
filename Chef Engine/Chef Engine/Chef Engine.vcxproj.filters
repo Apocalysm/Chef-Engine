@@ -78,6 +78,9 @@
     <ClInclude Include="TileMapLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SFML_LuaBind.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

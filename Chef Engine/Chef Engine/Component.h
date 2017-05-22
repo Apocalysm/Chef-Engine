@@ -44,7 +44,7 @@ namespace ce
 
 	protected:
 		// The GameObject holding this Component
-		ce::GameObject* gameObject = nullptr;
+		ce::GameObject* gameObject;
 
 	private: 
         friend class GameObject;
@@ -57,9 +57,9 @@ namespace ce
 
 		// This decides if the Component should be updated for example via the Update method
         /*! Enabled Components are Updated, disabled Components are not.*/
-		bool enabled = true;
+        bool enabled;
 
-		
+        static void DoBind(lua_State* L);
 
 	};
 }

@@ -3,11 +3,22 @@
 #include <iostream>
 
 using ce::LuaComponent;
- 
 
-LuaComponent::LuaComponent(luabridge::LuaRef ref)
+
+LuaComponent::LuaComponent(luabridge::LuaRef ref) :
+    ref(ref.state())
 {
-    *this->ref = ref;
+    this->ref = ref;
+
+    // Calls the Awake function in the lua script, if there is one
+    if (ref["Awake"].isFunction())
+    {
+        ref["Awake"](ref);
+    }
+
+    // Sets the Start and Update methods of the Lua Script
+    startFunc = std::make_unique<luabridge::LuaRef>(ref["Start"]);
+    updateFunc = std::make_unique<luabridge::LuaRef>(ref["Update"]);
 }
 
 
@@ -20,7 +31,7 @@ void LuaComponent::Start()
 {
     if (startFunc != nullptr)
     {
-        (*startFunc)();
+        (*startFunc)(ref);
     }
 }
 
@@ -29,7 +40,7 @@ void LuaComponent::Update()
 {
     if (updateFunc != nullptr)
     {
-        (*updateFunc)();
+        (*updateFunc)(ref);
     }
 }
 
@@ -76,17 +87,22 @@ void LuaComponent::LoadScript(lua_State* L, const std::string* scriptPath, const
     }
 }
 
+
 luabridge::LuaRef LuaComponent::LoadComponent(luabridge::LuaRef component)
 {
+    // Creates an empty table in the same state as the component we want to copy
     luabridge::LuaRef newComponent = luabridge::newTable(component.state());
     
+    // Loops through all the members of the component-table we want to copy 
     for (auto pair : getKeyValueMap(component))
     {
+        // Sets a key on our new, copied table to have the correct coresponding value
         newComponent[pair.first] = pair.second;
     }
 
     return newComponent;
 }
+
 
 std::unordered_map<std::string, luabridge::LuaRef> LuaComponent::getKeyValueMap(const luabridge::LuaRef& table)
 {
@@ -108,10 +124,13 @@ std::unordered_map<std::string, luabridge::LuaRef> LuaComponent::getKeyValueMap(
     return result;
 }
 
+
 void ce::LuaComponent::DoBind(lua_State * L)
 {
-   luabridge::getGlobalNamespace(L)
+    luabridge::getGlobalNamespace(L)
         .beginNamespace("Chef")
             .addFunction("LoadComponent", &LuaComponent::LoadComponent)
+            .deriveClass<LuaComponent, Component>("LuaComponent")
+            .endClass()
         .endNamespace();
 }

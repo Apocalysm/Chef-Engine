@@ -3,6 +3,9 @@
 // All the different classes we want to bind with Lua Bridge
 #include "GameObject.h"
 #include "LuaComponent.h"
+#include "Transform.h"
+#include "Sprite.h"
+#include "SFML_LuaBind.h"
 
 // dirent.h Allows us to read directories easier
 #include <dirent.h>
@@ -117,7 +120,11 @@ void ce::LuaBridgeBinder::BindAll()
 
 	// Here you put all the method calls for the classes you want to bind
     Bind<ce::GameObject>(L);
+    Bind<ce::Component>(L);
     Bind<ce::LuaComponent>(L);
+    Bind<ce::Sprite>(L);
+    Bind<ce::Transform>(L);
+    Bind<ce::SFML_Bind>(L);
 	
 	// Gets all the .lua file_paths
     std::vector<std::string*> file_paths = LoadDirectory(LUA_SCRIPTS_PATH);

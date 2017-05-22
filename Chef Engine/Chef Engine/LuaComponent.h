@@ -28,7 +28,7 @@ namespace ce
         friend class ce::GameObject;
 
         // Our actual component instance where all values and such are stored
-        std::unique_ptr<luabridge::LuaRef> ref;
+        luabridge::LuaRef ref;
 
         // Points to the Component 'Start' method, in a lua script
         std::unique_ptr<luabridge::LuaRef> startFunc;

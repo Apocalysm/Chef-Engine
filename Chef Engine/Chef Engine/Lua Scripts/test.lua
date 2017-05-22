@@ -2,7 +2,6 @@ package.path = package.path .. ";../Chef Engine/Lua Scripts/Components/?.lua;../
 
 require "NewComponent"
 
-
 --[[
 Account = {};
 

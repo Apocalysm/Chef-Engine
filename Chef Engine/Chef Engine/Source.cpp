@@ -50,7 +50,7 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     // Binds all defined classes with LuaBridge
     ce::LuaBridgeBinder::BindAll();
 
-	map->LoadMap("orthogonal-outside.tmx");
+	//map->LoadMap("orthogonal-outside.tmx");
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -99,7 +99,7 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         objManager->CallUpdate();
 
 		window.clear(sf::Color::Cyan);
-		//drawManager->Draw(window);
+		drawManager->Draw(window);
 		window.display();
 
 

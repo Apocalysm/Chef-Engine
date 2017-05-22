@@ -5,16 +5,11 @@ require "OtherComponent"
 
 object = Chef.GameObject("Name")
 
-comp = NewComponent.Create()
-comp.yesNo = "no"
-print(comp)
-print(comp.ID)
-print(comp.yesNo)
-newComp = NewComponent.Create()
+comp = object:AddLuaComponent(NewComponent)
+comp.Start(comp)
+object.transform.position = Chef.Vector2f(640, 360)
 
-print(NewComponent.yesNo)
-object:AddLuaComponent(comp)
+sprite = object:AddSprite()
+sprite:SetSprite("player.png")
 
---comp2 = OtherComponent.Create()
-
---object:AddLuaComponent(comp2)
+sprite.scale = Chef.Vector2f(10, 10)

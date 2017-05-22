@@ -152,6 +152,7 @@
     <ClInclude Include="LuaComponent.h" />
     <ClInclude Include="MapHandler.h" />
     <ClInclude Include="LuaBridgeBinder.h" />
+    <ClInclude Include="SFML_LuaBind.h" />
     <ClInclude Include="TileMapLayer.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Transform.h" />
