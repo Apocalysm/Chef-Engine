@@ -36,18 +36,13 @@ int main(int argc, char* argv[])
 int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #endif
 {
-	// Binds all defined classes with LuaBridge
-	//ce::LuaBridgeBinder::BindAll();
-
-
+    // Binds all defined classes with LuaBridge
+    ce::LuaBridgeBinder::BindAll();
 
 	ce::MapHandler* map = new ce::MapHandler;
 
     ce::GameObjectManager* objManager = new ce::GameObjectManager();
 	ce::DrawEventManager* drawManager = new ce::DrawEventManager();
-
-    // Binds all defined classes with LuaBridge
-    ce::LuaBridgeBinder::BindAll();
 
     ce::GameObject* object = new ce::GameObject();
 

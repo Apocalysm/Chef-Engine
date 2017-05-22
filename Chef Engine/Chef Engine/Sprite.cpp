@@ -112,6 +112,8 @@ void Sprite::SetColor(const int r, const int g, const int b, const int a)
 
 void Sprite::SetDrawOrder(const int newDrawOrder)
 {
+    ce::DrawEventManager::MoveSprite(this, newDrawOrder);
+
 	drawOrder = newDrawOrder;
 }
 
@@ -179,10 +181,12 @@ void Sprite::DoBind(lua_State * L)
 				.addConstructor<void(*)(void)>()
                 .addFunction("SetSprite", &Sprite::SetSprite)
 				.addProperty("sprite", &Sprite::GetSprite, &Sprite::ChangeSprite)
-				.addProperty("position", &Sprite::GetPosition, &Sprite::SetPosition)
+				
+                .addProperty("position", &Sprite::GetPosition, &Sprite::SetPosition)
 				.addProperty("scale", &Sprite::GetScale, &Sprite::SetScale)
 				.addProperty("rotation", &Sprite::GetRotation, &Sprite::SetRotation)
 				.addProperty("origin", &Sprite::GetOrigin, &Sprite::SetOrigin)
+
 				.addProperty("color", &Sprite::GetColor, &Sprite::SetColor)
 				.addProperty("drawOrder", &Sprite::GetDrawOrder, &Sprite::SetDrawOrder)
 			.endClass()
