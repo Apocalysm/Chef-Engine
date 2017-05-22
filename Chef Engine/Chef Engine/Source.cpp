@@ -46,7 +46,8 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     ce::GameObjectManager* objManager = new ce::GameObjectManager();
 	ce::DrawEventManager* drawManager = new ce::DrawEventManager();
 
-	ce::GameObject* object = new ce::GameObject();
+    // Binds all defined classes with LuaBridge
+    ce::LuaBridgeBinder::BindAll();
 
 	object->SetName("RandomObject");
 
@@ -82,31 +83,31 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 				window.close();
 		}
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        {
-            map->LoadMap("sewers.tmx");
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        {
+		{
+			map->LoadMap("sewers.tmx");
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		{
             map->LoadMapIndex(0);
-        }
-        
+		}
+
         if (timer >= count)
         {          
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-            {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		{
                 object->GetTransform()->Move(sf::Vector2f(0, -1));
                 timer = 0;
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-            {
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		{
                 object->GetTransform()->Move(sf::Vector2f(0, 1)); timer = 0;
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-            {
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		{
                 object->GetTransform()->Move(sf::Vector2f(-1, 0)); timer = 0;
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-            {
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		{
                 object->GetTransform()->Move(sf::Vector2f(1, 0)); timer = 0;
             }
 
