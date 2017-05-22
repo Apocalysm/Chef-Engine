@@ -1,13 +1,15 @@
 #include "LuaBridgeBinder.h"
 
 // All the different classes we want to bind with Lua Bridge
-#include "LuaComponent.h"
+
+
+// dirent.h Allows us to read directories easier
+#include <dirent.h>
 
 #include <iostream>
 #include <vector>
 
-// Allows us to read directories easier
-#include <dirent.h>
+
 
 // Linking a library through code
 #pragma comment(lib, "lua53.lib")

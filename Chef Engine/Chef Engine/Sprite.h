@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "Transform.h"
+#include "DrawEventManager.h"
 
 namespace ce
 {
@@ -11,7 +12,7 @@ namespace ce
 		Sprite(const int drawOrder);
 		~Sprite();
 
-		void Update();  
+		void Update() override;
 
 		#pragma region Origin Methods
         void SetOrigin(const float x, const float y);
@@ -31,6 +32,7 @@ namespace ce
         int GetDrawOrder() const;
 		
         void SetSprite(const std::string &fileName);
+		void SetRealSprite(sf::Sprite* sprite); 
 
 		sf::Sprite* GetSprite() const;
 

@@ -25,9 +25,9 @@ namespace ce
 
 		void SetGameObject(GameObject* gameObject);
 
-		virtual void OnCollision(GameObject* other);
+		virtual void OnCollision(Collider* other);
 
-		virtual void OnTrigger(GameObject* other);
+		virtual void OnTrigger(Collider* other);
 
 
 	private:

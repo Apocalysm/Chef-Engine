@@ -1,7 +1,7 @@
 #include "Sprite.h"
 
 #include "GameObject.h"
-#include "DrawEventManager.h"
+
 
 using ce::Sprite;
 
@@ -27,6 +27,7 @@ Sprite::Sprite(const int newDrawOrder)
 
 Sprite::~Sprite()
 {
+	ce::DrawEventManager::RemoveSprite(this);
 	delete sprite;
 }
 
@@ -47,6 +48,12 @@ void Sprite::SetSprite(const std::string& fileName)
 	sprite->setTexture(texture);
 
 	sprite->setPosition(transform->GetPosition());
+}
+
+void ce::Sprite::SetRealSprite(sf::Sprite * sprite)
+{
+	delete this->sprite; 
+	this->sprite = sprite;
 }
 
 

@@ -2,16 +2,16 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Collider.cpp">
-      <Filter>Source Files\Components</Filter>
+      <Filter>Source Files\Lua Binding\Components</Filter>
     </ClCompile>
     <ClCompile Include="Sprite.cpp">
-      <Filter>Source Files\Components</Filter>
+      <Filter>Source Files\Lua Binding\Components</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
-      <Filter>Source Files\Components</Filter>
+      <Filter>Source Files\Lua Binding\Components</Filter>
     </ClCompile>
     <ClCompile Include="Component.cpp">
-      <Filter>Source Files\Components</Filter>
+      <Filter>Source Files\Lua Binding\Components</Filter>
     </ClCompile>
     <ClCompile Include="LuaBridgeBinder.cpp">
       <Filter>Source Files\Lua Binding</Filter>
@@ -38,6 +38,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TileMapLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Lua Binding\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Math.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -78,6 +84,12 @@
     <ClInclude Include="TileMapLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -95,9 +107,6 @@
     <Filter Include="Header Files\Manager/Handler Classes">
       <UniqueIdentifier>{d68f48b2-506a-4a06-be3e-dbd716dd8ebf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Components">
-      <UniqueIdentifier>{a9f9481f-8dcf-4668-bb0b-12d164cb086a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Manager/Handler Classes">
       <UniqueIdentifier>{fcd2b3df-b8c7-4ea2-9ae2-a44c48d22f78}</UniqueIdentifier>
     </Filter>
@@ -106,6 +115,9 @@
     </Filter>
     <Filter Include="Source Files\Lua Binding">
       <UniqueIdentifier>{272328c9-a5a0-40b1-936d-c5698a40a49c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Lua Binding\Components">
+      <UniqueIdentifier>{a9f9481f-8dcf-4668-bb0b-12d164cb086a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

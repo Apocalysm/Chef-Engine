@@ -1,11 +1,21 @@
 #include "MapHandler.h"
-
 #include "DrawEventManager.h"
+#include "Sprite.h"
+#include "Collider.h"
+
+#include <Tmx\TmxPolygon.h>
+#include <Tmx\TmxPolyline.h>
+#include <Tmx\TmxEllipse.h>
+
 
 #include <algorithm>
 #include <iostream>
 
 using ce::MapHandler;
+int MapHandler::mapWidth;
+int MapHandler::mapHeight;
+int MapHandler::tileWidth;
+int MapHandler::tileHeight;
 
 
 MapHandler::MapHandler()
@@ -18,6 +28,7 @@ MapHandler::~MapHandler()
 }
 
 
+//Load map with an index number
 void ce::MapHandler::LoadMapIndex(const int mapIndex)
 {
 	std::string* mapString = tileMapNames[mapIndex];
@@ -30,7 +41,11 @@ void ce::MapHandler::LoadMapIndex(const int mapIndex)
 	}
 }
 
+const unsigned FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
+const unsigned FLIPPED_VERTICALLY_FLAG = 0x40000000;
+const unsigned FLIPPED_DIAGONALLY_FLAG = 0x20000000;
 
+//Load map with its file name
 void MapHandler::LoadMap(const std::string& fileName)
 {
 	//Check if we alreday have a map drawn
@@ -46,8 +61,14 @@ void MapHandler::LoadMap(const std::string& fileName)
 			}
 			outer_it->clear();
 		}
+		for (auto i = gameObjects.begin(); i != gameObjects.end(); i++)
+		{
+			(*i)->Destroy();
+		}
+
 		tileMapLayers.clear();
 		tileTextures.clear();
+		gameObjects.clear();
 	}
 	
 	map = new Tmx::Map();
@@ -97,18 +118,18 @@ void MapHandler::LoadMap(const std::string& fileName)
 				if (tile.tilesetId == -1)
 					continue;
 
+
 				if (tileMapLayers[k].find(tile.tilesetId) == tileMapLayers[k].end())
 				{
-					tileMapLayers[k].insert(std::make_pair(tile.tilesetId, new TileMapLayer(new sf::VertexArray(sf::Quads, mapHeight * mapWidth * 4), tileTextures[tile.tilesetId])));
+					tileMapLayers[k].insert(std::make_pair(tile.tilesetId, 
+						new TileMapLayer(new sf::VertexArray(sf::Quads, mapHeight * mapWidth * 4), tileTextures[tile.tilesetId])));
 				}
 				
 				//Get the current layer
 				sf::VertexArray& vertexLayer = tileMapLayers[k][tile.tilesetId]->GetVertexArray();
 				//Get the quad
 				sf::Vertex* quad = &vertexLayer[(i * mapWidth + j) * 4];
-
 				
-
 				//Find the position in the tileset texture
 				unsigned int tileNumber = tile.id;
 				int tu;
@@ -116,19 +137,6 @@ void MapHandler::LoadMap(const std::string& fileName)
 								
 				tu = tileNumber % (tileTextures[tile.tilesetId].getSize().x / tileWidth);
 				tv = tileNumber / (tileTextures[tile.tilesetId].getSize().x / tileWidth);
-
-				/*
-				for (size_t k = 0; k < tileTextures.size(); k++)
-				{
-					//tile.gid >= tileSets[k]->GetFirstGid() + tileSets[k]->GetTiles().size()
-					if (tile.gid > tileSets[k]->GetFirstGid() + tileSets[k]->GetTiles().size())
-					{
-						tu = tileNumber % (tileTextures[k].getSize().x / tileWidth);
-						tv = tileNumber / (tileTextures[k].getSize().x / tileWidth);
-						break;
-					}	
-				}
-				*/
 
 				//Define the quads 4 corners
 				quad[0].position = sf::Vector2f(j * tileWidth, i * tileHeight);
@@ -138,8 +146,12 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 				std::array<size_t, 4> texOrder = { 0, 1, 2, 3 };
 
-				if (tile.flippedHorizontally)
+				if (tile.flippedDiagonally)
+					texOrder = { 2,3,0,1 };
+				else if (tile.flippedHorizontally)
 					texOrder = { 1,0,3,2 };
+				else if (tile.flippedVertically)
+					texOrder = { 3,2,1,0 };
 				//Define its 4 corners in the texture coordinates
 				quad[texOrder[0]].texCoords = sf::Vector2f(tu * tileWidth, tv * tileHeight);
 				quad[texOrder[1]].texCoords = sf::Vector2f((tu + 1) * tileWidth, tv * tileHeight);
@@ -149,19 +161,137 @@ void MapHandler::LoadMap(const std::string& fileName)
 			}
 		}
 	}
+
+	std::vector<Tmx::ObjectGroup*> layers = map->GetObjectGroups();;
+
+	//Looping through all the object layers  
+	for (auto i = 0; i < layers.size(); i++)
+	{
+		auto objectsVector = layers[i]->GetObjects();
+
+		std::sort(objectsVector.begin(), objectsVector.end(), [](Tmx::Object* a, Tmx::Object* b) { return a->GetY() < b->GetY(); });
+
+		for (size_t j = 0; j < objectsVector.size(); j++)
+		{
+			const Tmx::Object* object = objectsVector.at(j);
+
+			ce::GameObject* gameObject = new ce::GameObject(object->GetName());
+
+			gameObject->GetTransform()->SetPosition(object->GetX(), object->GetY());
+
+			gameObject->GetTransform()->SetRotation(object->GetRot());
+
+			gameObjects.push_back(gameObject);
+
+			//Check what type the object is
+			switch (object->GetPrimitiveType())
+			{
+			case Tmx::TMX_PT_POLYGON:
+			{
+
+				break;
+			}
+			case Tmx::TMX_PT_POLYLINE:
+			{
+				break;
+			}
+
+			case Tmx::TMX_PT_ELLIPSE:
+			{
+				break;
+			}
+
+			//Check if the object is an rect or a sprite object
+			case Tmx::TMX_PT_NONE:
+			{
+				//Check if the object is part of an tileset
+				if (object->GetGid() != 0)
+				{
+					ce::Sprite* spriteComponent = gameObject->AddComponent<ce::Sprite>();
+
+					spriteComponent->SetDrawOrder(layers[i]->GetParseOrder());
+
+					for (int k = tileSets.size() - 1; k >= 0; k--)
+					{
+						Tmx::Tileset* ts = tileSets[k];
+
+						bool flipped_horizontally = (object->GetGid() & FLIPPED_HORIZONTALLY_FLAG);
+						bool flipped_vertically = (object->GetGid() & FLIPPED_VERTICALLY_FLAG);
+						bool flipped_diagonally = (object->GetGid() & FLIPPED_DIAGONALLY_FLAG);
+
+						int unflippedGid = object->GetGid() & ~(FLIPPED_VERTICALLY_FLAG | FLIPPED_HORIZONTALLY_FLAG | FLIPPED_DIAGONALLY_FLAG);
+
+						if (ts->GetFirstGid() <= unflippedGid)
+						{
+							int localID = unflippedGid - ts->GetFirstGid();
+
+
+							int tu = localID % (tileTextures[k].getSize().x / tileWidth);
+							int tv = localID / (tileTextures[k].getSize().x / tileWidth);
+
+							sf::Sprite* sprite = new sf::Sprite;
+							sprite->setTexture(tileTextures[k]);
+							sprite->setTextureRect(sf::IntRect(tu * object->GetWidth(), tv * object->GetHeight(), object->GetWidth(), object->GetHeight()));
+
+							if (flipped_diagonally)
+								sprite->setTextureRect(sf::IntRect(tu * (object->GetWidth() + 1) - 1, tv * (object->GetHeight() + 1) + 5, -object->GetWidth(), -object->GetHeight()));
+							else if (flipped_vertically)
+								sprite->setTextureRect(sf::IntRect(tu * object->GetWidth(), tv * (object->GetHeight() + 1) + 5, object->GetWidth(), -object->GetHeight()));
+							else if (flipped_horizontally)
+								sprite->setTextureRect(sf::IntRect(tu * (object->GetWidth() + 1) - 1, tv * object->GetHeight(), -object->GetWidth(), object->GetHeight()));
+
+							sprite->setOrigin(0, tileHeight);
+							spriteComponent->SetRealSprite(sprite);
+
+							break;
+						}
+					}
+
+				}
+				else
+				{
+					// This is a rect!
+					sf::RectangleShape* rectShape = new sf::RectangleShape();
+					rectShape->setSize(sf::Vector2f(object->GetWidth(), object->GetHeight()));
+					rectShape->setPosition(sf::Vector2f(object->GetX(), object->GetY()));
+					rectShape->setRotation(object->GetRot());
+					
+					ce::Collider* collider = gameObject->AddComponent<ce::Collider>();
+					collider->SetupTMX(rectShape,false,false);
+
+					break;
+				}
+
+			}
+
+
+			default:
+				break;
+			}
+
+		}
+	}
+
 	ce::DrawEventManager::AddTmxLayers(tileMapLayers);
 }
 
 
-void ce::MapHandler::AddMapName(std::string* mapName)
+//Adding the name of a map and where in the vector it should be.
+void ce::MapHandler::RegisterMap(int  index, std::string* mapName)
 {
-	tileMapNames.push_back(mapName);
+	tileMapNames.insert(tileMapNames.begin() + index, mapName);
 }
 
 
-void ce::MapHandler::AddMapNameIndex(int & index, std::string* mapName)
+//Loading in all the obect in the map and chech what sort of an object it is. 
+void ce::MapHandler::LoadObject()
 {
-	tileMapNames.insert(tileMapNames.begin() + index, mapName);
+}
+
+sf::Vector2i ce::MapHandler::GetMapSize()
+{
+	
+	return sf::Vector2i(mapWidth * tileWidth, mapHeight * tileHeight);
 }
 
 
@@ -173,7 +303,8 @@ void ce::MapHandler::DoBind(lua_State * L)
 				.addConstructor<void(*)(void)>()
 				.addFunction("LoadMap", &MapHandler::LoadMap)
 				.addFunction("LoadMapIndex", &MapHandler::LoadMap)
-				.addFunction("RegisterMap", &MapHandler::AddMapNameIndex)
+				.addFunction("RegisterMap", &MapHandler::RegisterMap)
+				.addStaticFunction("GetMapSize", &MapHandler::GetMapSize)
 			.endClass()
 		.endNamespace();
 }

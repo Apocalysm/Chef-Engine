@@ -42,12 +42,12 @@ void ce::Collider::Update()
 						
 	body->SetTransform(center, transRot);
 
-	ce::GameObject* obj = new ce::GameObject();
+	/*ce::GameObject* obj = new ce::GameObject();
 	ce::Sprite* spr = obj->AddComponent<ce::Sprite>();
 	spr->SetSprite("dot.png");
 	spr->SetDrawOrder(3);
 	obj->GetTransform()->SetPosition(body->GetFixtureList()->GetAABB(0).GetCenter().x,
-		body->GetFixtureList()->GetAABB(0).GetCenter().y);
+		body->GetFixtureList()->GetAABB(0).GetCenter().y);*/
 }
 
 
@@ -62,9 +62,12 @@ void ce::Collider::SetupTMX(const sf::RectangleShape* rectShape, const bool dyna
 	body = CollisionManager::GetWorld()->CreateBody(&bodyDef);
 
 	transScale = transform->GetScale();
+	transRot = transform->GetRotation();
+
+	b2Vec2 center = b2Vec2(rectShape->getSize().x / 2, rectShape->getSize().y / 2);
 
 	shape.SetAsBox(rectShape->getSize().x * transScale.x / 2, 
-				   rectShape->getSize().y * transScale.y / 2);
+				   rectShape->getSize().y * transScale.y / 2, center, transRot);
 
 	body->SetSleepingAllowed(false);
 
@@ -179,13 +182,13 @@ void ce::Collider::SetGameObject(GameObject * gameObject)
 }
 
 
-void ce::Collider::OnCollision(GameObject * other)
+void ce::Collider::OnCollision(Collider* other)
 {
 	std::cout << "Collision" << std::endl;
 }
 
 
-void ce::Collider::OnTrigger(GameObject * other)
+void ce::Collider::OnTrigger(Collider* other)
 {
 	std::cout << "Trigger" << std::endl;
 }

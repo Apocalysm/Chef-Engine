@@ -7,6 +7,7 @@
 #include "DrawEventManager.h"
 #include "Collider.h"
 #include "CollisionManager.h"
+#include "Camera.h"
 
 #include <SFML/Graphics.hpp>
 #include <Tmx\TmxTile.h>
@@ -15,16 +16,21 @@
 #include <typeinfo>
 #include <iostream>
 
-/*! \mainpage My Personal Index
+
+/*! \mainpage Main Page
 *
 *\section intro_sec Introduction
 *
-* This is the introduction.
+* This is an introduction for Chef Engine.
 *
-*\section install_sec Installation
+*
+*\section install_sec How to install Chef Engine
 * 
 *\subsection step1 Step 1: Do the thing
 *\subsection step2 Step 2: Do the other thing
+*\subsection step3 Step 3: Now do the first thing and the second thing at the same time.
+*
+* Now you're finished!
 */
 #if _DEBUG
 int main(int argc, char* argv[])
@@ -33,7 +39,8 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #endif
 {
 	// Binds all defined classes with LuaBridge
-	ce::LuaBridgeBinder::BindAll();
+	//ce::LuaBridgeBinder::BindAll();
+
 
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Test");
 	window.setFramerateLimit(60);
@@ -46,39 +53,29 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	ce::GameObject* object = new ce::GameObject();
 
-	ce::Sprite* sprite = object->AddComponent<ce::Sprite>();
+	object->SetName("RandomObject");
 
-	sprite->SetSprite("image.jpg");
-	
+	object->GetTransform()->SetPosition(150, 150);
+
+	ce::Sprite* sprite = object->AddComponent<ce::Sprite>();
+	sprite->SetSprite("Player.png");
 	sprite->SetDrawOrder(1);
 
-	//sprite->SetOrigin(82.5f, 69.0f);
+	ce::Collider* collider = object->AddComponent<ce::Collider>();
+	collider->SetFitSprite(true, true, false);
 
-	object->GetTransform()->SetPosition(200.0f, 200.0f);
-	//object->GetTransform()->SetScale(2.0f, 2.0f);
+	ce::Camera* camera = object->AddComponent<ce::Camera>();
+	camera->SetSize(sf::Vector2f(128, 72));
+	camera->SetFollow(true);
+	//camera->SetZoom(0.001);
 
-	ce::Collider* collBox = object->AddComponent<ce::Collider>();
-
-	collBox->SetFitSprite(true, true, true);
-
-	ce::GameObject* object2 = new ce::GameObject();
-	ce::Sprite* sprite2 = object2->AddComponent<ce::Sprite>();
-	sprite2->SetSprite("image.jpg");
-	sprite2->SetDrawOrder(1);
-	object2->GetTransform()->SetPosition(200.0f, 400.0f);
-	//sprite2->SetOrigin(82.5f, 69.0f);
-	//object2->GetTransform()->SetScale(2.0f, 2.0f);
-	ce::Collider* collBox2 = object2->AddComponent<ce::Collider>();
-	collBox2->SetFitSprite(true, false, false);
-
-
-	/*b2Vec2 gravity(0.0f, 0.0f);
-	b2World world(gravity);
-	b2BodyDef bodyDef;
-	bodyDef.position.Set(100.0f, 100.0f);
-	b2Body* body = world.CreateBody(&bodyDef);*/
-
-	//map->LoadMap("sewers.tmx");
+    float count = 10;
+    float timer = 0;
+	
+	map->LoadMap("RefferenceMap.tmx");
+	std::string* mapName = new std::string("RefferenceMap.tmx");
+	map->RegisterMap(0, mapName);
+	map->LoadObject();
 
 	while (window.isOpen())
 	{
@@ -88,64 +85,42 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
-
-		/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
 			map->LoadMap("sewers.tmx");
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
-			map->LoadMap("orthogonal-outside.tmx");
-		}*/
-
-		
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		{
-			object->GetTransform()->SetPosition(object->GetTransform()->GetPosition() + sf::Vector2f(-10.0f, 0));
-			//object->GetTransform()->Move(sf::Vector2f(-3000.0f, 0.0f));
+            map->LoadMapIndex(0);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		{
-			object->GetTransform()->SetPosition(object->GetTransform()->GetPosition() + sf::Vector2f(10.0f, 0));
-			//object->GetTransform()->Move(sf::Vector2f(3000.0f, 0.0f));
-        }
+        
+        if (timer >= count)
+        {          
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		{
-			object->GetTransform()->SetPosition(object->GetTransform()->GetPosition() + sf::Vector2f(0, -10.0f));
-			//object->GetTransform()->Move(sf::Vector2f(0.0f, -3000.0f));
+                object->GetTransform()->Move(sf::Vector2f(0, -1));
+                timer = 0;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		{
-			object->GetTransform()->SetPosition(object->GetTransform()->GetPosition() + sf::Vector2f(0, 10.0f));
-			//object->GetTransform()->Move(sf::Vector2f(0.0f, 3000.0f));
+                object->GetTransform()->Move(sf::Vector2f(0, 1)); timer = 0;
 		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		{
+                object->GetTransform()->Move(sf::Vector2f(-1, 0)); timer = 0;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		{
+                object->GetTransform()->Move(sf::Vector2f(1, 0)); timer = 0;
+            }
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
-		{
-			object->GetTransform()->Rotate(5.0f);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-		{
-			object->GetTransform()->Rotate(-5.0f);
-		}
-
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		{
-			object2->GetTransform()->SetPosition(object2->GetTransform()->GetPosition() + sf::Vector2f(-10.0f, 0));
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		{
-			object2->GetTransform()->SetPosition(object2->GetTransform()->GetPosition() + sf::Vector2f(10.0f, 0));
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		{
-			object2->GetTransform()->SetPosition(object2->GetTransform()->GetPosition() + sf::Vector2f(0, -10.0f));
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		{
-			object2->GetTransform()->SetPosition(object2->GetTransform()->GetPosition() + sf::Vector2f(0, 10.0f));
-		}
+			/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+			{
+				camera->SetZoom(0.001);
+			}*/
+        }
+        else
+            timer += 1;
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
         {
@@ -158,12 +133,12 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
         objManager->CallUpdate();
 		collManager->UpdateCollision();
+		camera->Update();
+		window.setView(camera->GetView());
 
 		window.clear(sf::Color::Cyan);
 		drawManager->Draw(window);
 		window.display();
-
-
 	}
 
 	return 0;

@@ -17,6 +17,7 @@ namespace ce
 		static void BindAll();
 
 	private:
+        // Loads a Lua 
 		static void LoadLua(lua_State* L, const std::string& path);
         
 	};
