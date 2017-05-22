@@ -20,56 +20,27 @@ Collider::~Collider()
 
 void ce::Collider::Update()
 {
-	if (fitSprite)
-	{
-		//fRect = sprite->getGlobalBounds();
+	b2Vec2 center;
 
-		/*shape.setPosition(sprite->getPosition());
-		shape.setRotation(sprite->getRotation());
-		shape.setScale(sprite->getScale());
-		shape.setOrigin(sprite->getOrigin());*/
-
-		/*b2Vec2 vertices[4];
-
-		vertices[0].Set(transform->GetPosition().x - spriteOrigin.x,
-			transform->GetPosition().y - spriteOrigin.y);
-
-		vertices[1].Set(transform->GetPosition().x - spriteOrigin.x,
-			transform->GetPosition().y + spriteSizeY * transScale.y - spriteOrigin.y);
-
-		vertices[2].Set(transform->GetPosition().x + spriteSizeX * transScale.x - spriteOrigin.x,
-			transform->GetPosition().y + spriteSizeY * transScale.y - spriteOrigin.y);
-
-		vertices[3].Set(transform->GetPosition().x + spriteSizeX * transScale.x - spriteOrigin.x,
-			transform->GetPosition().y - spriteOrigin.y);
-
-		shape.Set(vertices, 4);*/
-	}
-	else
-	{
-	}
-	
-	/*b2Vec2 transformPos;
-	transformPos.x = transform->GetPosition().x;
-	transformPos.y = transform->GetPosition().y;
-	transRot = (transform->GetRotation() * PI) / 180;
-	body->SetTransform(transformPos, transRot);*/
-
-	/*b2Vec2 spritePos = b2Vec2(sprite->GetSprite()->getPosition().x - sprite->GetOrigin().x,
-							  sprite->GetSprite()->getPosition().y - sprite->GetOrigin().y);*/
-
-	b2Vec2 spritePos = b2Vec2(sprite->GetSprite()->getPosition().x,
-							  sprite->GetSprite()->getPosition().y);
-
+	transPos = transform->GetPosition();
 
 	transRot = (transform->GetRotation() * PI) / 180;
 
 	transScale = transform->GetScale();
 
-	body->SetTransform(spritePos, transRot);
-
-	//std::cout << body->GetLocalCenter().x << " " << body->GetLocalCenter().y << std::endl;
-	std::cout << shape.m_centroid.x << " " << shape.m_centroid.y << std::endl;
+	if (fitSprite)
+	{
+		float sprCenterX = transPos.x + spriteSizeX / 2 * transScale.x - spriteOrigin.x * transScale.x;
+		float sprCenterY = transPos.y + spriteSizeY / 2 * transScale.y - spriteOrigin.y * transScale.y;
+	
+		center = b2Vec2(sprCenterX, sprCenterY);
+	}
+	else
+	{
+		center = b2Vec2(transPos.x, transPos.y);
+	}
+						
+	body->SetTransform(center, transRot);
 
 	ce::GameObject* obj = new ce::GameObject();
 	ce::Sprite* spr = obj->AddComponent<ce::Sprite>();
@@ -77,93 +48,23 @@ void ce::Collider::Update()
 	spr->SetDrawOrder(3);
 	obj->GetTransform()->SetPosition(body->GetFixtureList()->GetAABB(0).GetCenter().x,
 		body->GetFixtureList()->GetAABB(0).GetCenter().y);
-
 }
 
 
-void ce::Collider::SetupTMX(sf::RectangleShape* rectShape)
+void ce::Collider::SetupTMX(const sf::RectangleShape* rectShape, const bool dynamic, const bool isTrigger)
 {
-}
+	fitSprite = false;
 
-
-void ce::Collider::SetFitSprite(bool fitSprite, bool dynamic)
-{
-	this->fitSprite = fitSprite;
-
-	if (fitSprite)
-	{
-		/*sprite = gameObject->GetComponent<ce::Sprite>()->GetSprite();
-
-		fRect = sprite->getGlobalBounds();*/
-
-		/*size.x = sprite->getTexture()->getSize().x;
-		size.y = sprite->getTexture()->getSize().y;
-
-		shape.setSize(size);
-		shape.setPosition(sprite->getPosition());
-		shape.setRotation(sprite->getRotation());
-		shape.setScale(sprite->getScale());
-		shape.setOrigin(sprite->getOrigin());*/
-	}
-	else
-	{
-		/*shape->setPosition(transform->GetPosition());
-		shape->setRotation(transform->GetRotation());
-		shape->setScale(transform->GetScale());
-
-		fRect = shape->getGlobalBounds();*/
-	}
-
-	sprite = gameObject->GetComponent<ce::Sprite>();
-	spriteSizeX = sprite->GetSprite()->getTexture()->getSize().x;
-	spriteSizeY = sprite->GetSprite()->getTexture()->getSize().y;
-	spriteOrigin = sprite->GetOrigin();
-
-	/*b2Vec2 vertices[4];
-
-	vertices[0].Set(transPos.x - spriteOrigin.x,
-					transPos.y - spriteOrigin.y);
-
-	vertices[1].Set(transPos.x - spriteOrigin.x,
-					transPos.y + spriteSizeY * transScale.y - spriteOrigin.y);
-
-	vertices[2].Set(transPos.x + spriteSizeX * transScale.x - spriteOrigin.x,
-					transPos.y + spriteSizeY * transScale.y - spriteOrigin.y);
-
-	vertices[3].Set(transPos.x + spriteSizeX * transScale.x - spriteOrigin.x,
-					transPos.y - spriteOrigin.y);
-
-	shape.Set(vertices, 4);*/
-
-	if(dynamic)
+	if (dynamic)
 		bodyDef.type = b2_dynamicBody;
 
-	bodyDef.position.Set(transPos.x, transPos.y);
+	bodyDef.position.Set(rectShape->getPosition().x, rectShape->getPosition().y);
 	body = CollisionManager::GetWorld()->CreateBody(&bodyDef);
 
-	transPos = transform->GetPosition();
 	transScale = transform->GetScale();
-	transRot = (transform->GetRotation() * PI) / 180;
 
-	/*b2Vec2 spriteCenter = b2Vec2(transPos.x + spriteSizeX / 2 - spriteOrigin.x,
-		transPos.y + spriteSizeY / 2 - spriteOrigin.y);*/
-
-	b2Vec2 center = b2Vec2((-spriteSizeX / 2) * transScale.x + spriteOrigin.x,
-						   (-spriteSizeY / 2) * transScale.y + spriteOrigin.y);
-
-	//body->GetLocalCenter().Set(1.0f, 1.0f);
-
-	std::cout << body->GetLocalCenter().x << " " << body->GetLocalCenter().y << std::endl;
-
-	transRot = (transform->GetRotation() * PI) / 180;
-
-	shape.SetAsBox(spriteSizeX * transScale.x / 2, spriteSizeY * transScale.y / 2);
-
-	//shape.SetAsBox(spriteSizeX * transScale.x / 2, spriteSizeY * transScale.y / 2, center, transRot);
-
-	//shape.SetAsBox(spriteSizeX / 2, spriteSizeY / 2, center, transRot);
-
-	//body->SetLinearDamping(0.1f);
+	shape.SetAsBox(rectShape->getSize().x * transScale.x / 2, 
+				   rectShape->getSize().y * transScale.y / 2);
 
 	body->SetSleepingAllowed(false);
 
@@ -180,12 +81,54 @@ void ce::Collider::SetFitSprite(bool fitSprite, bool dynamic)
 	else
 		body->CreateFixture(&shape, 0.0f);
 
-	ce::GameObject* obj = new ce::GameObject();
+	body->GetFixtureList()->SetSensor(isTrigger);
+}
+
+
+void ce::Collider::SetFitSprite(const bool fitSprite, const bool dynamic, const bool isTrigger)
+{
+	this->fitSprite = fitSprite;
+
+	transPos = transform->GetPosition();
+	transScale = transform->GetScale();
+	transRot = (transform->GetRotation() * PI) / 180;
+
+	sprite = gameObject->GetComponent<ce::Sprite>();
+	spriteSizeX = sprite->GetSprite()->getTexture()->getSize().x;
+	spriteSizeY = sprite->GetSprite()->getTexture()->getSize().y;
+	spriteOrigin = sprite->GetOrigin();
+
+	if(dynamic)
+		bodyDef.type = b2_dynamicBody;
+
+	bodyDef.position.Set(transPos.x, transPos.y);
+	body = CollisionManager::GetWorld()->CreateBody(&bodyDef);
+
+	shape.SetAsBox(spriteSizeX * transScale.x / 2, spriteSizeY * transScale.y / 2);
+
+	body->SetSleepingAllowed(false);
+
+	if (dynamic)
+	{
+		body->SetFixedRotation(true);
+
+		fixtureDef.shape = &shape;
+		fixtureDef.density = 1.0f;
+		fixtureDef.friction = 0.3f;
+
+		body->CreateFixture(&fixtureDef);
+	}
+	else
+		body->CreateFixture(&shape, 0.0f);
+
+	body->GetFixtureList()->SetSensor(isTrigger);
+
+	/*ce::GameObject* obj = new ce::GameObject();
 	ce::Sprite* spr = obj->AddComponent<ce::Sprite>();
 	spr->SetSprite("dot.png");
 	spr->SetDrawOrder(3);
 	obj->GetTransform()->SetPosition(body->GetFixtureList()->GetAABB(0).GetCenter().x,
-									 body->GetFixtureList()->GetAABB(0).GetCenter().y);
+									 body->GetFixtureList()->GetAABB(0).GetCenter().y);*/
 
 	/*ce::GameObject* obj2 = new ce::GameObject();
 	ce::Sprite* spr2 = obj2->AddComponent<ce::Sprite>();
@@ -210,15 +153,15 @@ void ce::Collider::SetFitSprite(bool fitSprite, bool dynamic)
 }
 
 
-void ce::Collider::SetIsTrigger(bool isTrigger)
+void ce::Collider::SetIsTrigger(const bool isTrigger)
 {
-	this->isTrigger = isTrigger;
+	body->GetFixtureList()->SetSensor(isTrigger);
 }
 
 
 bool ce::Collider::GetIsTrigger() const
 {
-	return isTrigger;
+	return body->GetFixtureList()->IsSensor();
 }
 
 
@@ -238,7 +181,7 @@ void ce::Collider::SetGameObject(GameObject * gameObject)
 
 void ce::Collider::OnCollision(GameObject * other)
 {
-	//std::cout << "Collision" << std::endl;
+	std::cout << "Collision" << std::endl;
 }
 
 

@@ -52,14 +52,14 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	
 	sprite->SetDrawOrder(1);
 
-	sprite->SetOrigin(82.5f, 69.0f);
+	//sprite->SetOrigin(82.5f, 69.0f);
 
 	object->GetTransform()->SetPosition(200.0f, 200.0f);
 	//object->GetTransform()->SetScale(2.0f, 2.0f);
 
 	ce::Collider* collBox = object->AddComponent<ce::Collider>();
 
-	collBox->SetFitSprite(true, true);
+	collBox->SetFitSprite(true, true, true);
 
 	ce::GameObject* object2 = new ce::GameObject();
 	ce::Sprite* sprite2 = object2->AddComponent<ce::Sprite>();
@@ -69,7 +69,7 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	//sprite2->SetOrigin(82.5f, 69.0f);
 	//object2->GetTransform()->SetScale(2.0f, 2.0f);
 	ce::Collider* collBox2 = object2->AddComponent<ce::Collider>();
-	collBox2->SetFitSprite(true, false);
+	collBox2->SetFitSprite(true, false, false);
 
 
 	/*b2Vec2 gravity(0.0f, 0.0f);

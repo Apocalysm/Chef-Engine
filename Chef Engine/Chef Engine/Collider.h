@@ -15,9 +15,9 @@ namespace ce
 
 		void Update();
 
-		void SetupTMX(sf::RectangleShape* rectShape);
+		void SetupTMX(const sf::RectangleShape* rectShape, const bool dynamic, const bool isTrigger);
 
-		void SetFitSprite(bool fitSprite, bool dynamic);
+		void SetFitSprite(const bool fitSprite, const bool dynamic, const bool isTrigger);
 
 		void SetIsTrigger(const bool isTrigger);
 
