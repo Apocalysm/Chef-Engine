@@ -251,13 +251,10 @@ void MapHandler::LoadMap(const std::string& fileName)
 				else
 				{
 					// This is a rect!
-					sf::RectangleShape* rectShape = new sf::RectangleShape();
-					rectShape->setSize(sf::Vector2f(object->GetWidth(), object->GetHeight()));
-					rectShape->setPosition(sf::Vector2f(object->GetX(), object->GetY()));
-					rectShape->setRotation(object->GetRot());
+					sf::Vector2f rectSize = sf::Vector2f(object->GetWidth(), object->GetHeight());
 					
 					ce::Collider* collider = gameObject->AddComponent<ce::Collider>();
-					collider->SetupTMX(rectShape,false,false);
+					collider->SetupTMX(rectSize,false,false);
 
 					break;
 				}

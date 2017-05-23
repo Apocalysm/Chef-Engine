@@ -8,6 +8,7 @@
 #include "Collider.h"
 #include "CollisionManager.h"
 #include "Camera.h"
+#include "ContactListener.h"
 
 #include <SFML/Graphics.hpp>
 #include <Tmx\TmxTile.h>
@@ -15,6 +16,7 @@
 #include <Windows.h>
 #include <typeinfo>
 #include <iostream>
+#include <vector>
 
 
 /*! \mainpage Main Page
@@ -50,6 +52,8 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     ce::GameObjectManager* objManager = new ce::GameObjectManager();
 	ce::DrawEventManager* drawManager = new ce::DrawEventManager();
 	ce::CollisionManager* collManager = new ce::CollisionManager();
+	ce::ContactListener contactListener;
+	collManager->GetWorld()->SetContactListener(&contactListener);
 
 	ce::GameObject* object = new ce::GameObject();
 
@@ -65,11 +69,38 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	collider->SetFitSprite(true, true, false);
 
 	ce::Camera* camera = object->AddComponent<ce::Camera>();
-	camera->SetSize(sf::Vector2f(128, 72));
+	camera->SetSize(sf::Vector2f(128 * 2, 72 * 2));
 	camera->SetFollow(true);
 	//camera->SetZoom(0.001);
 
-    float count = 10;
+
+	ce::GameObject* dot1 = new ce::GameObject();
+	dot1->GetTransform()->SetPosition(140, 150);
+	ce::Sprite* dot1Spr = dot1->AddComponent<ce::Sprite>();
+	dot1Spr->SetSprite("dot.png");
+	dot1Spr->SetDrawOrder(5);
+	ce::Collider* dot1Coll = dot1->AddComponent<ce::Collider>();
+	dot1Coll->SetFitSprite(true, false, false);
+
+	ce::GameObject* dot2 = new ce::GameObject();
+	dot2->GetTransform()->SetPosition(150, 140);
+	ce::Sprite* dot2Spr = dot2->AddComponent<ce::Sprite>();
+	dot2Spr->SetSprite("dot.png");
+	dot2Spr->SetDrawOrder(5);
+	ce::Collider* dot2Coll = dot2->AddComponent<ce::Collider>();
+	dot2Coll->SetFitSprite(true, false, false);
+
+	ce::GameObject* dot3 = new ce::GameObject();
+	dot3->GetTransform()->SetPosition(160, 150);
+	ce::Sprite* dot3Spr = dot3->AddComponent<ce::Sprite>();
+	dot3Spr->SetSprite("dot.png");
+	dot3Spr->SetDrawOrder(5);
+	ce::Collider* dot3Coll = dot3->AddComponent<ce::Collider>();
+	dot3Coll->SetFitSprite(true, false, false);
+
+	dot2->Destroy();
+
+    float count = 5;
     float timer = 0;
 	
 	map->LoadMap("RefferenceMap.tmx");

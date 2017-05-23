@@ -220,26 +220,26 @@ void GameObject::Destroy()
 }
 
 
-    void GameObject::DoBind(lua_State * L)
-    {
-        luabridge::getGlobalNamespace(L)
+void GameObject::DoBind(lua_State * L)
+{
+    luabridge::getGlobalNamespace(L)
  
-            .beginNamespace("Chef")
-                .beginClass<GameObject>("GameObject")
-                    .addProperty("active", &GameObject::GetActive, &GameObject::SetActive)
-                    .addProperty("layer", &GameObject::GetLayer, &GameObject::SetLayer)
-                    .addProperty("instanceID", &GameObject::GetID)
-                    .addFunction("AddComponent", &GameObject::AddComponent)
-                    .addFunction("GetComponent", &GameObject::GetComponent)
-                    .addFunction("RemoveComponent", &GameObject::RemoveComponent)           
-                    /*.addVariable("Default", &GameObject::layerRef[0], false)
-                    .addVariable("Player", &GameObject::layerRef[1], false)
-                    .addVariable("Enemy", &GameObject::layerRef[2], false)
-                    .addVariable("Terrain", &GameObject::layerRef[3], false)
-                    .addVariable("UI", &GameObject::layerRef[4], false)*/
-                .endClass()
-            .endNamespace();
-    }
+        .beginNamespace("Chef")
+            .beginClass<GameObject>("GameObject")
+                .addProperty("active", &GameObject::GetActive, &GameObject::SetActive)
+                .addProperty("layer", &GameObject::GetLayer, &GameObject::SetLayer)
+                .addProperty("instanceID", &GameObject::GetID)
+                .addFunction("AddComponent", &GameObject::AddComponent)
+                .addFunction("GetComponent", &GameObject::GetComponent)
+                .addFunction("RemoveComponent", &GameObject::RemoveComponent)           
+                /*.addVariable("Default", &GameObject::layerRef[0], false)
+                .addVariable("Player", &GameObject::layerRef[1], false)
+                .addVariable("Enemy", &GameObject::layerRef[2], false)
+                .addVariable("Terrain", &GameObject::layerRef[3], false)
+                .addVariable("UI", &GameObject::layerRef[4], false)*/
+            .endClass()
+        .endNamespace();
+}
 
 
     LuaComponent* GameObject::AddLuaComponent(lua_State* L, const std::string* scriptPath, const std::string* tableName)

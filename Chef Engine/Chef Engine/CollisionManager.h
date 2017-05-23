@@ -15,6 +15,8 @@ namespace ce
 	public:
 		CollisionManager();
 		~CollisionManager();
+
+		// Returns the world holding bodies and handling physics
 		static b2World* GetWorld();
 
 		static void AddCollider(ce::Collider* collider);
@@ -25,12 +27,11 @@ namespace ce
 
 	private:
 		// Map with colliders
-		static std::map<Common::uint64, ce::Collider*> intToRectangles;
-
-		//// Map with colliders recently created
-		//static std::map<Common::uint64, ce::Collider*> intToNewRectangles;
+		static std::map<Common::uint64, ce::Collider*> intToCollider;
 
 		b2Vec2 gravity;
+
+		// Holds bodies and handles physics
 		static b2World* world;
 	};
 }
