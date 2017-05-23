@@ -138,11 +138,11 @@ namespace ce
         }
         // Does the same thing for luaComponents
         for (auto it = luaComponents.begin(); it != luaComponents.end(); it++)
-        {
+    {
             if (it->second->GetEnabled())
-            {
+        {
                 it->second->Update();
-            }
+    }
         }
     }
 
@@ -280,7 +280,7 @@ void GameObject::Destroy()
                     .addFunction("AddCollider", &GameObject::AddComponent<ce::Collider>)
                     .addFunction("GetCollider", &GameObject::GetComponent<ce::Collider>)
                     .addFunction("RemoveCollider", &GameObject::RemoveComponent<ce::Collider>)
-                    
+
                     .addFunction("AddCamera", &GameObject::AddComponent<ce::Camera>)
                     .addFunction("GetCamera", &GameObject::GetComponent<ce::Camera>)
                     .addFunction("RemoveCamera", &GameObject::RemoveComponent<ce::Camera>)

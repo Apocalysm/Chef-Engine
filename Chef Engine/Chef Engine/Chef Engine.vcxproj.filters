@@ -46,6 +46,9 @@
     <ClCompile Include="Math.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ContactListener.cpp">
+      <Filter>Source Files\Manager/Handler Classes</Filter>
+    </ClCompile>
     <ClCompile Include="SFMLKeyboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -92,6 +95,12 @@
     </ClInclude>
     <ClInclude Include="Math.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContactListener.h">
+      <Filter>Header Files\Manager/Handler Classes</Filter>
     </ClInclude>
     <ClInclude Include="SFML_LuaBind.h">
       <Filter>Header Files</Filter>

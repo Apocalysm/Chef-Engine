@@ -8,10 +8,10 @@
 using ce::DrawEventManager;
 
 // Map with Sprites 
-std::map<ce::DrawEventManager::int64, std::map<ce::DrawEventManager::int64, ce::Sprite*>> ce::DrawEventManager::enumToMapSpr;
+std::map<ce::DrawEventManager::uint64, std::map<ce::DrawEventManager::uint64, ce::Sprite*>> ce::DrawEventManager::enumToMapSpr;
 
 // Map with Sprites recently created
-std::map<ce::DrawEventManager::int64, std::map<ce::DrawEventManager::int64, ce::Sprite*>> ce::DrawEventManager::enumToMapNewSpr;
+std::map<ce::DrawEventManager::uint64, std::map<ce::DrawEventManager::uint64, ce::Sprite*>> ce::DrawEventManager::enumToMapNewSpr;
 
 // Vector containing layers from Tiled to be drawn
 std::vector<std::map<int, ce::TileMapLayer*>> ce::DrawEventManager::tileMapLayers;

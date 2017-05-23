@@ -5,8 +5,10 @@
 #include "Sprite.h"
 #include "GameObjectManager.h"
 #include "DrawEventManager.h"
+#include "Collider.h"
+#include "CollisionManager.h"
 #include "Camera.h"
-#include "SFMLKeyboard.h"
+#include "ContactListener.h"
 
 #include <SFML/Graphics.hpp>
 #include <Tmx\TmxTile.h>
@@ -14,6 +16,7 @@
 #include <Windows.h>
 #include <typeinfo>
 #include <iostream>
+#include <vector>
 
 //////////////////////////////////////////////
 ///   \mainpage Main Page
@@ -32,12 +35,17 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #endif
 {
 	// Binds all defined classes with LuaBridge
-    ce::LuaBridgeBinder::BindAll();
+	//ce::LuaBridgeBinder::BindAll();
+
+
 
 	ce::MapHandler* map = new ce::MapHandler;
 
     ce::GameObjectManager* objManager = new ce::GameObjectManager();
 	ce::DrawEventManager* drawManager = new ce::DrawEventManager();
+	ce::CollisionManager* collManager = new ce::CollisionManager();
+	ce::ContactListener contactListener;
+	collManager->GetWorld()->SetContactListener(&contactListener);
 
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Test");
 	window.setFramerateLimit(60);
@@ -51,26 +59,30 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
-
+        
 			else if (event.type == sf::Event::KeyPressed)
-			{
+        {          
 				ce::SFMLKeyboard::SetKeyDown(event.key.code);
-			}
+            }
 			else if (event.type == sf::Event::KeyReleased)
-			{
+            {
 				ce::SFMLKeyboard::SetKeyUp(event.key.code);
-			}
+            }
 			else if (event.type == sf::Event::LostFocus || event.type == sf::Event::GainedFocus)
-			{
+            {
 				ce::SFMLKeyboard::ResetKeyboard();
-			}
-		}
+            }
+        }
 
         objManager->CallUpdate();
         if (ce::Camera::main != nullptr)
-		{
+        {
             window.setView(ce::Camera::main->GetView());
         }
+
+        objManager->CallUpdate();
+		window.setView(camera->GetView());
+
 		window.clear(sf::Color::Cyan);
 		drawManager->Draw(window);
 		window.display();

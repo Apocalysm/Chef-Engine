@@ -1,6 +1,7 @@
 #pragma once
 #include "LuaComponent.h"
 #include "Transform.h"
+#include "ContactListener.h"
 
 #include <vector>
 #include <map>
@@ -89,6 +90,7 @@ namespace ce
     private:
 		// Lets GameObjectManager access the private members in GameObjects
 		friend class GameObjectManager;
+		friend class ContactListener;
 
 		// All the components the GameObject is currently holding
 		std::map<int, Component*> components;

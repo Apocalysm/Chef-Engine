@@ -1,6 +1,7 @@
 #include "MapHandler.h"
 #include "DrawEventManager.h"
 #include "Sprite.h"
+#include "Collider.h"
 
 #include <Tmx\TmxPolygon.h>
 #include <Tmx\TmxPolyline.h>
@@ -176,6 +177,10 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 			ce::GameObject* gameObject = new ce::GameObject(object->GetName());
 
+			gameObject->GetTransform()->SetPosition(object->GetX(), object->GetY());
+
+			gameObject->GetTransform()->SetRotation(object->GetRot());
+
 			gameObjects.push_back(gameObject);
 
 			//Check what type the object is
@@ -205,11 +210,6 @@ void MapHandler::LoadMap(const std::string& fileName)
 					ce::Sprite* spriteComponent = gameObject->AddComponent<ce::Sprite>();
 
 					spriteComponent->SetDrawOrder(layers[i]->GetParseOrder());
-
-					spriteComponent->SetRotation(object->GetRot());
-
-					spriteComponent->SetPosition(object->GetX(), object->GetY());
-
 
 					for (int k = tileSets.size() - 1; k >= 0; k--)
 	{
@@ -251,11 +251,11 @@ void MapHandler::LoadMap(const std::string& fileName)
 				else
 			{
 					// This is a rect!
-					/*sf::RectangleShape* rectShape = new sf::RectangleShape;
-					rectShape->setSize(sf::Vector2f(object->GetWidth(), object->GetHeight()));
-					rectShape->setPosition(sf::Vector2f(object->GetX(), object->GetY()));
-					rectShape->setRotation(object->GetRot());*/
+					sf::Vector2f rectSize = sf::Vector2f(object->GetWidth(), object->GetHeight());
 					
+					ce::Collider* collider = gameObject->AddComponent<ce::Collider>();
+					collider->SetupTMX(rectSize,false,false);
+
 					break;
 				}
 

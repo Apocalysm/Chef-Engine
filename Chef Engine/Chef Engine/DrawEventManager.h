@@ -23,10 +23,10 @@ namespace ce
 		void Draw(sf::RenderWindow& window);
 
 	private:
-        typedef unsigned long long int64;
+        typedef unsigned long long uint64;
 
-		typedef std::map<int64, Sprite*> SpriteMap;
-		typedef std::map<int64, SpriteMap> OrderSpriteMap;
+		typedef std::map<uint64, Sprite*> SpriteMap;
+		typedef std::map<uint64, SpriteMap> OrderSpriteMap;
 
 		// OrderSpriteMap with Sprite components recently created
 		static OrderSpriteMap enumToMapNewSpr;
