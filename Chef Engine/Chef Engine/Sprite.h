@@ -5,12 +5,49 @@
 
 namespace ce
 {
+    ////////////////////////////////////////////////////////////
+    /// \brief Component that gives your objects a visual representation
+    /// Add a Sprite to a GameObject with GameObject:AddSprite()
+    /// \code
+    /// --Creates a GameObject and adds a Sprite to it
+    ///
+    /// object = Chef.GameObject("name")
+    ///
+    /// sprite = object:AddSprite() 
+    /// \endcode
+    /// 
+    /// \n Tries to get a Sprite from a GameObject with GameObject:GetSprite()
+    /// \code
+    /// --Gets a Sprite from the GameObject "object"
+    ///
+    /// sprite = object:GetSprite()
+    /// \endcode
+    ///
+    /// \n Remove a Sprite from a GameObject with GameObject:RemoveSprite()
+    /// \code
+    /// --Tries to remove a Sprite from the GameObject "object"
+    ///
+    /// object:RemoveSprite()
+    /// \endcode
+    ////////////////////////////////////////////////////////////
 	class Sprite : public ce::Component
 	{
         // Befriends the templated Bind function so it can access our protected functions
         friend void LuaBridgeBinder::Bind<ce::Sprite>(lua_State*);
 
 	public:
+
+        ////////////////////////////////////////////////////////////
+        /// \brief Default Sprite Constructor. 
+        /// In Lua you use GameObject:AddSprite()
+        /// \code
+        /// --Creates a GameObject and adds a Sprite to it
+        ///
+        /// object = Chef.GameObject("name")
+        ///
+        /// sprite = object:AddSprite() 
+        /// \endcode
+        ////////////////////////////////////////////////////////////
 		Sprite();
 		Sprite(const int drawOrder);
 		~Sprite();
@@ -48,8 +85,18 @@ namespace ce
 		sf::Sprite* sprite;
 		sf::Texture texture;
 
+        ////////////////////////////////////////////////////////////
+        /// \brief Tints the Sprite in a specified Color
+        /// \code
+        /// -- Sets the Color of the Sprite to be blue
+        ///
+        /// sprite.color = Chef.Color(0, 0, 255, 255)
+        /// \endcode
+        ////////////////////////////////////////////////////////////
 		sf::Color color;
+        /// \brief How far up the Sprite is drawn in the game, the higher the number, the higer it is drawn
 		int drawOrder;
+
 		bool isNew;
 
 		// The transform of this components GameObject

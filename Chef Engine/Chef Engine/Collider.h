@@ -7,9 +7,45 @@
 
 namespace ce
 {
+    ////////////////////////////////////////////////////////////
+    /// \brief Component that allows for collision with other GameObjects
+    /// Add a Collider to a GameObject with GameObject:AddCollider()
+    /// \code
+    /// --Creates a GameObject and adds a Collider to it
+    ///
+    /// object = Chef.GameObject("name")
+    ///
+    /// collider = object:AddCollider() 
+    /// \endcode
+    /// 
+    /// \n Tries to get a Collider from a GameObject with GameObject:GetCamera()
+    /// \code
+    /// --Gets a Collider from the GameObject "object"
+    ///
+    /// collider = object:GetCollider()
+    /// \endcode
+    ///
+    /// \n Remove a Collider from a GameObject with GameObject:RemoveCamera()
+    /// \code
+    /// --Tries to remove a Collider from the GameObject "object"
+    ///
+    /// object:RemoveCollider()
+    /// \endcode
+    ////////////////////////////////////////////////////////////
 	class Collider : public ce::Component
 	{
 	public:
+        ////////////////////////////////////////////////////////////
+        /// \brief Default Collider Constructor.
+        /// In Lua you use GameObject:AddCollider()
+        /// \code
+        /// --Creates a GameObject and adds a Collider to it
+        ///
+        /// object = Chef.GameObject("name")
+        ///
+        /// collider = object:AddCollider()
+        /// \endcode
+        ////////////////////////////////////////////////////////////
 		Collider();
 		~Collider();
 
@@ -19,7 +55,15 @@ namespace ce
 		// Should only be called when creating collision boxes from Tiled
 		void SetupTMX(const sf::Vector2f rectSize, const bool dynamic, const bool isTrigger);
 
-		// Creates a collision box based on the sprite component attached to the same gameobject this component is attached to
+        ////////////////////////////////////////////////////////////
+        /// \brief Creates a collision box based on the sprite component attached to the same gameobject this component is attached to
+        /// \code
+        /// --Adds a Collider component to an object and then fits the Collision box to that object's Sprite
+        ///
+        /// collider = object:AddCollider()
+        /// collider:SetFitSprite() 
+        /// \endcode
+        ////////////////////////////////////////////////////////////
 		void SetFitSprite(const bool fitSprite, const bool dynamic, const bool isTrigger);
 
 		// Sets if the collider should be a trigger or not
@@ -49,7 +93,7 @@ namespace ce
 		// Should the collider fit a sprite?
 		bool fitSprite;
 
-		// Is this collider a trigger?
+		/// \brief If the collider is a trigger, that basically means it goes through other objects but still trigger Collisions
 		bool isTrigger;
 
 		// Is a body created?

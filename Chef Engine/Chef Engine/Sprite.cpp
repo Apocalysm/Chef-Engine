@@ -132,12 +132,7 @@ void Sprite::DoBind(lua_State * L)
 				.addConstructor<void(*)(void)>()
                 .addFunction("SetSprite", &Sprite::SetSprite)
 				.addProperty("sprite", &Sprite::GetSprite, &Sprite::ChangeSprite)
-				
-                .addProperty("position", &Sprite::GetPosition, &Sprite::SetPosition)
-				.addProperty("scale", &Sprite::GetScale, &Sprite::SetScale)
-				.addProperty("rotation", &Sprite::GetRotation, &Sprite::SetRotation)
 				.addProperty("origin", &Sprite::GetOrigin, &Sprite::SetOrigin)
-
 				.addProperty("color", &Sprite::GetColor, &Sprite::SetColor)
 				.addProperty("drawOrder", &Sprite::GetDrawOrder, &Sprite::SetDrawOrder)
 			.endClass()

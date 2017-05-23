@@ -269,9 +269,7 @@ void GameObject::Destroy()
                     .addFunction("GetLuaComponent", &GameObject::GetLuaComponent)
                     .addFunction("RemoveLuaComponent", &GameObject::RemoveLuaComponent)  
 
-                    .addFunction("AddTransform", &GameObject::AddComponent<ce::Transform>)
                     .addFunction("GetTransform", &GameObject::GetComponent<ce::Transform>)
-                    .addFunction("RemoveTransform", &GameObject::RemoveComponent<ce::Transform>)
 
                     .addFunction("AddSprite", &GameObject::AddComponent<ce::Sprite>)
                     .addFunction("GetSprite", &GameObject::GetComponent<ce::Sprite>)

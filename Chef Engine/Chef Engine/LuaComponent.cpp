@@ -24,6 +24,7 @@ LuaComponent::LuaComponent(luabridge::LuaRef ref) :
 
 LuaComponent::~LuaComponent()
 {
+    lua_pop(ref.state, 1);
 }
 
 

@@ -9,6 +9,7 @@
 #include "CollisionManager.h"
 #include "Camera.h"
 #include "ContactListener.h"
+#include "SFMLKeyboard.h"
 
 #include <SFML/Graphics.hpp>
 #include <Tmx\TmxTile.h>
@@ -74,16 +75,13 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
             }
         }
 
+		window.clear(sf::Color::Cyan);
         objManager->CallUpdate();
         if (ce::Camera::main != nullptr)
         {
             window.setView(ce::Camera::main->GetView());
+            ce::Camera::main->Update();
         }
-
-        objManager->CallUpdate();
-		window.setView(camera->GetView());
-
-		window.clear(sf::Color::Cyan);
 		drawManager->Draw(window);
 		window.display();
 
