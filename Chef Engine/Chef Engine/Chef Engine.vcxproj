@@ -158,6 +158,7 @@
     <ClInclude Include="LuaBridgeBinder.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="SFMLKeyboard.h" />
+    <ClInclude Include="SFML_LuaBind.h" />
     <ClInclude Include="TileMapLayer.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Transform.h" />

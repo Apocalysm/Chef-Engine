@@ -25,9 +25,9 @@ namespace ce
 		/*! Update is called every frame.*/
         virtual void Update();
 
-		// Getter for the 'hash'-variable
+		// Getter for the 'ID'-variable
 		int GetID() const;
-		void SetID(int hash);
+		void SetID(int ID);
 
 		// Getter and setter for the 'enabled'-variable
 		void SetEnabled(bool enabled);
@@ -44,12 +44,12 @@ namespace ce
 
 	protected:
 		// The GameObject holding this Component
-		ce::GameObject* gameObject = nullptr;
+		ce::GameObject* gameObject;
 
 	private: 
-        static int IDCounter;
+        friend class GameObject;
 
-		// The hash_code of the Component, is set in AddComponent
+		// The ID of the Component, is set in AddComponent
 		int ID;
 
         // If we just created the Component
@@ -57,9 +57,9 @@ namespace ce
 
 		// This decides if the Component should be updated for example via the Update method
         /*! Enabled Components are Updated, disabled Components are not.*/
-		bool enabled = true;
+        bool enabled;
 
-		
+        static void DoBind(lua_State* L);
 
 	};
 }

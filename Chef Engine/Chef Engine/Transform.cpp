@@ -92,3 +92,20 @@ void Transform::SetScale(const sf::Vector2f& newScale)
 }
 
 
+void Transform::DoBind(lua_State * L)
+{
+    luabridge::getGlobalNamespace(L)
+        .beginNamespace("Chef")
+            .deriveClass<Transform, Component>("Transform")
+                .addConstructor<void(*)(void)>()
+                .addProperty("position", &Transform::GetPosition, &Transform::SetPosition)
+                .addProperty("rotation", &Transform::GetRotation, &Transform::SetRotation)
+                .addProperty("scale", &Transform::GetScale, &Transform::SetScale)
+                .addFunction("Move", &Transform::Move)
+                .addFunction("Rotate", &Transform::Rotate)
+            .endClass()
+        .endNamespace();
+}
+
+
+
