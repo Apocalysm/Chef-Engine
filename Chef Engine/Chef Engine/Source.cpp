@@ -6,6 +6,7 @@
 #include "GameObjectManager.h"
 #include "DrawEventManager.h"
 #include "Camera.h"
+#include "SFMLKeyboard.h"
 
 #include <SFML/Graphics.hpp>
 #include <Tmx\TmxTile.h>
@@ -30,7 +31,7 @@ int main(int argc, char* argv[])
 int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #endif
 {
-    // Binds all defined classes with LuaBridge
+	// Binds all defined classes with LuaBridge
     ce::LuaBridgeBinder::BindAll();
 
 	ce::MapHandler* map = new ce::MapHandler;
@@ -48,16 +49,31 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
+
+			else if (event.type == sf::Event::KeyPressed)
+			{
+				ce::SFMLKeyboard::SetKeyDown(event.key.code);
+			}
+			else if (event.type == sf::Event::KeyReleased)
+			{
+				ce::SFMLKeyboard::SetKeyUp(event.key.code);
+			}
+			else if (event.type == sf::Event::LostFocus || event.type == sf::Event::GainedFocus)
+			{
+				ce::SFMLKeyboard::ResetKeyboard();
+			}
 		}
 
         objManager->CallUpdate();
         if (ce::Camera::main != nullptr)
-        {
+		{
             window.setView(ce::Camera::main->GetView());
         }
-        window.clear(sf::Color::Cyan);
+		window.clear(sf::Color::Cyan);
 		drawManager->Draw(window);
 		window.display();
+
+		ce::SFMLKeyboard::ClearKeys();
 	}
 
 	return 0;
