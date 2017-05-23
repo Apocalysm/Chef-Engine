@@ -6,6 +6,7 @@
 #include "GameObjectManager.h"
 #include "DrawEventManager.h"
 #include "Camera.h"
+#include "SFMLKeyboard.h"
 
 #include <SFML/Graphics.hpp>
 #include <Tmx\TmxTile.h>
@@ -61,7 +62,6 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	camera->SetFollow(true);
 	//camera->SetZoom(0.001);
 
-
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Test");
 
 	window.setFramerateLimit(60);
@@ -73,6 +73,9 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	map->RegisterMap(0, mapName);
 	map->LoadObject();
 
+	window.setKeyRepeatEnabled(false);
+	ce::SFMLKeyboard::Initialize();
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -80,6 +83,19 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
+
+			else if (event.type == sf::Event::KeyPressed)
+			{
+				ce::SFMLKeyboard::SetKeyDown(event.key.code);
+			}
+			else if (event.type == sf::Event::KeyReleased)
+			{
+				ce::SFMLKeyboard::SetKeyUp(event.key.code);
+			}
+			else if (event.type == sf::Event::LostFocus || event.type == sf::Event::GainedFocus)
+			{
+				ce::SFMLKeyboard::ResetKeyboard();
+			}
 		}
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         {
@@ -118,6 +134,9 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         else
             timer += 1;
 
+		if (ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::Escape))
+			window.close();
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
         {
             object->GetTransform()->SetScale(object->GetTransform()->GetScale() + sf::Vector2f(0.001f, 0.001f));
@@ -127,11 +146,26 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
             object->GetTransform()->SetScale(object->GetTransform()->GetScale() - sf::Vector2f(0.001f, 0.001f));
         }
 
+		if (ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::M))
+		{
+			std::cout << "Key Pressed" << std::endl;
+		}
+		else if (ce::SFMLKeyboard::GetKey(sf::Keyboard::N))
+		{
+			std::cout << "Key Down" << std::endl;
+		}
+		else if (ce::SFMLKeyboard::GetKeyUp(sf::Keyboard::Key(1)))
+		{
+			std::cout << "Key Released" << std::endl;
+		}
+
         objManager->CallUpdate();
 		window.setView(camera->GetView());
 		window.clear(sf::Color::Cyan);
 		drawManager->Draw(window);
 		window.display();
+
+		ce::SFMLKeyboard::ClearKeys();
 	}
 
 	return 0;
