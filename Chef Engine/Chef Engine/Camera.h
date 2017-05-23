@@ -11,6 +11,8 @@ namespace ce
 	public:
 		Camera();
 		~Camera();
+        // The main camera, the camera that's currently in use
+        static Camera* main;
 
 		void SetSize(const sf::Vector2f &size);
 		sf::Vector2f GetSize() const;
@@ -37,6 +39,6 @@ namespace ce
 		sf::Vector2i mapSize;
 
 		bool follow;
-		float zoom = 1;
+        float zoom;
 	};
 }

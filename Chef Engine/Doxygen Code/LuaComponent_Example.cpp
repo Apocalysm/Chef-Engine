@@ -1,15 +1,24 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// \defgroup luaComponent Writing a new component type in Lua
+/// \defgroup luaComponent Creating and using your own Component type written in Lua
 ///  In this group there is instructions for how to create and use your very own Component type made in Lua
 ///
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-///    \defgroup Creation
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///    \defgroup Creation 1. How to write a new Component Type in Lua
 ///    \ingroup Creation
 ///    \ingroup luaComponent
-///    \brief How to set up a new Component in Lua
+///
+///    Here, you're going to find the code needed to create your own Component type in Lua.
+///    \n You can just copy the code in the first code-block and replace the all the 'ComponentName'
+///    with your own .lua-file's name. Do this simply by marking 'ComponentName' and then press
+///    CTRL + H to replace it with whatever their name should be.
+///
+///    \n But as said earlier, you can either just copy the code-block or read more on this page
+///    to know what everything does. The other thing to note is that all the scripts that should be
+///    handled as Components, should be placed in the Components-folder that's in the Lua Scripts-folder.
+///    In the Components-folder you can then create as many sub-folders as you want.
 ///    
 ///    Example for a completed Component that has all the basic functionality of a Component:
 ///     \code
@@ -124,15 +133,78 @@
 ///     \n\n To add a new function to a Component you simply do as you would with any other lua-function.
 ///     See the 'Usage' chapter to know how to use functions and variables from your components created in Lua.
 ///
-/////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-///    \defgroup Usage
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///    \defgroup Register 2. How to register a Component created in Lua
+///    \ingroup Register
+///    \ingroup luaComponent
+///    
+///     The first thing that have to be done to use your new Component is that you have to
+///     register it. You register your component by going to 'include.lua' that's in the %Include
+///     folder in the Lua Scripts-folder.
+///
+///     \n Here you will be met with a lot of code, but you don't have to change more than two parts of the script.
+///     
+///     First you want to "require" the new Component you created. This is done simply by just writing
+///     'require "<ComponentName>" under the bottom most written require-statement.
+///     \code
+///         require "NewComponent"
+///         require "OtherComponent"
+///         require "YourComponentName"
+///         ...
+///     \endcode
+///
+///     \n After that you have to add your Component's name to the table called 'Components' which is simple 
+///     to some degree, where you just add a new entry to the table by writing [number] your Component. The problem
+///     is that you have to write this in alphabetical order which can be tricky, but it has to be done!
+///     \code
+///         Components =
+///         {
+///             --Here you simply add more components as you go
+///             [1] = NewComponent,
+///             [2] = OtherComponent,
+///             [3] = YourNewComponent,
+///             [4] = ...
+///         }
+///     \endcode
+///    
+///     After you have done this you can now go to any other .lua-script to use it. At the top of the script
+///     you have to add the path to the folder your script is in, if it's not already there.
+///     \n You will be met with something similiar to this line that you, yourself will have to add to
+///     by simply adding the new folder-path and then put a semicolon(;) at the end.
+///     
+///     \code
+///         package.path = package.path .. ";../Chef Engine/Lua Scripts/Components/?.lua;../Chef Engine/Lua Scripts/?.lua;"
+///     \endcode
+///     \n After this you have to do the same thing as in 'include.lua' where you write "require <ComponentName>" to include the file.
+///
+///     \n Now you're ready to use the Component you just created in many ways which will be explained in "3. How to use a Component created in Lua"
+///
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///    \defgroup Usage 3. How to use a Component created in Lua
 ///    \ingroup Usage
 ///    \ingroup luaComponent
-///    \brief How to use a Component created in Lua
-///    
 ///
-/////////////////////////////////////////////////////////////////////////////////////////////
-
+///    You are now ready to use the new Component you created in Lua.
+///    First, you want to create a new GameObject to add your Components to.
+///    Creating a new GameObject is simple where you only need to call it's constructor and set a name for it.
+///    \code
+///         object = Chef.GameObject("Name")
+///    \endcode
+///    
+///    \nAfter that, you can add a Component via the function AddLuaComponent() that's in GameObject.
+///    Doing that is also simple where you just write the name of the Component to add.
+///    \code
+///         comp = object:AddLuaComponent(MyComponentType)
+///    \endcode
+///    One thing to note is that all function calls in Lua are made by referencing the table the function is in
+///    , such as GameObject, and then writing a colon(:).
+///
+///    \n Now you can reference all of the members in MyComponentType so you can do what you want to do with them.
+///     And the different default functions will be called automatically when they're supposed to.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////

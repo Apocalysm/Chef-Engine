@@ -3,6 +3,7 @@
 #include "Component.h"
 #include "Sprite.h"
 #include "Collider.h"
+#include "Camera.h"
 
 #include "GameObjectManager.h"
 #include "DrawEventManager.h"
@@ -203,7 +204,7 @@ void GameObject::Destroy()
 
         int id = ref["ID"];
          
-        if (luaComponents.find(id) == luaComponents.end())
+        //if (luaComponents.find(id) == luaComponents.end())
         {
             // Creates a new LuaComponent with the ref we passed as an argument
             LuaComponent* newComponent = new ce::LuaComponent(ref);
@@ -223,8 +224,8 @@ void GameObject::Destroy()
             // Sends the newRef back into Lua
             return newRef;
         }
-        std::cerr << "You sadly can't add the same component type twice to a GameObject. Yet..." << std::endl;
-        assert(false);
+        //std::cerr << "You sadly can't add the same component type twice to a GameObject. Yet..." << std::endl;
+        //assert(false);
     }
     
     // Gets a LuaComponent and returns that components specified LuaRef
@@ -251,8 +252,11 @@ void GameObject::Destroy()
 
     void GameObject::DoBind(lua_State * L)
     {
+       
+
         luabridge::getGlobalNamespace(L)
             .beginNamespace("Chef")
+                
                 .beginClass<GameObject>("GameObject")
                     .addConstructor<void (*) (std::string)>()
                 
@@ -261,7 +265,8 @@ void GameObject::Destroy()
                     .addProperty("instanceID", &GameObject::GetID)
                     .addProperty("name", &GameObject::GetName, &GameObject::SetName)
                     .addProperty("transform", &GameObject::GetTransform)
-
+                    .addFunction("Equals", &GameObject::operator==)
+                   
                     .addFunction("AddLuaComponent", &GameObject::AddLuaComponent)
                     .addFunction("GetLuaComponent", &GameObject::GetLuaComponent)
                     .addFunction("RemoveLuaComponent", &GameObject::RemoveLuaComponent)  
@@ -278,6 +283,10 @@ void GameObject::Destroy()
                     .addFunction("GetCollider", &GameObject::GetComponent<ce::Collider>)
                     .addFunction("RemoveCollider", &GameObject::RemoveComponent<ce::Collider>)
                     
+                    .addFunction("AddCamera", &GameObject::AddComponent<ce::Camera>)
+                    .addFunction("GetCamera", &GameObject::GetComponent<ce::Camera>)
+                    .addFunction("RemoveCamera", &GameObject::RemoveComponent<ce::Camera>)
+
                     /*.addStaticData("Default", Default, false)
                     .addStaticData("Player", Player, false)
                     .addStaticData("Enemy", Enemy, false)

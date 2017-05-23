@@ -1,3 +1,5 @@
+package.path = package.path .. ";../Chef Engine/Lua Scripts/Components/?.lua;../Chef Engine/Lua Scripts/?.lua;"
+require "OtherComponent"
 -- Here you put all the values you want the component to contain
 NewComponent = 
 {
@@ -20,18 +22,17 @@ end
 
 -- Gets called the moment you instantiate this component
 function NewComponent.Awake(self)
-	print("waking up, new...")
-	--print(self.ID)
+	self.comp2 = object:AddLuaComponent(OtherComponent)
 end
 
 -- Used for initialization
-function NewComponent.Start(self)	
-	print("starting...")
+function NewComponent.Start(self)
+	
 end
 
 
 --Gets called every frame
 function NewComponent.Update(self)
-	self.transform:Move(Chef.Vector2f(0.5, 0.1))
+	self.comp2.setTrue = self.comp2.setTrue + 5
 end
 

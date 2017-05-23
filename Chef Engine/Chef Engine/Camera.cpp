@@ -5,9 +5,17 @@
 
 using ce::Camera;
 
+Camera* Camera::main;
+
 Camera::Camera()
 {
 	follow = false;
+    zoom = 1;
+
+    if (main == nullptr)
+    {
+        main = this;
+    }
 }
 
 
@@ -73,17 +81,21 @@ void ce::Camera::SetFollow(const bool & follow)
 
 void ce::Camera::Update()
 {
-	mapSize = ce::MapHandler::GetMapSize();
-
 	if (follow)
 	{
-		view.setCenter(gameObject->GetTransform()->GetPosition());
+        center = gameObject->GetTransform()->GetPosition();
+		view.setCenter(center);
 	}
 
-	sf::Vector2f clampedCenter = sf::Vector2f(ce::Math::ClampF(view.getCenter().x, mapSize.x - (size.x / 2) * zoom, 0 + (size.x / 2) * zoom),
-		ce::Math::ClampF(view.getCenter().y, mapSize.y - (size.y / 2) * zoom, 0 + (size.y / 2) * zoom));
-
-	view.setCenter(clampedCenter);
+    mapSize = ce::MapHandler::GetMapSize();
+    sf::Vector2f clampedCenter = center;
+    if (mapSize.x > 0 && mapSize.y > 0)
+    {
+        clampedCenter = sf::Vector2f(ce::Math::ClampF(view.getCenter().x, mapSize.x - (size.x / 2) * zoom, 0 + (size.x / 2) * zoom),
+            ce::Math::ClampF(view.getCenter().y, mapSize.y - (size.y / 2) * zoom, 0 + (size.y / 2) * zoom));
+    }
+    center = clampedCenter;
+	view.setCenter(center);
 }
 
 void ce::Camera::DoBind(lua_State * L)
