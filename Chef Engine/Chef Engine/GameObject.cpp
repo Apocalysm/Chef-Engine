@@ -252,8 +252,6 @@ void GameObject::Destroy()
 
     void GameObject::DoBind(lua_State * L)
     {
-       
-
         luabridge::getGlobalNamespace(L)
             .beginNamespace("Chef")
                 

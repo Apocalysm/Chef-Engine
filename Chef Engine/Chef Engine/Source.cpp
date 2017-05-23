@@ -41,6 +41,8 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Test");
 	window.setFramerateLimit(60);
+    window.setKeyRepeatEnabled(false);
+    ce::SFMLKeyboard::Initialize();
 
 	while (window.isOpen())
 	{

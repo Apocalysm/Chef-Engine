@@ -64,17 +64,9 @@
 ///     One important rule of creating Components is that the .lua-file and the table you create must have the same name
 ///     For example, the table 'PlayerComponent' must be in a file called 'PlayerComponent.lua'\n
 ///     
-///     You must include the ID variable in all Components, you also have to set it but it doesn't matter to what.
-///     After that you can simply add a comma(',') to add a new variable or function as we have done in the example below
+///     You must include the ID variable in all Component-tables and it is best if you declare it at the top of the script and as -1
 ///     \code
-///
-///     PlayerComponent =
-///     {
-///         ID = -1,
-///         health = 100,
-///         dead = false,
-///         ...
-///     }
+///     PlayerComponent = {ID = -1}
 ///     \endcode
 ///
 ///     \n\n We will now look at the three basic functions 'Awake', 'Start' and 'Update'.
@@ -87,18 +79,20 @@
 ///     One thing to note when creating a function in a Lua Component is that you have to send
 ///     a variable 'self' in the function parameters, this should be a reference to the Component instance you
 ///     have created in another script. You need a variable like that to know which specific values to use.
+///     The Awake function is where you should create different variables that doesn't need references to things such
+///     as the GameObject the component belongs to or that GameObject's Transform component.
 ///     \code
 ///         function ComponentName.Awake(self)
-///             print("waking up...")
+///             -- Creates a new variable called 100 and sets it to health
+///             self.health = 100
 ///         end
 ///     \endcode
 ///
 ///     \n Start: This function will be called once in the Component's lifetime just before the first time Update
-///     is called. Here, just as all functions, you need to send 'self' as a parameter.
+///     is called. Here, just as all functions, you need to send 'self' as a parameter. This is where you want to cre
 ///     \code
 ///         function ComponentName.Start(self)
-///             -- Sets the gameObject's health to 100 and moves it to a new position
-///             health = 100
+///             -- Moves the GameObject to a new position
 ///             self.transform.position = Chef.Vector2f(250, 400)
 ///         end
 ///     \endcode

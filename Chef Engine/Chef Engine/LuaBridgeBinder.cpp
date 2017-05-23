@@ -8,6 +8,7 @@
 #include "Sprite.h"
 #include "Camera.h"
 
+#include "SFMLKeyboard.h"
 #include "SFML_LuaBind.h"
 
 // dirent.h Allows us to read directories easier
@@ -130,6 +131,7 @@ void ce::LuaBridgeBinder::BindAll()
     Bind<ce::Transform>(L);
     Bind<ce::Camera>(L);
 
+    Bind<ce::SFMLKeyboard>(L);
     Bind<ce::SFML_Bind>(L);
 
 	

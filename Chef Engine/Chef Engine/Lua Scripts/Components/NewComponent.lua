@@ -1,10 +1,6 @@
 package.path = package.path .. ";../Chef Engine/Lua Scripts/Components/?.lua;../Chef Engine/Lua Scripts/?.lua;"
 require "OtherComponent"
--- Here you put all the values you want the component to contain
-NewComponent = 
-{
-	ID = -1
-}
+NewComponent = {ID = -1}
 
 -- This is what you call to create a new instance of the component
 function NewComponent.Create(component)
@@ -22,17 +18,39 @@ end
 
 -- Gets called the moment you instantiate this component
 function NewComponent.Awake(self)
-	self.comp2 = object:AddLuaComponent(OtherComponent)
+	self.speed = 5
+
 end
 
 -- Used for initialization
 function NewComponent.Start(self)
-	
+	self.transform.scale = Chef.Vector2f(10, 10)
+	self.other = self.gameObject:AddLuaComponent(OtherComponent)
 end
 
 
 --Gets called every frame
 function NewComponent.Update(self)
-	self.comp2.setTrue = self.comp2.setTrue + 5
+
+	if(self.other.canMove)
+	then
+		if Chef.Input.GetKey(Chef.A) == true then
+			self.transform:Move(Chef.Vector2f(-self.speed, 0))
+			self.other.canMove = false
+		end
+		if Chef.Input.GetKey(Chef.D)== true then
+			self.transform:Move(Chef.Vector2f(self.speed, 0))
+			self.other.canMove = false
+		end
+		if Chef.Input.GetKey(Chef.W)== true then
+			self.transform:Move(Chef.Vector2f(0, -self.speed))
+			self.other.canMove = false
+		end
+		if Chef.Input.GetKey(Chef.S)== true then
+			self.transform:Move(Chef.Vector2f(0, self.speed))
+			self.other.canMove = false
+		end
+	end
+
 end
 

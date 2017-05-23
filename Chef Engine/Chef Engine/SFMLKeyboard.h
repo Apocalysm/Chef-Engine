@@ -18,13 +18,13 @@ namespace ce
 		static void ClearKeys();
 		static void SetKeyDown(sf::Keyboard::Key key);
 		static void SetKeyUp(sf::Keyboard::Key key);
-		static bool GetKey(sf::Keyboard::Key key);
-		static bool GetKeyDown(sf::Keyboard::Key key);
-		static bool GetKeyUp(sf::Keyboard::Key key);
+		static bool GetKey(int key);
+		static bool GetKeyDown(int key);
+		static bool GetKeyUp(int key);
 		static void ResetKeyboard();
 		
 	private:
-		static void DoBind(lua_State* L);
+		static void DoBind(lua_State* Lua);
 		// Don't try to print these, like ever
 		static char* newKeys;
 		static char* keys;
