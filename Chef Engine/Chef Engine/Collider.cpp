@@ -160,34 +160,6 @@ void ce::Collider::SetFitSprite(const bool fitSprite, const bool dynamic, const 
 
 		bodyIsCreated = true;
 	}
-
-	/*ce::GameObject* obj = new ce::GameObject();
-	ce::Sprite* spr = obj->AddComponent<ce::Sprite>();
-	spr->SetSprite("dot.png");
-	spr->SetDrawOrder(3);
-	obj->GetTransform()->SetPosition(body->GetFixtureList()->GetAABB(0).GetCenter().x,
-									 body->GetFixtureList()->GetAABB(0).GetCenter().y);*/
-
-	/*ce::GameObject* obj2 = new ce::GameObject();
-	ce::Sprite* spr2 = obj2->AddComponent<ce::Sprite>();
-	spr2->SetSprite("dot.png");
-	spr2->SetDrawOrder(3);
-	obj2->GetTransform()->SetPosition(body->GetFixtureList()->GetAABB(1).GetCenter().x,
-		body->GetFixtureList()->GetAABB(1).GetCenter().y);
-
-	ce::GameObject* obj3 = new ce::GameObject();
-	ce::Sprite* spr3 = obj3->AddComponent<ce::Sprite>();
-	spr3->SetSprite("dot.png");
-	spr3->SetDrawOrder(3);
-	obj3->GetTransform()->SetPosition(body->GetFixtureList()->GetAABB(2).GetCenter().x,
-		body->GetFixtureList()->GetAABB(2).GetCenter().y);
-
-	ce::GameObject* obj4 = new ce::GameObject();
-	ce::Sprite* spr4 = obj4->AddComponent<ce::Sprite>();
-	spr4->SetSprite("dot.png");
-	spr4->SetDrawOrder(3);
-	obj4->GetTransform()->SetPosition(body->GetFixtureList()->GetAABB(3).GetCenter().x,
-		body->GetFixtureList()->GetAABB(3).GetCenter().y);*/
 }
 
 
@@ -217,13 +189,21 @@ void ce::Collider::SetGameObject(GameObject * gameObject)
 
 void ce::Collider::OnCollisionEnter(Collider* other)
 {
+	collidingColls.insert(std::make_pair(other->gameObject->GetID(), other));
 	std::cout << "Collision Enter" << std::endl;
 }
 
 
 void ce::Collider::OnCollisionExit(Collider* other)
 {
+	
 	std::cout << "Collision Exit" << std::endl;
+}
+
+
+void ce::Collider::OnCollisionStay(Collider* other)
+{
+	std::cout << "Collision Stay" << std::endl;
 }
 
 
@@ -236,6 +216,12 @@ void ce::Collider::OnTriggerEnter(Collider* other)
 void ce::Collider::OnTriggerExit(Collider* other)
 {
 	std::cout << "Trigger Exit" << std::endl;
+}
+
+
+void ce::Collider::OnTriggerStay(Collider * other)
+{
+	std::cout << "Trigger Stay" << std::endl;
 }
 
 

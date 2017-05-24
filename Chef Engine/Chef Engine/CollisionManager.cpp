@@ -60,33 +60,36 @@ void ce::CollisionManager::UpdateCollision()
 
 	for (auto it = intToCollider.begin(); it != intToCollider.end(); it++)
 	{
-		ce::Collider* coll = it->second;
-
-		// Positions to be moved to
-		float posX;
-		float posY;
-
-		// If the collider should fit a sprite
-		if (coll->fitSprite)
+		if (!it->second->isTrigger)
 		{
-			// Gets the position of the body with an offset since the transform should not be directly at the bodys position
-			posX = coll->body->GetPosition().x - coll->spriteSizeX / 2 * coll->transScale.x + coll->spriteOrigin.x * coll->transScale.x;
-			posY = coll->body->GetPosition().y - coll->spriteSizeY / 2 * coll->transScale.y + coll->spriteOrigin.y * coll->transScale.y;
+			ce::Collider* coll = it->second;
 
-			// Moves the transform component to the calculated position
-			coll->transform->SetPosition(posX, posY);
+			// Positions to be moved to
+			float posX;
+			float posY;
 
-			// Updates the sprites since it should be moved to the transforms ne position
-			coll->gameObject->GetComponent<ce::Sprite>()->Update();
-		}
-		else
-		{
-			// Gets the position of the body
-			posX = coll->body->GetPosition().x;
-			posY = coll->body->GetPosition().y;
+			// If the collider should fit a sprite
+			if (coll->fitSprite)
+			{
+				// Gets the position of the body with an offset since the transform should not be directly at the bodys position
+				posX = coll->body->GetPosition().x - coll->spriteSizeX / 2 * coll->transScale.x + coll->spriteOrigin.x * coll->transScale.x;
+				posY = coll->body->GetPosition().y - coll->spriteSizeY / 2 * coll->transScale.y + coll->spriteOrigin.y * coll->transScale.y;
 
-			// Moves the transform to the same position of the body
-			coll->transform->SetPosition(posX, posY);
+				// Moves the transform component to the calculated position
+				coll->transform->SetPosition(posX, posY);
+
+				// Updates the sprites since it should be moved to the transforms ne position
+				coll->gameObject->GetComponent<ce::Sprite>()->Update();
+			}
+			else
+			{
+				// Gets the position of the body
+				posX = coll->body->GetPosition().x;
+				posY = coll->body->GetPosition().y;
+
+				// Moves the transform to the same position of the body
+				coll->transform->SetPosition(posX, posY);
+			}
 		}
 	}
 }

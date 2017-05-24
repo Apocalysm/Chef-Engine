@@ -36,11 +36,17 @@ namespace ce
 		// Is called when this collider stops colliding
 		virtual void OnCollisionExit(Collider* other);
 
+		// Is continuously called when this collider collide with another collider that isn't a trigger
+		virtual void OnCollisionStay(Collider* other);
+
 		// Is called when this collider begins to overlap another collider if this is a trigger
 		virtual void OnTriggerEnter(Collider* other);
 
 		// Is called when this collider stops to overlap
 		virtual void OnTriggerExit(Collider* other);
+
+		// Is continuously called when this collider overlaps another collider if this is a trigger
+		virtual void OnTriggerStay(Collider* other);
 
 	private:
 		friend class CollisionManager;
@@ -54,6 +60,9 @@ namespace ce
 
 		// Is a body created?
 		bool bodyIsCreated;
+
+		// Is the collider currently colliding?
+		bool isColliding;
 
 		// Bodies is created from this
 		b2BodyDef bodyDef;
@@ -84,6 +93,9 @@ namespace ce
 		float spriteSizeY;
 
 		sf::Vector2f spriteOrigin;
+
+		// Contains pointers to colliders that this collider is currently colliding with
+		std::map<unsigned long long, ce::Collider*> collidingColls;
 
 		const double PI = 3.141592653589793;
 
