@@ -126,23 +126,23 @@ namespace ce
 
     // Runs the Update method each frame on all of the Components this GameObject is holding
     void GameObject::ComponentUpdate()
-    {
-        // Iterates through all of the components this GameObject is holding
+    {   
+        // Iterates through all of the lua-components this GameObject is holding
         // and calls the Update method on them
-        for (auto it = components.begin(); it != components.end(); it++)
+        for (auto it = luaComponents.begin(); it != luaComponents.end(); it++)
         {
             if (it->second->GetEnabled())
             {
                 it->second->Update();
             }
         }
-        // Does the same thing for luaComponents
-        for (auto it = luaComponents.begin(); it != luaComponents.end(); it++)
-    {
-            if (it->second->GetEnabled())
+        // Does the same thing for the normal components
+        for (auto it = components.begin(); it != components.end(); it++)
         {
+            if (it->second->GetEnabled())
+            {
                 it->second->Update();
-    }
+            }
         }
     }
 

@@ -56,7 +56,7 @@ void ce::CollisionManager::RemoveCollider(ce::Collider* collider)
 void ce::CollisionManager::UpdateCollision()
 {
 	// Takes a step at calculating physics
-	world->Step(1, 8, 30);
+	world->Step(1, 8, 300);
 
 	for (auto it = intToCollider.begin(); it != intToCollider.end(); it++)
 	{

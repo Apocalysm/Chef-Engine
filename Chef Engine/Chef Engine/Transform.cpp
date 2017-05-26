@@ -8,7 +8,6 @@ using ce::Transform;
 // Default Constructor
 Transform::Transform()
 {
-	//SetPosition(0, 0);
 	position = sf::Vector2f(0.0f, 0.0f);
 	SetRotation(0);
 	SetScale(1, 1);
@@ -35,27 +34,19 @@ void Transform::Start()
 
 void ce::Transform::Update()
 {
-	velocity = position - lastPos;
-	lastPos = position;
+
 }
 
 
-// Overload for SetPosition with floats instead of a sf::Vector2f
+// Overload for SetPosition with floating numbers instead of a sf::Vector2f
 void Transform::SetPosition(const float x, const float y)
 {
-	/*if (gameObject->GetComponent<ce::Collider>() != NULL)
-	{
-		b2Vec2 pos = b2Vec2(x, y);
-		gameObject->GetComponent<ce::Collider>()->body->SetTransform(pos, rotation);
-	}
-	else*/
 	SetPosition(sf::Vector2f(x, y));
 }
 
 
 void Transform::SetPosition(const sf::Vector2f& newPosition)
 {
-	lastPos = position;
 	position = newPosition;
 }
 
@@ -68,33 +59,7 @@ const sf::Vector2f& Transform::GetPosition() const
 
 void ce::Transform::Move(sf::Vector2f movement)
 {
-	/*if (gameObject->GetComponent<ce::Collider>() != NULL)
-	{
-		gameObject->GetComponent<ce::Collider>()->body->ApplyForce(b2Vec2(movement.x, movement.y), gameObject->GetComponent<ce::Collider>()->body->GetWorldCenter(), true);
-	}
-	else
-	{*/
-		lastPos = position;
     position += movement;
-	//}
-}
-
-
-const sf::Vector2f ce::Transform::GetLastPos() const
-{
-	return lastPos;
-}
-
-
-const sf::Vector2f ce::Transform::GetVelocity() const
-{
-	return velocity;
-}
-
-
-void ce::Transform::ResetVelocity()
-{
-	velocity = sf::Vector2f(0.0f, 0.0f);
 }
 
 
@@ -136,6 +101,12 @@ void Transform::SetScale(const sf::Vector2f& newScale)
 }
 
 
+void ce::Transform::SetGameObject(GameObject * gameObject)
+{
+    this->gameObject = gameObject;
+}
+
+
 void Transform::DoBind(lua_State * L)
 {
     luabridge::getGlobalNamespace(L)
@@ -149,11 +120,4 @@ void Transform::DoBind(lua_State * L)
                 .addFunction("Rotate", &Transform::Rotate)
             .endClass()
         .endNamespace();
-}
-
-
-
-void ce::Transform::SetGameObject(GameObject * gameObject)
-{
-	this->gameObject = gameObject;
 }

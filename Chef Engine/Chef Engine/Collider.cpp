@@ -217,25 +217,25 @@ void ce::Collider::SetGameObject(GameObject * gameObject)
 
 void ce::Collider::OnCollisionEnter(Collider* other)
 {
-	std::cout << "Collision Enter" << std::endl;
+	//std::cout << "Collision Enter" << std::endl;
 }
 
 
 void ce::Collider::OnCollisionExit(Collider* other)
 {
-	std::cout << "Collision Exit" << std::endl;
+	//std::cout << "Collision Exit" << std::endl;
 }
 
 
 void ce::Collider::OnTriggerEnter(Collider* other)
 {
-	std::cout << "Trigger Enter" << std::endl;
+	//std::cout << "Trigger Enter" << std::endl;
 }
 
 
 void ce::Collider::OnTriggerExit(Collider* other)
 {
-	std::cout << "Trigger Exit" << std::endl;
+	//std::cout << "Trigger Exit" << std::endl;
 }
 
 
@@ -243,7 +243,7 @@ void Collider::DoBind(lua_State * L)
 {
 	luabridge::getGlobalNamespace(L)
 		.beginNamespace("Chef")
-			.beginClass<Collider>("Collider")
+			.deriveClass<Collider, ce::Component>("Collider")
 				.addFunction("SetFitSprite", &Collider::SetFitSprite)
 				.addProperty("isTrigger", &Collider::GetIsTrigger, &Collider::SetIsTrigger)
 			.endClass()

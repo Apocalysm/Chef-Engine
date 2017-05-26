@@ -1,6 +1,6 @@
 -- Here you put all the values you want the component to contain
 OtherComponent = {ID = -1}
-
+	
 -- This is what you call to create a new instance of the component
 function OtherComponent.Create(component)
 		
@@ -19,6 +19,7 @@ end
 function OtherComponent.Awake(self)
 	self.timer = 60
 	self.countdown = 0
+	self.timedecrementer = 20
 	self.canMove = true
 end
 
@@ -35,7 +36,7 @@ function OtherComponent.Update(self)
 			self.countdown = self.timer
 			self.canMove = true
 		else 
-			self.countdown = self.countdown - 5
+			self.countdown = self.countdown - self.timedecrementer
 		end
 	end
 end

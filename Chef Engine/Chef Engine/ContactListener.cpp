@@ -30,10 +30,10 @@ void ce::ContactListener::BeginContact(b2Contact* contact)
 	{
 		// Calls the potential OnTriggerEnter functions in lua components
 		// The function takes a pointer to the other objects Collider component
-		/*for (component : collA->GetGameObject()->luaComponents)
+		for (auto component : collA->GetGameObject()->luaComponents)
 		{
-			component->OnCollisionEnterFunc(collB);
-		}*/
+            component.second->OnTriggerEnter(collB);
+		}
 	}
 
 	// If the collider of the second body is a trigger
@@ -41,7 +41,10 @@ void ce::ContactListener::BeginContact(b2Contact* contact)
 	{
 		// Calls the potential OnTriggerEnter functions in lua components
 		// The function takes a pointer to the other objects Collider component
-		collB->OnTriggerEnter(collA);
+        for (auto component : collB->GetGameObject()->luaComponents)
+        {
+            component.second->OnTriggerEnter(collA);
+        }
 	}
 
 	// If none of the colliders are triggers
@@ -49,8 +52,14 @@ void ce::ContactListener::BeginContact(b2Contact* contact)
 	{
 		// Calls the potential OnCollisionEnter functions in lua components
 		// The function takes a pointer to the other objects Collider component
-		collA->OnCollisionEnter(collB);
-		collB->OnCollisionEnter(collA);
+        for (auto component : collA->GetGameObject()->luaComponents)
+        {
+            component.second->OnCollisionEnter(collB);
+        }
+        for (auto component : collB->GetGameObject()->luaComponents)
+        {
+            component.second->OnCollisionEnter(collA);
+        }
 	}
 }
 
@@ -70,7 +79,10 @@ void ce::ContactListener::EndContact(b2Contact* contact)
 	{
 		// Calls the potential OnTriggerExit functions in lua components
 		// The function takes a pointer to the other objects Collider component
-		collA->OnTriggerExit(collB);
+        for (auto component : collA->GetGameObject()->luaComponents)
+        {
+            component.second->OnTriggerExit(collB);
+        }
 	}
 
 	// If the collider of the second body is a trigger
@@ -78,13 +90,23 @@ void ce::ContactListener::EndContact(b2Contact* contact)
 	{
 		// Calls the potential OnTriggerExit functions in lua components
 		// The function takes a pointer to the other objects Collider component
-		collB->OnTriggerExit(collA);
+        for (auto component : collB->GetGameObject()->luaComponents)
+        {
+            component.second->OnTriggerExit(collA);
+        }
 	}
-	else
+	
+    if (!collB->GetIsTrigger() && !collA->GetIsTrigger())
 	{
 		// Calls the potential OnCollisionExit functions in lua components
 		// The function takes a pointer to the other objects Collider component
-		collA->OnCollisionExit(collB);
-		collB->OnCollisionExit(collA);
+        for (auto component : collA->GetGameObject()->luaComponents)
+        {
+            component.second->OnCollisionExit(collB);
+        }
+        for (auto component : collB->GetGameObject()->luaComponents)
+        {
+            component.second->OnCollisionExit(collA);
+        }
 	}
 }

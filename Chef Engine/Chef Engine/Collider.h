@@ -34,6 +34,9 @@ namespace ce
     ////////////////////////////////////////////////////////////
 	class Collider : public ce::Component
 	{
+        // Befriends the templated Bind function so it can access our protected functions
+        friend void LuaBridgeBinder::Bind<ce::Collider>(lua_State*);
+
 	public:
         ////////////////////////////////////////////////////////////
         /// \brief Default Collider Constructor.

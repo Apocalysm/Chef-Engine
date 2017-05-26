@@ -47,8 +47,13 @@ namespace ce
         ////////////////////////////////////////////////////////////
 		Camera();
 		~Camera();
+
+    
+
         // The main camera, the camera that's currently in use
         static Camera* main;
+        // The window of the game
+        static sf::RenderWindow* window;
 
 		void SetSize(const sf::Vector2f &size);
 		sf::Vector2f GetSize() const;
@@ -63,8 +68,8 @@ namespace ce
 		void SetFollow(const bool &follow);
 
 		sf::View GetView() const;
-
-		void Update();
+        
+        void UpdateCamera();
 
 	private:
 		static void DoBind(lua_State* L);

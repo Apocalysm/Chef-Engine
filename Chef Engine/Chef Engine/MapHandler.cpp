@@ -20,6 +20,7 @@ int MapHandler::tileHeight;
 
 MapHandler::MapHandler()
 {
+    map = nullptr;
 }
 
 
@@ -277,13 +278,13 @@ void MapHandler::LoadMap(const std::string& fileName)
 void ce::MapHandler::RegisterMap(int  index, std::string* mapName)
 {
 	tileMapNames.insert(tileMapNames.begin() + index, mapName);
-		}
+}
 
 
 //Loading in all the obect in the map and chech what sort of an object it is. 
 void ce::MapHandler::LoadObject()
 {
-	}
+}
 
 sf::Vector2i ce::MapHandler::GetMapSize()
 {

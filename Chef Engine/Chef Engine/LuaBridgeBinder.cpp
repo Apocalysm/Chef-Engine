@@ -7,7 +7,9 @@
 #include "Transform.h"
 #include "Sprite.h"
 #include "Camera.h"
+#include "Collider.h"
 
+#include "MapHandler.h"
 #include "SFMLKeyboard.h"
 #include "SFML_LuaBind.h"
 
@@ -130,7 +132,9 @@ void ce::LuaBridgeBinder::BindAll()
     Bind<ce::Sprite>(L);
     Bind<ce::Transform>(L);
     Bind<ce::Camera>(L);
+    Bind<ce::Collider>(L);
 
+    Bind<ce::MapHandler>(L);
     Bind<ce::SFMLKeyboard>(L);
     Bind<ce::SFML_Bind>(L);
 

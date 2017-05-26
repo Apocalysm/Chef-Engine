@@ -3,28 +3,29 @@ package.path = package.path .. ";../Chef Engine/Lua Scripts/Components/?.lua;../
 --require "OtherComponent"
 require "include"
 
-object = Chef.GameObject("Name")
+mapHandler = Chef.MapHandler()
+mapHandler:LoadMap("RefferenceMap.tmx")
+
+
+object = Chef.GameObject("Green")
 
 comp = object:AddLuaComponent(NewComponent)
-object.transform.position = Chef.Vector2f(150, 150)
+object.transform.position = Chef.Vector2f(100, 50)
 
 sprite = object:AddSprite()
 sprite:SetSprite("player.png")
-sprite.drawOrder = 10
+sprite.drawOrder = 0
 sprite.color = Chef.Color(0, 222, 0, 255)
 
-camera = object:AddCamera()
-camera.size = Chef.Vector2f(256, 148)
-camera.follow = true
+cameraFollow = object:AddLuaComponent(CameraFollow)
 
-object2 = Chef.GameObject("Name")
+object2 = Chef.GameObject("Red")
 
-comp3 = object2:AddLuaComponent(NewComponent)
-object2.transform.position = Chef.Vector2f(200, 150)
+comp2 = object2:AddLuaComponent(NewComponent)
+comp2.speed = 0;
+object2.transform.position = Chef.Vector2f(25, 0)
 
-sprite3 = object2:AddSprite()
-sprite3:SetSprite("player.png")
-sprite3.drawOrder = 10
-sprite3.color = Chef.Color(222, 0, 0, 255)
-comp3.speed = 0;
-
+sprite2 = object2:AddSprite()
+sprite2:SetSprite("player.png")
+sprite2.drawOrder = 0
+sprite2.color = Chef.Color(222, 0, 0, 255)

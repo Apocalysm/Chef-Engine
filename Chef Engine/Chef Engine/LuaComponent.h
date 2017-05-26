@@ -2,6 +2,7 @@
 
 #include "Component.h"
 #include "LuaBridgeBinder.h"
+#include "Collider.h"
 
 #include <memory>
 #include <vector>
@@ -22,6 +23,11 @@ namespace ce
         void Start() override;
         void Update() override;
 
+        void OnCollisionEnter(ce::Collider* collider);
+        void OnCollisionExit(ce::Collider* collider);
+        void OnTriggerEnter(ce::Collider* collider);
+        void OnTriggerExit(ce::Collider* collider);
+
         void LoadScript(lua_State* L, const std::string* scriptFilename, const std::string* tableName);
 
     private:
@@ -35,12 +41,22 @@ namespace ce
         // Points to the Component 'Update' method, in a lua script
         std::unique_ptr<luabridge::LuaRef> updateFunc;
 
+        // Points to the Component 'OnCollisionEnter' method, in a lua script
+        std::unique_ptr<luabridge::LuaRef> onCollisionEnterFunc;
+        // Points to the Component 'OnCollisionExit' method, in a lua script
+        std::unique_ptr<luabridge::LuaRef> onCollisionExitFunc;
+        // Points to the Component 'OnTriggerEnter' method, in a lua script
+        std::unique_ptr<luabridge::LuaRef> onTriggerEnterFunc;
+        // Points to the Component 'OnTriggerExit' method, in a lua script
+        std::unique_ptr<luabridge::LuaRef> onTriggerExitFunc;
+
+
         // Takes in a table and creates a new table and copies all of that tables members and puts them in the new one
         static luabridge::LuaRef LoadComponent(luabridge::LuaRef component);
 
         static void DoBind(lua_State* L);
         
-        static std::unordered_map<std::string, luabridge::LuaRef> getKeyValueMap(const luabridge::LuaRef & table);
+        static std::pair<std::unordered_map<std::string, luabridge::LuaRef>, std::unordered_map<int, luabridge::LuaRef>> getKeyValueMap(const luabridge::LuaRef & table);
     };
 }
 
