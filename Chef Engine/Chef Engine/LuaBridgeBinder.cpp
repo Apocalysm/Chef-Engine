@@ -2,11 +2,16 @@
 
 // All the different classes we want to bind with Lua Bridge
 #include "GameObject.h"
+
 #include "LuaComponent.h"
 #include "Transform.h"
 #include "Sprite.h"
-#include "SFML_LuaBind.h"
+#include "Camera.h"
 #include "Collider.h"
+
+#include "MapHandler.h"
+#include "SFMLKeyboard.h"
+#include "SFML_LuaBind.h"
 
 // dirent.h Allows us to read directories easier
 #include <dirent.h>
@@ -53,7 +58,7 @@ static const std::vector<std::string*> LoadDirectory(const std::string dir_path)
 	std::vector<std::string*> output;
 
 	// First we check if we can open the directory path
-    if ((dir = opendir(dir_path.c_str())) != nullptr)
+	if ((dir = opendir(dir_path.c_str())) != nullptr)
 	{
 		// Prints all the files and directories within directory
 		while ((ent = readdir(dir)) != nullptr)
@@ -62,7 +67,7 @@ static const std::vector<std::string*> LoadDirectory(const std::string dir_path)
 			std::string newPath = dir_path;
 			newPath.append("\\");
 			newPath.append(ent->d_name);
-			
+				
 			// Checks if the directory entry is a directory
 			if (ent->d_type == DIRECTORY_FLAG)
 			{	
@@ -121,12 +126,18 @@ void ce::LuaBridgeBinder::BindAll()
 
 	// Here you put all the method calls for the classes you want to bind
     Bind<ce::GameObject>(L);
+
     Bind<ce::Component>(L);
     Bind<ce::LuaComponent>(L);
     Bind<ce::Sprite>(L);
     Bind<ce::Transform>(L);
+    Bind<ce::Camera>(L);
+    Bind<ce::Collider>(L);
+
+    Bind<ce::MapHandler>(L);
+    Bind<ce::SFMLKeyboard>(L);
     Bind<ce::SFML_Bind>(L);
-	Bind<ce::Collider>(L);
+	
 	
 	// Gets all the .lua file_paths
     std::vector<std::string*> file_paths = LoadDirectory(LUA_SCRIPTS_PATH);
@@ -160,7 +171,7 @@ void ce::LuaBridgeBinder::LoadLua(lua_State * L, const std::string & tableName, 
     if (std::string(path).find(LUA_COMPONENTS_PATH) != std::string(path).npos)
     {
         luabridge::LuaRef table = luabridge::getGlobal(L, tableName.c_str());
-        RegisterComponent(table);
+        RegisterComponent(table);   
     }
 }
 

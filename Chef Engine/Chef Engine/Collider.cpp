@@ -53,7 +53,7 @@ void ce::Collider::Update()
 				OnTriggerStay(it->second);
 			else
 				OnCollisionStay(it->second);
-		}
+}
 	}
 }
 
@@ -252,7 +252,7 @@ void Collider::DoBind(lua_State * L)
 {
 	luabridge::getGlobalNamespace(L)
 		.beginNamespace("Chef")
-			.beginClass<Collider>("Collider")
+			.deriveClass<Collider, ce::Component>("Collider")
 				.addFunction("SetFitSprite", &Collider::SetFitSprite)
 				.addProperty("isTrigger", &Collider::GetIsTrigger, &Collider::SetIsTrigger)
 			.endClass()

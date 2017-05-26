@@ -80,8 +80,7 @@ void ce::ContactListener::EndContact(b2Contact* contact)
 		// The function takes a pointer to the other objects Collider component
 		collB->OnTriggerExit(collA);
 	}
-
-	if (!collB->GetIsTrigger() && !collA->GetIsTrigger())
+	else
 	{
 		// Calls the potential OnCollisionExit functions in lua components
 		// The function takes a pointer to the other objects Collider component

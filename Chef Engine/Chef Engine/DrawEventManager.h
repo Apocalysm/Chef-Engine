@@ -18,6 +18,7 @@ namespace ce
 
         static void AddSprite(Sprite* sprite);
 		static void RemoveSprite(Sprite* sprite);
+        static void MoveSprite(Sprite * sprite, int newDrawOrder);
 		static void AddTmxLayers(std::vector<std::map<int, ce::TileMapLayer*>> tileMapLayers);
 		void Draw(sf::RenderWindow& window);
 

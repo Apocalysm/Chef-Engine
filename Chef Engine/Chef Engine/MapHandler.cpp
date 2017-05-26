@@ -20,6 +20,7 @@ int MapHandler::tileHeight;
 
 MapHandler::MapHandler()
 {
+    map = nullptr;
 }
 
 

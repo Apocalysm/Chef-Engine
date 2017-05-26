@@ -7,19 +7,21 @@ package.path = package.path .. ";../Chef Engine/Lua Scripts/Components/?.lua;"
 -- You then have to write require "<filename>" for all the Component scripts
 require "NewComponent"
 require "OtherComponent"
+require "CameraFollow"
 
 Components = 
 {
 	-- Here you simply add more components as you go
-	[1] = OtherComponent,
-	[2] = NewComponent
+	[1] = CameraFollow,
+	[2] = NewComponent,
+	[3] = OtherComponent
 	
 }
 
 local IDTicker = 0
 
 -- Loops through the table above and gives every component their own ID
-for key, value in pairs(Components) do
-	value.ID = IDTicker
+for i = 1, #Components do
+	Components[i].ID = IDTicker
 	IDTicker = IDTicker + 1
 end

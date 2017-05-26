@@ -47,6 +47,26 @@ void ce::DrawEventManager::RemoveSprite(Sprite* sprite)
 	}
 }
 
+void ce::DrawEventManager::MoveSprite(Sprite* sprite, const int newDrawOrder)
+{
+    // Checks if the sprite isNew or not
+    if (!sprite->isNew)
+    {
+        // Removes the sprite from it's old position
+        enumToMapSpr[sprite->drawOrder].erase(sprite->gameObject->GetID());
+        // Adds it to the new position
+        enumToMapSpr[newDrawOrder][sprite->gameObject->GetID()] = sprite;
+    }
+    else
+    {
+        // Removes the sprite from it's old position
+        enumToMapNewSpr[sprite->drawOrder].erase(sprite->gameObject->GetID());
+        // Adds it to the new position
+        enumToMapNewSpr[newDrawOrder][sprite->gameObject->GetID()] = sprite;
+    }
+
+}
+
 
 void ce::DrawEventManager::AddTmxLayers(std::vector<std::map<int, ce::TileMapLayer*>> layers)
 {

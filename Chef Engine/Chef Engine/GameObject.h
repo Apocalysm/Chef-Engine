@@ -10,20 +10,16 @@
 #include <typeinfo>
 #include <utility>
 
-/*! \defgroup luaGroup LuaCallable
-*   This group contains all the functions that are callable from Lua scripts.
-*/
 
 namespace ce
 {
 	// Forward declaration to Component since Component includes GameObject
 	class Component;
 	
-    /*! \defgroup GameObjectGroup GameObject
-    *   \ingroup luaGroup
-    *   \brief Base class for all entities in Chef Engine.
-    *   \brief Can hold Components to add more behaviour to it.
-    */
+////////////////////////////////////////////////////////////
+/// \brief Base Class that holds Components
+/// 
+////////////////////////////////////////////////////////////
 	class GameObject
 	{
 		// Befriends the templated Bind function so it can access our protected functions
@@ -32,36 +28,24 @@ namespace ce
         typedef unsigned long long int64;
 
 	public:
-        // Adds a default name 'none' tp the GameObject
 		GameObject();
 
-        /*! \ingroup GameObjectGroup
-        *   \brief Lua Constructor for GameObject
-        *
-        *   Example for using GameObject's constructor:
-        *	\code{.unparsed}
-        *	-- Creates a new GameObject named "Player"
-        *	-- Adds a Sprite Component to it.
-        *
-        *	local ExampleScript = {}
-        *
-        *	ExampleScript:Start = function()
-        *		local gameObj = GameObject("Player")
-        *
-        *		local sprite = GameObject.AddComponent(SpriteID)
-        *	end
-        *
-        *	return ExampleScript
-        *	\endcode
-        */ 
+        ////////////////////////////////////////////////////////////
+        /// \brief Constructor to use in Lua
+        /// 
+        /// \param name The name given to the GameObject
+        ///
+        /// \code
+        /// --Creates a GameObject called "name"
+        ///
+        /// object = Chef.GameObject("name")
+        /// \endcode
+        ////////////////////////////////////////////////////////////
 		GameObject(std::string name);
 
-        /*! \example GameObject_Constructor_Example.lua
-        *   This is an example of doing example code.
-        */
 		~GameObject();
 
-        
+
         #pragma region Component Methods
 		// Adds a new component to the GameObject based on the typename in the method call
 		template<typename T> 
@@ -77,22 +61,51 @@ namespace ce
         #pragma endregion
 
         #pragma region LuaComponent Methods
-        // Creates and adds a LuaComponent by passing a LuaRef into it
+        ////////////////////////////////////////////////////////////
+        /// \brief Adds a component created in Lua
+        /// 
+        ///\param ref This is the Component Type you want to
+        /// the GameObject
+        ///
+        /// \code
+        /// --Creates a GameObject and adds a component of type 'PlayerController' to it
+        ///
+        /// object = Chef.GameObject("name")
+        ///
+        /// controller = object:GetLuaComponent(PlayerController.ID)
+        /// \endcode
+        ////////////////////////////////////////////////////////////
         luabridge::LuaRef AddLuaComponent(luabridge::LuaRef ref);
 
+        ////////////////////////////////////////////////////////////
+        /// \brief Gets the specified Lua Component in the GameObject
+        /// 
+        ///\param ID The ID of the Component you want to get
+        ///
+        ///
+        ///\code
+        /// --Tries to get a 'PlayerController' component from the GameObject "object"
+        ///
+        /// controller = object:GetLuaComponent(PlayerController.ID)
+        /// \endcode
+        ////////////////////////////////////////////////////////////
         luabridge::LuaRef GetLuaComponent(int ID);
-
+        
+        ////////////////////////////////////////////////////////////
+        /// \brief Removes the specified Lua Component from the GameObject
+        /// 
+        ///\param ID The ID of the Component you want to remove
+        ///
+        ///\code
+        /// --Tries to remove the 'PlayerController' component from the GameObject "object"
+        ///
+        /// controller = object:RemoveLuaComponent(PlayerController.ID)
+        /// \endcode
+        ////////////////////////////////////////////////////////////
         void RemoveLuaComponent(int ID);
       
         #pragma endregion
 
-		// An enumerator for differentiating our GameObjects between layers
-        /*! \enum Layers
-            \brief Layers are for sorting objects
-
-         *  Set the class: GameObject::layer variable of your GameObject to one of the available Layers and the GameObject will be sorted under that layer.
-         *  This allows you to find all GameObjects or Sprites in a layer and disable or something else.
-         */
 		enum Layers { Default, Player, Enemy, Terrain, UI};
 
 		// The amount of different values in the Layers enum
@@ -117,7 +130,15 @@ namespace ce
 		std::string GetTag() const;
 		void SetTag(std::string tag);
 
-		// Destroys the specified Object instance
+        ////////////////////////////////////////////////////////////
+		/// \brief Removes the GameObject and all its Components from the game
+        ///
+        /// \code
+        /// -- Removes the GameObject called "object"
+        ///
+        /// object:Destroy()
+        /// \endcode
+        ////////////////////////////////////////////////////////////
 		void Destroy();
 
 		// Getter for instanceID
@@ -136,14 +157,16 @@ namespace ce
 
         std::map<int, LuaComponent*> luaComponents;
 
+        /// \brief What the GameObject is called
 		std::string name;
 
-		// Specifies what kind of Object this is
+		/// \brief The tag of this GameObject
 		std::string tag;
 
-		// If the gameObject should be considered active or not
+		/// \brief If the GameObject will be updated or be interactive
 		bool active;
 
+        /// \brief Where the GameObject is sorted
 		Layers layer;
 
 		// number to differentiate our different GameObject
@@ -155,6 +178,7 @@ namespace ce
 		// If we created the object this frame
 		bool isNew;
 
+        /// \brief The Transform attached to this GameObject by default
 		Transform* transform;
 	    
         // Calls the Start method on all the Components that are marked is new / was created this frame
