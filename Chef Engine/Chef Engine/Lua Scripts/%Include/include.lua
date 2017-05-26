@@ -7,15 +7,12 @@ package.path = package.path .. ";../Chef Engine/Lua Scripts/Components/?.lua;"
 -- You then have to write require "<filename>" for all the Component scripts
 require "NewComponent"
 require "OtherComponent"
-require "CameraFollow"
 
 Components = 
 {
 	-- Here you simply add more components as you go
-	[1] = CameraFollow,
-	[2] = NewComponent,
-	[3] = OtherComponent
-	
+	[1] = NewComponent,
+	[2] = OtherComponent
 }
 
 local IDTicker = 0

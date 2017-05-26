@@ -29,14 +29,17 @@ LuaComponent::LuaComponent(luabridge::LuaRef ref) :
 
     // Sets all the Collision Event methods of the Lua Script
     if (ref["OnCollisionEnter"].isFunction())
-{
+	{
         onCollisionEnterFunc = std::make_unique<luabridge::LuaRef>(ref["OnCollisionEnter"]);
-}
+	}
     if (ref["OnCollisionExit"].isFunction())
     {
         onCollisionExitFunc = std::make_unique<luabridge::LuaRef>(ref["OnCollisionExit"]);
     }
-
+	if (ref["OnCollisionStay"].isFunction())
+	{
+		onCollisionStayFunc = std::make_unique<luabridge::LuaRef>(ref["OnCollisionStay"]);
+	}
     if (ref["OnTriggerEnter"].isFunction())
     {
         onTriggerEnterFunc = std::make_unique<luabridge::LuaRef>(ref["OnTriggerEnter"]);
@@ -45,6 +48,10 @@ LuaComponent::LuaComponent(luabridge::LuaRef ref) :
     {
         onTriggerExitFunc = std::make_unique<luabridge::LuaRef>(ref["OnTriggerExit"]);
     }
+	if (ref["OnTriggerStay"].isFunction())
+	{
+		onTriggerStayFunc = std::make_unique<luabridge::LuaRef>(ref["OnTriggerStay"]);
+	}
 
 }
 
@@ -88,6 +95,14 @@ void ce::LuaComponent::OnCollisionExit(ce::Collider * collider)
     }
 }
 
+void ce::LuaComponent::OnCollisionStay(ce::Collider * collider)
+{
+	if (onCollisionStayFunc != nullptr)
+	{
+		(*onCollisionStayFunc)(ref, collider);
+	}
+}
+
 void ce::LuaComponent::OnTriggerEnter(ce::Collider * collider)
 {
     if (onTriggerEnterFunc != nullptr)
@@ -102,7 +117,15 @@ void ce::LuaComponent::OnTriggerExit(ce::Collider * collider)
     {
         (*onTriggerExitFunc)(ref, collider);
     }
-    }
+}
+
+void ce::LuaComponent::OnTriggerStay(ce::Collider * collider)
+{
+	if (onTriggerStayFunc != nullptr)
+	{
+		(*onTriggerStayFunc)(ref, collider);
+	}
+}
 #pragma endregion
 
 luabridge::LuaRef LuaComponent::LoadComponent(luabridge::LuaRef component)
@@ -122,7 +145,7 @@ luabridge::LuaRef LuaComponent::LoadComponent(luabridge::LuaRef component)
 
 
 std::pair<std::unordered_map<std::string, luabridge::LuaRef>, std::unordered_map<int, luabridge::LuaRef>> LuaComponent::getKeyValueMap(const luabridge::LuaRef& table)
-    {
+{
     std::unordered_map<std::string, luabridge::LuaRef> string_result;
     std::unordered_map<int, luabridge::LuaRef> number_result;
 
@@ -155,14 +178,8 @@ std::pair<std::unordered_map<std::string, luabridge::LuaRef>, std::unordered_map
     lua_pop(L, 1); 
 
     return std::make_pair(string_result, number_result);
-    }
 }
 
-
-luabridge::LuaRef LuaComponent::LoadComponent(luabridge::LuaRef component)
-{
-    // Creates an empty table in the same state as the component we want to copy
-    luabridge::LuaRef newComponent = luabridge::newTable(component.state());
 
 void ce::LuaComponent::DoBind(lua_State * L)
 {

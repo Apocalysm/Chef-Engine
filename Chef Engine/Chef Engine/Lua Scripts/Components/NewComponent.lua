@@ -1,6 +1,6 @@
 package.path = package.path .. ";../Chef Engine/Lua Scripts/Components/?.lua;../Chef Engine/Lua Scripts/?.lua;"
 require "OtherComponent"
-require "CameraFollow"
+--require "CameraFollow"
 NewComponent = {ID = -1}
 
 -- This is what you call to create a new instance of the component
@@ -27,7 +27,7 @@ function NewComponent.Start(self)
 	self.other = self.gameObject:AddLuaComponent(OtherComponent)
 
 	self.collision = self.gameObject:AddCollider()
-	self.collision:SetFitSprite(true, true, false)
+	self.collision:SetFitSprite(true, true, true)
 
 end
 
@@ -57,10 +57,22 @@ function NewComponent.Update(self)
 
 end
 
-function NewComponent.OnCollisionEnter(self, collider)
+--[[function NewComponent.OnCollisionEnter(self, collider)
 	print("Hello there")
 end
 function NewComponent.OnCollisionExit(self, collider)
 	print("Auf Wiedersehen")
 end
+function NewComponent.OnCollisionStay(self, collider)
+	print("Stay")
+end]]--
 
+function NewComponent.OnTriggerEnter(self, collider)
+	print("Trigger Enter")
+end
+function NewComponent.OnTriggerExit(self, collider)
+	print("Trigger Exit")
+end
+function NewComponent.OnTriggerStay(self, collider)
+	print("Trigger Stay")
+end

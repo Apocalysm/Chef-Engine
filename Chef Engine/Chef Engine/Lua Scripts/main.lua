@@ -17,7 +17,7 @@ sprite:SetSprite("player.png")
 sprite.drawOrder = 0
 sprite.color = Chef.Color(0, 222, 0, 255)
 
-cameraFollow = object:AddLuaComponent(CameraFollow)
+--cameraFollow = object:AddLuaComponent(CameraFollow)
 
 object2 = Chef.GameObject("Red")
 

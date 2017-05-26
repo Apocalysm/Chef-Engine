@@ -28,27 +28,21 @@ void ce::ContactListener::BeginContact(b2Contact* contact)
 	// If the collider of the first body is a trigger
 	if (collA->GetIsTrigger())
 	{
-		// Calls the potential OnTriggerEnter functions in lua components
-		// The function takes a pointer to the other objects Collider component
-		/*for (component : collA->GetGameObject()->luaComponents)
-		{
-			component->OnCollisionEnterFunc(collB);
-		}*/
+		// Calls the OnTriggerEnter event and passes the colliding collider
+		collA->OnTriggerEnter(collB);
 	}
 
 	// If the collider of the second body is a trigger
 	if (collB->GetIsTrigger())
 	{
-		// Calls the potential OnTriggerEnter functions in lua components
-		// The function takes a pointer to the other objects Collider component
+		// Calls the OnTriggerEnter event and passes the colliding collider
 		collB->OnTriggerEnter(collA);
 	}
 
 	// If none of the colliders are triggers
 	if (!collB->GetIsTrigger() && !collA->GetIsTrigger())
 	{
-		// Calls the potential OnCollisionEnter functions in lua components
-		// The function takes a pointer to the other objects Collider component
+		// Calls the OnCollisionEnter event and passes the colliding collider
 		collA->OnCollisionEnter(collB);
 		collB->OnCollisionEnter(collA);
 	}
@@ -68,22 +62,20 @@ void ce::ContactListener::EndContact(b2Contact* contact)
 	// If the collider of the first body is a trigger
 	if (collA->GetIsTrigger())
 	{
-		// Calls the potential OnTriggerExit functions in lua components
-		// The function takes a pointer to the other objects Collider component
+		// Calls the OnTriggerExit event and passes the collider that stopped colliding
 		collA->OnTriggerExit(collB);
 	}
 
 	// If the collider of the second body is a trigger
 	if (collB->GetIsTrigger())
 	{
-		// Calls the potential OnTriggerExit functions in lua components
-		// The function takes a pointer to the other objects Collider component
+		// Calls the OnTriggerExit event and passes the collider that stopped colliding
 		collB->OnTriggerExit(collA);
 	}
-	else
+
+	if (!collB->GetIsTrigger() && !collA->GetIsTrigger())
 	{
-		// Calls the potential OnCollisionExit functions in lua components
-		// The function takes a pointer to the other objects Collider component
+		// Calls the OnCollisionExit event and passes the collider that stopped colliding
 		collA->OnCollisionExit(collB);
 		collB->OnCollisionExit(collA);
 	}

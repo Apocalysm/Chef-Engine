@@ -227,57 +227,7 @@ void GameObject::Destroy()
         std::cerr << "You sadly can't add the same component type twice to a GameObject. Yet..." << std::endl;
         assert(false);
     }
-    
-    // Gets a LuaComponent and returns that components specified LuaRef
-    luabridge::LuaRef GameObject::GetLuaComponent(int ID)
-    {
-        // Checks if there is an element on index "ID" 
-        if (luaComponents[ID]->ref.isTable())
-        {
-            return luaComponents[ID]->ref;
-        }
-    }
 
-    // Creates a new LuaComponent and adds it to this GameObject
-    luabridge::LuaRef GameObject::AddLuaComponent(luabridge::LuaRef ref)
-    {
-        if (!ref.isTable())
-        {
-            std::cerr << lua_tostring(ref.state(), -1) << std::endl;
-            assert(false);
-        }
-        // Checks if the ref has a variable "ID"
-        if (!ref["ID"].isNumber())
-        {
-            std::cerr << lua_tostring(ref.state(), -1) << std::endl;
-            assert(false);
-        }
-
-        int id = ref["ID"];
-
-        //if (luaComponents.find(id) == luaComponents.end())
-        {
-            // Creates a new LuaComponent with the ref we passed as an argument
-            LuaComponent* newComponent = new ce::LuaComponent(ref);
-
-            // Sets the component's gameObject reference
-            newComponent->SetGameObject(this);
-
-            // Passes this GameObject and the new luaComponent back to our new component instance in Lua
-            luabridge::LuaRef newRef = ref["Create"](newComponent);
-
-            // Sets the LuaComponent's ref to the newly created one
-            newComponent->ref = newRef;
-
-            // Adds the new Lua Component to this GameObject
-            luaComponents.insert(std::make_pair(id, newComponent));
-
-            // Sends the newRef back into Lua
-            return newRef;
-        }
-        //std::cerr << "You sadly can't add the same component type twice to a GameObject. Yet..." << std::endl;
-        //assert(false);
-    }
     
     // Gets a LuaComponent and returns that components specified LuaRef
     luabridge::LuaRef GameObject::GetLuaComponent(int ID)

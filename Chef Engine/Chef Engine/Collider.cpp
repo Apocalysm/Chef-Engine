@@ -45,15 +45,17 @@ void ce::Collider::Update()
 						
 	body->SetTransform(center, transRot);
 
+	// If this collider is currently colliding with any other colliders
 	if (collidingColls.size() != 0)
 	{
-		for (auto it = collidingColls.begin(); it != collidingColls.end(); it++)
+		for (auto it : collidingColls)
 		{
+			// Calls either Trigger or Collision event and passes the colliding collider
 			if (isTrigger)
-				OnTriggerStay(it->second);
+				OnTriggerStay(it.second);
 			else
-				OnCollisionStay(it->second);
-}
+				OnCollisionStay(it.second);
+		}
 	}
 }
 
@@ -204,47 +206,85 @@ void ce::Collider::SetGameObject(GameObject * gameObject)
 
 void ce::Collider::OnCollisionEnter(Collider* other)
 {
+	// Adds the colliding collider to the map
 	collidingColls.insert(std::make_pair(other->gameObject->GetID(), other));
 
+	// Calls potential OnCollisionEnter methdods in lua-components
 	for (auto component : gameObject->luaComponents)
 	{
-		component.second->
+		component.second->OnCollisionEnter(other);
 	}
 
-	std::cout << "Collision Enter" << std::endl;
+	//std::cout << "Collision Enter" << std::endl;
 }
 
 
 void ce::Collider::OnCollisionExit(Collider* other)
 {
+	// Erases the collider that this collider stopped colliding with from the map
 	collidingColls.erase(other->GetGameObject()->GetID());
-	std::cout << "Collision Exit" << std::endl;
+
+	// Calls potential OnCollisionExit methdods in lua-components
+	for (auto component : gameObject->luaComponents)
+	{
+		component.second->OnCollisionExit(other);
+	}
+
+	//std::cout << "Collision Exit" << std::endl;
 }
 
 
 void ce::Collider::OnCollisionStay(Collider* other)
 {
-	std::cout << "Collision Stay" << std::endl;
+	// Calls potential OnCollisionStay methdods in lua-components
+	for (auto component : gameObject->luaComponents)
+	{
+		component.second->OnCollisionStay(other);
+	}
+
+	//std::cout << "Collision Stay" << std::endl;
 }
 
 
 void ce::Collider::OnTriggerEnter(Collider* other)
 {
+	// Adds the colliding collider to the map
 	collidingColls.insert(std::make_pair(other->gameObject->GetID(), other));
-	std::cout << "Trigger Enter" << std::endl;
+
+	// Calls potential OnTriggerEnter methdods in lua-components
+	for (auto component : gameObject->luaComponents)
+	{
+		component.second->OnTriggerEnter(other);
+	}
+
+	//std::cout << "Trigger Enter" << std::endl;
 }
 
 
 void ce::Collider::OnTriggerExit(Collider* other)
 {
+	// Erases the collider that this collider stopped colliding with from the map
 	collidingColls.erase(other->GetGameObject()->GetID());
-	std::cout << "Trigger Exit" << std::endl;
+
+	// Calls potential OnTriggerExit methdods in lua-components
+	for (auto component : gameObject->luaComponents)
+	{
+		component.second->OnTriggerExit(other);
+	}
+
+	//std::cout << "Trigger Exit" << std::endl;
 }
 
 
 void ce::Collider::OnTriggerStay(Collider * other)
 {
-	std::cout << "Trigger Stay" << std::endl;
+	// Calls potential OnTriggerStay methdods in lua-components
+	for (auto component : gameObject->luaComponents)
+	{
+		component.second->OnTriggerStay(other);
+	}
+
+	//std::cout << "Trigger Stay" << std::endl;
 }
 
 

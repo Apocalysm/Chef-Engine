@@ -25,10 +25,10 @@ namespace ce
 
         void OnCollisionEnter(ce::Collider* collider);
         void OnCollisionExit(ce::Collider* collider);
+		void OnCollisionStay(ce::Collider* collider);
         void OnTriggerEnter(ce::Collider* collider);
         void OnTriggerExit(ce::Collider* collider);
-
-        void LoadScript(lua_State* L, const std::string* scriptFilename, const std::string* tableName);
+		void OnTriggerStay(ce::Collider* collider);
 
     private:
         friend class ce::GameObject;
@@ -45,10 +45,14 @@ namespace ce
         std::unique_ptr<luabridge::LuaRef> onCollisionEnterFunc;
         // Points to the Component 'OnCollisionExit' method, in a lua script
         std::unique_ptr<luabridge::LuaRef> onCollisionExitFunc;
+		// Points to the Component 'OnCollisionStay' method in lua script
+		std::unique_ptr<luabridge::LuaRef> onCollisionStayFunc;
         // Points to the Component 'OnTriggerEnter' method, in a lua script
         std::unique_ptr<luabridge::LuaRef> onTriggerEnterFunc;
         // Points to the Component 'OnTriggerExit' method, in a lua script
         std::unique_ptr<luabridge::LuaRef> onTriggerExitFunc;
+		// Points to the Component 'OnTriggerStay' method in lua script
+		std::unique_ptr<luabridge::LuaRef> onTriggerStayFunc;
 
 
         // Takes in a table and creates a new table and copies all of that tables members and puts them in the new one
