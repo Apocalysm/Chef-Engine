@@ -49,7 +49,7 @@ void Transform::SetPosition(const float x, const float y)
 		gameObject->GetComponent<ce::Collider>()->body->SetTransform(pos, rotation);
 	}
 	else*/
-		SetPosition(sf::Vector2f(x, y));
+	SetPosition(sf::Vector2f(x, y));
 }
 
 
@@ -75,7 +75,7 @@ void ce::Transform::Move(sf::Vector2f movement)
 	else
 	{*/
 		lastPos = position;
-		position += movement;
+    position += movement;
 	//}
 }
 
@@ -140,3 +140,21 @@ void ce::Transform::SetGameObject(GameObject * gameObject)
 {
 	this->gameObject = gameObject;
 }
+
+
+void Transform::DoBind(lua_State * L)
+{
+    luabridge::getGlobalNamespace(L)
+        .beginNamespace("Chef")
+            .deriveClass<Transform, Component>("Transform")
+                .addConstructor<void(*)(void)>()
+                .addProperty("position", &Transform::GetPosition, &Transform::SetPosition)
+                .addProperty("rotation", &Transform::GetRotation, &Transform::SetRotation)
+                .addProperty("scale", &Transform::GetScale, &Transform::SetScale)
+                .addFunction("Move", &Transform::Move)
+                .addFunction("Rotate", &Transform::Rotate)
+            .endClass()
+        .endNamespace();
+}
+
+

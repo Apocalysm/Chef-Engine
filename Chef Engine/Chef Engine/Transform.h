@@ -1,10 +1,14 @@
 #pragma once
 #include "Component.h"
+#include "LuaBridgeBinder.h"
 
 namespace ce
 {
 	class Transform : public ce::Component
 	{
+        // Befriends the templated Bind function so it can access our protected functions
+        friend void LuaBridgeBinder::Bind<ce::Transform>(lua_State*);
+
 	public:
 		Transform();
 		Transform(const sf::Vector2f& position, const float rotation, const sf::Vector2f& scale);
@@ -53,6 +57,9 @@ namespace ce
 		sf::Vector2f velocity;
         float rotation;
 		sf::Vector2f scale;
+
+        // Binds parts of this script to Lua
+        static void DoBind(lua_State* L);
 	};
 }
 

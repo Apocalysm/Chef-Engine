@@ -140,6 +140,7 @@
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="LuaBridgeBinder.cpp" />
     <ClCompile Include="Math.cpp" />
+    <ClCompile Include="SFMLKeyboard.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="TileMapLayer.cpp" />
@@ -161,6 +162,8 @@
     <ClInclude Include="MapHandler.h" />
     <ClInclude Include="LuaBridgeBinder.h" />
     <ClInclude Include="Math.h" />
+    <ClInclude Include="SFMLKeyboard.h" />
+    <ClInclude Include="SFML_LuaBind.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="TileMapLayer.h" />

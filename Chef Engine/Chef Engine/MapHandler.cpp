@@ -129,7 +129,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 				sf::VertexArray& vertexLayer = tileMapLayers[k][tile.tilesetId]->GetVertexArray();
 				//Get the quad
 				sf::Vertex* quad = &vertexLayer[(i * mapWidth + j) * 4];
-				
+
 				//Find the position in the tileset texture
 				unsigned int tileNumber = tile.id;
 				int tu;
@@ -172,7 +172,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 		std::sort(objectsVector.begin(), objectsVector.end(), [](Tmx::Object* a, Tmx::Object* b) { return a->GetY() < b->GetY(); });
 
 		for (size_t j = 0; j < objectsVector.size(); j++)
-		{
+{
 			const Tmx::Object* object = objectsVector.at(j);
 
 			ce::GameObject* gameObject = new ce::GameObject(object->GetName());
@@ -190,7 +190,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 			{
 
 				break;
-			}
+}
 			case Tmx::TMX_PT_POLYLINE:
 			{
 				break;
@@ -203,7 +203,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 			//Check if the object is an rect or a sprite object
 			case Tmx::TMX_PT_NONE:
-			{
+{
 				//Check if the object is part of an tileset
 				if (object->GetGid() != 0)
 				{
@@ -212,7 +212,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 					spriteComponent->SetDrawOrder(layers[i]->GetParseOrder());
 
 					for (int k = tileSets.size() - 1; k >= 0; k--)
-					{
+	{
 						Tmx::Tileset* ts = tileSets[k];
 
 						bool flipped_horizontally = (object->GetGid() & FLIPPED_HORIZONTALLY_FLAG);
@@ -222,7 +222,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 						int unflippedGid = object->GetGid() & ~(FLIPPED_VERTICALLY_FLAG | FLIPPED_HORIZONTALLY_FLAG | FLIPPED_DIAGONALLY_FLAG);
 
 						if (ts->GetFirstGid() <= unflippedGid)
-						{
+		{
 							int localID = unflippedGid - ts->GetFirstGid();
 
 
@@ -241,7 +241,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 								sprite->setTextureRect(sf::IntRect(tu * (object->GetWidth() + 1) - 1, tv * object->GetHeight(), -object->GetWidth(), object->GetHeight()));
 
 							sprite->setOrigin(0, tileHeight);
-							spriteComponent->SetRealSprite(sprite);
+							spriteComponent->ChangeSprite(sprite);
 
 							break;
 						}
@@ -249,7 +249,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 				}
 				else
-				{
+			{
 					// This is a rect!
 					sf::Vector2f rectSize = sf::Vector2f(object->GetWidth(), object->GetHeight());
 					
@@ -277,13 +277,13 @@ void MapHandler::LoadMap(const std::string& fileName)
 void ce::MapHandler::RegisterMap(int  index, std::string* mapName)
 {
 	tileMapNames.insert(tileMapNames.begin() + index, mapName);
-}
+		}
 
 
 //Loading in all the obect in the map and chech what sort of an object it is. 
 void ce::MapHandler::LoadObject()
 {
-}
+	}
 
 sf::Vector2i ce::MapHandler::GetMapSize()
 {

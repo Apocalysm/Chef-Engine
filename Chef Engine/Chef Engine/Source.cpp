@@ -8,6 +8,7 @@
 #include "Collider.h"
 #include "CollisionManager.h"
 #include "Camera.h"
+#include "SFMLKeyboard.h"
 #include "ContactListener.h"
 
 #include <SFML/Graphics.hpp>
@@ -54,6 +55,9 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	ce::CollisionManager* collManager = new ce::CollisionManager();
 	ce::ContactListener contactListener;
 	collManager->GetWorld()->SetContactListener(&contactListener);
+
+    // Binds all defined classes with LuaBridge
+    ce::LuaBridgeBinder::BindAll();
 
 	ce::GameObject* object = new ce::GameObject();
 
@@ -102,11 +106,14 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
     float count = 5;
     float timer = 0;
-	
+
 	map->LoadMap("RefferenceMap.tmx");
 	std::string* mapName = new std::string("RefferenceMap.tmx");
 	map->RegisterMap(0, mapName);
 	map->LoadObject();
+
+	window.setKeyRepeatEnabled(false);
+	ce::SFMLKeyboard::Initialize();
 
 	while (window.isOpen())
 	{
@@ -115,33 +122,46 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
+
+			else if (event.type == sf::Event::KeyPressed)
+			{
+				ce::SFMLKeyboard::SetKeyDown(event.key.code);
+			}
+			else if (event.type == sf::Event::KeyReleased)
+			{
+				ce::SFMLKeyboard::SetKeyUp(event.key.code);
+			}
+			else if (event.type == sf::Event::LostFocus || event.type == sf::Event::GainedFocus)
+			{
+				ce::SFMLKeyboard::ResetKeyboard();
+		}
 		}
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		{
-			map->LoadMap("sewers.tmx");
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		{
+        {
+            map->LoadMap("sewers.tmx");
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        {
             map->LoadMapIndex(0);
-		}
+        }
         
         if (timer >= count)
         {          
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		{
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+            {
                 object->GetTransform()->Move(sf::Vector2f(0, -1));
                 timer = 0;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		{
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+            {
                 object->GetTransform()->Move(sf::Vector2f(0, 1)); timer = 0;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		{
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+            {
                 object->GetTransform()->Move(sf::Vector2f(-1, 0)); timer = 0;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		{
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+            {
                 object->GetTransform()->Move(sf::Vector2f(1, 0)); timer = 0;
             }
 
@@ -153,6 +173,9 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         else
             timer += 1;
 
+		if (ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::Escape))
+			window.close();
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
         {
             object->GetTransform()->SetScale(object->GetTransform()->GetScale() + sf::Vector2f(0.001f, 0.001f));
@@ -162,6 +185,19 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
             object->GetTransform()->SetScale(object->GetTransform()->GetScale() - sf::Vector2f(0.001f, 0.001f));
         }
 
+		if (ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::M))
+		{
+			std::cout << "Key Pressed" << std::endl;
+		}
+		else if (ce::SFMLKeyboard::GetKey(sf::Keyboard::N))
+		{
+			std::cout << "Key Down" << std::endl;
+		}
+		else if (ce::SFMLKeyboard::GetKeyUp(sf::Keyboard::Key(1)))
+		{
+			std::cout << "Key Released" << std::endl;
+		}
+
         objManager->CallUpdate();
 		collManager->UpdateCollision();
 		camera->Update();
@@ -170,6 +206,8 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		window.clear(sf::Color::Cyan);
 		drawManager->Draw(window);
 		window.display();
+
+		ce::SFMLKeyboard::ClearKeys();
 	}
 
 	return 0;

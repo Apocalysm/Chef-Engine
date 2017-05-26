@@ -5,21 +5,21 @@
 
 namespace ce
 {
-class TileMapLayer
-{
-public:
-		TileMapLayer(sf::VertexArray* va, const sf::Texture& txt);
-	~TileMapLayer();
+	class TileMapLayer
+	{
+		public:
+				TileMapLayer(sf::VertexArray* va, const sf::Texture& txt);
+			~TileMapLayer();
 
-		sf::VertexArray& GetVertexArray();
-	    void SetVertexArray(sf::VertexArray& vertexArray);
+				sf::VertexArray& GetVertexArray();
+				void SetVertexArray(sf::VertexArray& vertexArray);
 
-	const sf::Texture& GetTexture() const;
-	    void SetTexture(const sf::Texture& texture);
+			const sf::Texture& GetTexture() const;
+				void SetTexture(const sf::Texture& texture);
 
-private:
-	    sf::VertexArray* vertexArray;
-	const sf::Texture* texture;
-};
+		private:
+				sf::VertexArray* vertexArray;
+			const sf::Texture* texture;
+	};
 }
 

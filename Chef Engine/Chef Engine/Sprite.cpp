@@ -1,7 +1,7 @@
 #include "Sprite.h"
 
 #include "GameObject.h"
-
+#include "DrawEventManager.h"
 
 using ce::Sprite;
 
@@ -50,7 +50,7 @@ void Sprite::SetSprite(const std::string& fileName)
 	sprite->setPosition(transform->GetPosition());
 }
 
-void ce::Sprite::SetRealSprite(sf::Sprite * sprite)
+void ce::Sprite::ChangeSprite(sf::Sprite* sprite)
 {
 	delete this->sprite; 
 	this->sprite = sprite;
@@ -126,7 +126,7 @@ void Sprite::DoBind(lua_State * L)
 {
 	luabridge::getGlobalNamespace(L)
 		.beginNamespace("Chef")
-			.beginClass<Sprite>("Sprite")
+			.deriveClass<Sprite, Component>("Sprite")
 				.addConstructor<void(*)(void)>()
 				.addProperty("sprite", &Sprite::GetSprite, &SetSprite)
 				.addProperty("origin", &Sprite::GetOrigin, &Sprite::SetOrigin)

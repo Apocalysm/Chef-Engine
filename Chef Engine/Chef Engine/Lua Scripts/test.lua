@@ -1,4 +1,7 @@
 package.path = package.path .. ";../Chef Engine/Lua Scripts/Components/?.lua;../Chef Engine/Lua Scripts/?.lua;"
+
+require "NewComponent"
+
 --[[
 Account = {};
 
@@ -14,7 +17,7 @@ end
 function Account:Withdraw(amount)
 	self.balance = self.balance - amount;
 end
-]]
+
 
 -- Component.lua
 Component = {}
@@ -37,4 +40,4 @@ local NewComponent = Component:subclass("NewComponent")
 
 ...
 
-return NewComponent
+return NewComponent]]

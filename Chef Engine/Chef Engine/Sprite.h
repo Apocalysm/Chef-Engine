@@ -1,12 +1,15 @@
 #pragma once
 #include "Component.h"
 #include "Transform.h"
-#include "DrawEventManager.h"
+#include "LuaBridgeBinder.h"
 
 namespace ce
 {
 	class Sprite : public ce::Component
 	{
+        // Befriends the templated Bind function so it can access our protected functions
+        friend void LuaBridgeBinder::Bind<ce::Sprite>(lua_State*);
+
 	public:
 		Sprite();
 		Sprite(const int drawOrder);
@@ -32,7 +35,8 @@ namespace ce
         int GetDrawOrder() const;
 		
         void SetSprite(const std::string &fileName);
-		void SetRealSprite(sf::Sprite* sprite); 
+
+        void ChangeSprite(sf::Sprite* sprite);
 
 		sf::Sprite* GetSprite() const;
 
@@ -51,7 +55,7 @@ namespace ce
 		// The transform of this components GameObject
 		ce::Transform* transform;
 
-		// Bridges parts of this script to Lua
+		// Binds parts of this script to Lua
 		static void DoBind(lua_State* L); 
 	};
 }

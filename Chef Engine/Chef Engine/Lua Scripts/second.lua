@@ -1,8 +1,15 @@
 package.path = package.path .. ";../Chef Engine/Lua Scripts/Components/?.lua;../Chef Engine/Lua Scripts/?.lua;"
+require "NewComponent"
+require "OtherComponent"
 
-require "test"
 
---print(comp.enabled)
+object = Chef.GameObject("Name")
 
-comp2 = Chef.Component()
-comp2.enabled = false
+comp = object:AddLuaComponent(NewComponent)
+comp.Start(comp)
+object.transform.position = Chef.Vector2f(640, 360)
+
+sprite = object:AddSprite()
+sprite:SetSprite("player.png")
+
+object:GetSprite().scale = Chef.Vector2f(10, 10)

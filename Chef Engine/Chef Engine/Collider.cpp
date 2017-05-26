@@ -205,6 +205,12 @@ void ce::Collider::SetGameObject(GameObject * gameObject)
 void ce::Collider::OnCollisionEnter(Collider* other)
 {
 	collidingColls.insert(std::make_pair(other->gameObject->GetID(), other));
+
+	for (auto component : gameObject->luaComponents)
+	{
+		component.second->
+	}
+
 	std::cout << "Collision Enter" << std::endl;
 }
 
