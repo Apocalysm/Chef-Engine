@@ -13,7 +13,7 @@ using ce::CollisionManager;
 CollisionManager::CollisionManager()
 {
 	// Zeroes gravity
-	gravity.Set(0.0f, 0.0f);
+	gravity.SetZero();
 
 	// Creates the physics world
 	world = new b2World(gravity);

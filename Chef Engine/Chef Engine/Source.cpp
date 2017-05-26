@@ -96,7 +96,7 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	dot3Spr->SetSprite("dot.png");
 	dot3Spr->SetDrawOrder(5);
 	ce::Collider* dot3Coll = dot3->AddComponent<ce::Collider>();
-	dot3Coll->SetFitSprite(true, false, false);
+	dot3Coll->SetFitSprite(true, false, true);
 
 	dot2->Destroy();
 

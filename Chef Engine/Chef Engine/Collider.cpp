@@ -44,6 +44,17 @@ void ce::Collider::Update()
 	}
 						
 	body->SetTransform(center, transRot);
+
+	if (collidingColls.size() != 0)
+	{
+		for (auto it = collidingColls.begin(); it != collidingColls.end(); it++)
+		{
+			if (isTrigger)
+				OnTriggerStay(it->second);
+			else
+				OnCollisionStay(it->second);
+		}
+	}
 }
 
 
@@ -95,6 +106,8 @@ void ce::Collider::SetupTMX(const sf::Vector2f rectSize, const bool dynamic, con
 	// Makes the body a sensor or not based on if it should be
 	// Sensor is basically the same as Trigger in Unity
 	body->GetFixtureList()->SetSensor(isTrigger);
+
+	this->isTrigger = isTrigger;
 
 	bodyIsCreated = true;
 }
@@ -158,6 +171,8 @@ void ce::Collider::SetFitSprite(const bool fitSprite, const bool dynamic, const 
 		// Sensor is basically the same as Trigger in Unity
 		body->GetFixtureList()->SetSensor(isTrigger);
 
+		this->isTrigger = isTrigger;
+
 		bodyIsCreated = true;
 	}
 }
@@ -196,7 +211,7 @@ void ce::Collider::OnCollisionEnter(Collider* other)
 
 void ce::Collider::OnCollisionExit(Collider* other)
 {
-	
+	collidingColls.erase(other->GetGameObject()->GetID());
 	std::cout << "Collision Exit" << std::endl;
 }
 
@@ -209,12 +224,14 @@ void ce::Collider::OnCollisionStay(Collider* other)
 
 void ce::Collider::OnTriggerEnter(Collider* other)
 {
+	collidingColls.insert(std::make_pair(other->gameObject->GetID(), other));
 	std::cout << "Trigger Enter" << std::endl;
 }
 
 
 void ce::Collider::OnTriggerExit(Collider* other)
 {
+	collidingColls.erase(other->GetGameObject()->GetID());
 	std::cout << "Trigger Exit" << std::endl;
 }
 

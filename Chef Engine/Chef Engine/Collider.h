@@ -2,6 +2,7 @@
 
 #include "Component.h"
 #include "Sprite.h"
+#include "Common.h"
 
 #include <Box2D/Box2D.h>
 
@@ -95,7 +96,7 @@ namespace ce
 		sf::Vector2f spriteOrigin;
 
 		// Contains pointers to colliders that this collider is currently colliding with
-		std::map<unsigned long long, ce::Collider*> collidingColls;
+		std::map<Common::uint64, ce::Collider*> collidingColls;
 
 		const double PI = 3.141592653589793;
 
