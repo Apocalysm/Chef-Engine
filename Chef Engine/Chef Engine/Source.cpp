@@ -55,55 +55,44 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     // Binds all defined classes with LuaBridge
     ce::LuaBridgeBinder::BindAll();
 
-    ce::GameObject* obj = new ce::GameObject("nnands");
-    ce::Sprite* spr = obj->AddComponent<ce::Sprite>();
-    spr->SetSprite("Buss_Red_Test_001.png");
-    ce::Collider* coll = obj->AddComponent<ce::Collider>();
-    coll->SetFitSprite(true, true, false);
-    /*ce::Camera* cam = obj->AddComponent<ce::Camera>();
-    cam->SetSize(sf::Vector2f(128, 72));
-    cam->SetFollow(true);*/
-
-
-    ce::GameObject* obj2 = new ce::GameObject("nnands");
-    ce::Sprite* spr2 = obj2->AddComponent<ce::Sprite>();
-    spr2->SetSprite("Buss_Red_Test_001.png");
-    ce::Collider* coll2 = obj2->AddComponent<ce::Collider>();
-    coll2->SetFitSprite(true, true, false);
-    obj2->GetTransform()->SetPosition(sf::Vector2f(150, 0));
-
 	while (window.isOpen())
 	{
 		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window.close();
-        
-			else if (event.type == sf::Event::KeyPressed)
-        {          
-				ce::SFMLKeyboard::SetKeyDown(event.key.code);
-		}
-			else if (event.type == sf::Event::KeyReleased)
-			{
-				ce::SFMLKeyboard::SetKeyUp(event.key.code);
-        }
-			else if (event.type == sf::Event::LostFocus || event.type == sf::Event::GainedFocus)
+        while (window.pollEvent(event))
         {
-				ce::SFMLKeyboard::ResetKeyboard();
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+            }
+            else if (event.type == sf::Event::KeyPressed)
+            {
+                ce::SFMLKeyboard::SetKeyDown(event.key.code);
+            }
+            else if (event.type == sf::Event::KeyReleased)
+            {
+                ce::SFMLKeyboard::SetKeyUp(event.key.code);
+            }
+            else if (event.type == sf::Event::LostFocus || event.type == sf::Event::GainedFocus)
+            {
+                ce::SFMLKeyboard::ResetKeyboard();
+            }
         }
-        }
-        obj->GetTransform()->Move(sf::Vector2f(0.5, 0));
-        obj2->GetTransform()->Move(sf::Vector2f(-0.5, 0));
 
 		window.clear(sf::Color::Cyan);
-        objManager->CallUpdate();
-		collManager->UpdateCollision();
+        
+        // Calls our main-loop in Lua
+        (*ce::LuaBridgeBinder::mainFunc)();
 
+        objManager->CallUpdate();
+		
+        collManager->UpdateCollision();
+
+        // Updates the camera if there is one
         if (ce::Camera::main != nullptr)
         {
             ce::Camera::main->UpdateCamera();
         }
+
 		drawManager->Draw(window);
 
 		window.display();

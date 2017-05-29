@@ -3,6 +3,7 @@
 #include <LuaBridge.h>
 
 #include <vector>
+#include <memory>
 #include <map>
 #include <string>
 
@@ -18,6 +19,8 @@ namespace ce
 		static void Bind(lua_State* L);
 
 		static void BindAll();
+
+        static std::unique_ptr<luabridge::LuaRef> mainFunc;
 
 	private:
         // Loads a Lua 

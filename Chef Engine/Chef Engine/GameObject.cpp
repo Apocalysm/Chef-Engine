@@ -187,46 +187,46 @@ void GameObject::Destroy()
 	delete this;
 }
 
-    // Creates a new LuaComponent and adds it to this GameObject
-    luabridge::LuaRef GameObject::AddLuaComponent(luabridge::LuaRef ref)
+// Creates a new LuaComponent and adds it to this GameObject
+luabridge::LuaRef GameObject::AddLuaComponent(luabridge::LuaRef ref)
+{
+    if (!ref.isTable())
     {
-        if (!ref.isTable())
-        {
-            std::cerr << lua_tostring(ref.state(), -1) << std::endl;
-            assert(false);
-        }
-        // Checks if the ref has a variable "ID"
-        if (!ref["ID"].isNumber())
-        {
-            std::cerr << lua_tostring(ref.state(), -1) << std::endl;
-            assert(false);
-        }
-
-        int id = ref["ID"];
-         
-        if (luaComponents.find(id) == luaComponents.end())
-        {
-            // Creates a new LuaComponent with the ref we passed as an argument
-            LuaComponent* newComponent = new ce::LuaComponent(ref);
-
-            // Sets the component's gameObject reference
-            newComponent->SetGameObject(this);
-
-            // Passes this GameObject and the new luaComponent back to our new component instance in Lua
-            luabridge::LuaRef newRef = ref["Create"](newComponent);
-
-            // Sets the LuaComponent's ref to the newly created one
-            newComponent->ref = newRef;
-
-            // Adds the new Lua Component to this GameObject
-            luaComponents.insert(std::make_pair(id, newComponent));
-
-            // Sends the newRef back into Lua
-            return newRef;
-        }
-        std::cerr << "You sadly can't add the same component type twice to a GameObject. Yet..." << std::endl;
+        std::cerr << lua_tostring(ref.state(), -1) << std::endl;
         assert(false);
     }
+    // Checks if the ref has a variable "ID"
+    if (!ref["ID"].isNumber())
+    {
+        std::cerr << lua_tostring(ref.state(), -1) << std::endl;
+        assert(false);
+    }
+
+    int id = ref["ID"];
+         
+    if (luaComponents.find(id) == luaComponents.end())
+    {
+        // Creates a new LuaComponent with the ref we passed as an argument
+        LuaComponent* newComponent = new ce::LuaComponent(ref);
+
+        // Sets the component's gameObject reference
+        newComponent->SetGameObject(this);
+
+        // Passes this GameObject and the new luaComponent back to our new component instance in Lua
+        luabridge::LuaRef newRef = ref["Create"](newComponent);
+
+        // Sets the LuaComponent's ref to the newly created one
+        newComponent->ref = newRef;
+
+        // Adds the new Lua Component to this GameObject
+        luaComponents.insert(std::make_pair(id, newComponent));
+
+        // Sends the newRef back into Lua
+        return newRef;
+    }
+    std::cerr << "You sadly can't add the same component type twice to a GameObject. Yet..." << std::endl;
+    assert(false);
+}
 
     
     // Gets a LuaComponent and returns that components specified LuaRef
@@ -257,38 +257,38 @@ void GameObject::DoBind(lua_State * L)
             .beginNamespace("Chef")
                 
             .beginClass<GameObject>("GameObject")
-                    .addConstructor<void (*) (std::string)>()
+                .addConstructor<void (*) (std::string)>()
                 
                 .addProperty("active", &GameObject::GetActive, &GameObject::SetActive)
                 .addProperty("layer", &GameObject::GetLayer, &GameObject::SetLayer)
                 .addProperty("instanceID", &GameObject::GetID)
-                    .addProperty("name", &GameObject::GetName, &GameObject::SetName)
-                    .addProperty("transform", &GameObject::GetTransform)
-                    .addFunction("Equals", &GameObject::operator==)
+                .addProperty("name", &GameObject::GetName, &GameObject::SetName)
+                .addProperty("transform", &GameObject::GetTransform)
+                .addFunction("Equals", &GameObject::operator==)
                    
-                    .addFunction("AddLuaComponent", &GameObject::AddLuaComponent)
-                    .addFunction("GetLuaComponent", &GameObject::GetLuaComponent)
-                    .addFunction("RemoveLuaComponent", &GameObject::RemoveLuaComponent)  
+                .addFunction("AddLuaComponent", &GameObject::AddLuaComponent)
+                .addFunction("GetLuaComponent", &GameObject::GetLuaComponent)
+                .addFunction("RemoveLuaComponent", &GameObject::RemoveLuaComponent)  
 
-                    .addFunction("GetTransform", &GameObject::GetComponent<ce::Transform>)
+                .addFunction("GetTransform", &GameObject::GetComponent<ce::Transform>)
 
-                    .addFunction("AddSprite", &GameObject::AddComponent<ce::Sprite>)
-                    .addFunction("GetSprite", &GameObject::GetComponent<ce::Sprite>)
-                    .addFunction("RemoveSprite", &GameObject::RemoveComponent<ce::Sprite>)
+                .addFunction("AddSprite", &GameObject::AddComponent<ce::Sprite>)
+                .addFunction("GetSprite", &GameObject::GetComponent<ce::Sprite>)
+                .addFunction("RemoveSprite", &GameObject::RemoveComponent<ce::Sprite>)
                     
-                    .addFunction("AddCollider", &GameObject::AddComponent<ce::Collider>)
-                    .addFunction("GetCollider", &GameObject::GetComponent<ce::Collider>)
-                    .addFunction("RemoveCollider", &GameObject::RemoveComponent<ce::Collider>)
+                .addFunction("AddCollider", &GameObject::AddComponent<ce::Collider>)
+                .addFunction("GetCollider", &GameObject::GetComponent<ce::Collider>)
+                .addFunction("RemoveCollider", &GameObject::RemoveComponent<ce::Collider>)
 
-                    .addFunction("AddCamera", &GameObject::AddComponent<ce::Camera>)
-                    .addFunction("GetCamera", &GameObject::GetComponent<ce::Camera>)
-                    .addFunction("RemoveCamera", &GameObject::RemoveComponent<ce::Camera>)
+                .addFunction("AddCamera", &GameObject::AddComponent<ce::Camera>)
+                .addFunction("GetCamera", &GameObject::GetComponent<ce::Camera>)
+                .addFunction("RemoveCamera", &GameObject::RemoveComponent<ce::Camera>)
 
-                    /*.addStaticData("Default", Default, false)
-                    .addStaticData("Player", Player, false)
-                    .addStaticData("Enemy", Enemy, false)
-                    .addStaticData("Terrain", Terrain, false)
-                    .addStaticData("UI", UI, false)*/
+                /*.addStaticData("Default", Default, false)
+                .addStaticData("Player", Player, false)
+                .addStaticData("Enemy", Enemy, false)
+                .addStaticData("Terrain", Terrain, false)
+                .addStaticData("UI", UI, false)*/
 
                 .endClass()
             .endNamespace();

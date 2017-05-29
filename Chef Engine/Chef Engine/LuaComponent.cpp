@@ -75,6 +75,7 @@ void LuaComponent::Update()
 {
     if (updateFunc != nullptr)
     {
+        int id = ref["ID"];
         (*updateFunc)(ref);
     }
 }
@@ -133,24 +134,32 @@ luabridge::LuaRef LuaComponent::LoadComponent(luabridge::LuaRef component)
     // Creates an empty table in the same state as the component we want to copy
     luabridge::LuaRef newComponent = luabridge::newTable(component.state());
 
-    // Loops through all the members of the component-table we want to copy 
-    for (auto pair : getKeyValueMap(component).second)
+    ce::LuaKeyValue* keys = getKeyValueMap(component);
+
+    // Loops through all the members with string keys in the table
+    for (auto pair : keys->stringKeys)
     {
         // Sets a key on our new, copied table to have the correct coresponding value
         newComponent[pair.first] = pair.second;
     }
-
-    return newComponent;
+    // Does the same with the number keys
+    for (auto pair : keys->numberKeys)
+    {
+        newComponent[pair.first] = pair.second;
     }
 
+    delete keys;
 
-std::pair<std::unordered_map<std::string, luabridge::LuaRef>, std::unordered_map<int, luabridge::LuaRef>> LuaComponent::getKeyValueMap(const luabridge::LuaRef& table)
+    return newComponent;
+}
+
+
+ce::LuaKeyValue* LuaComponent::getKeyValueMap(const luabridge::LuaRef& table)
 {
-    std::unordered_map<std::string, luabridge::LuaRef> string_result;
-    std::unordered_map<int, luabridge::LuaRef> number_result;
+    ce::LuaKeyValue* keys = new ce::LuaKeyValue();
 
     // Returns immediately if their isn't anything on the LuaRef
-    if (table.isNil()) { return std::make_pair(string_result, number_result); }
+    if (table.isNil()) { return keys; }
 
     // Gets the state of the table and pushes it up again so it's on the top of the stack
     auto L = table.state();
@@ -160,24 +169,26 @@ std::pair<std::unordered_map<std::string, luabridge::LuaRef>, std::unordered_map
     lua_pushnil(L);
     // Checks if there is something on (-2) which is the first key
     while (lua_next(L, -2) != 0) 
-    {
-        // Checks if the key was a string
-        if (lua_isstring(L, -2)) 
-    {
-            // Stores the string key and it's value in the unordered_map
-            string_result.emplace(lua_tostring(L, -2), luabridge::LuaRef::fromStack(L, -1));
-    }
-        else if (lua_isnumber(L, -2))
-    {
-            number_result.emplace(lua_tonumber(L, -2), luabridge::LuaRef::fromStack(L, -1));
+    {        
+        if (lua_isnumber(L, -2))
+        {
+            // Stores the number key and it's value in the number map
+            keys->numberKeys.emplace(lua_tonumber(L, -2), luabridge::LuaRef::fromStack(L, -1));
         }
+        // Checks if the key was a string
+        else if (lua_isstring(L, -2)) 
+        {
+                // Stores the string key and it's value in the string map
+                keys->stringKeys.emplace(lua_tostring(L, -2), luabridge::LuaRef::fromStack(L, -1));
+        }
+
         // Removes the value we just checked so lua_next will go to the next one
         lua_pop(L, 1);
     }
     // Removes the whole copied table;
     lua_pop(L, 1); 
 
-    return std::make_pair(string_result, number_result);
+    return keys;
 }
 
 

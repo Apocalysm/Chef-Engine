@@ -31,6 +31,7 @@ end
 
 --Gets called every frame
 function OtherComponent.Update(self)	
+
 	if self.canMove == false then
 		if self.countdown <= 0 then 	
 			self.countdown = self.timer

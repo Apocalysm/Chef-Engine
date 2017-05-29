@@ -1,8 +1,8 @@
 package.path = package.path .. ";../Chef Engine/Lua Scripts/Components/?.lua;../Chef Engine/Lua Scripts/?.lua;"
 require "OtherComponent"
---require "CameraFollow"
-NewComponent = {ID = -1}
 
+NewComponent = {ID = -1}
+NewComponent[3] = 2
 -- This is what you call to create a new instance of the component
 function NewComponent.Create(component)
 		
@@ -13,7 +13,7 @@ function NewComponent.Create(component)
 	output.component = component
 	output.gameObject = component.gameObject
 	output.transform = component.gameObject.transform
-
+		
 	return output
 end
 
@@ -24,17 +24,20 @@ end
 
 -- Used for initialization
 function NewComponent.Start(self)
-	self.other = self.gameObject:AddLuaComponent(OtherComponent)
-
+	self.camera = self.gameObject:AddCamera()
+	self.camera.size = Chef.Vector2f(64, 36)
+	self.camera.follow = true
+	
 	self.collision = self.gameObject:AddCollider()
 	self.collision:SetFitSprite(true, true, true)
-
+	
+	self.other = self.gameObject:AddLuaComponent(OtherComponent)
 end
 
 
 --Gets called every frame
 function NewComponent.Update(self)
-	
+
 	if(self.other.canMove)
 	then
 		if Chef.Input.GetKey(Chef.A) == true then
