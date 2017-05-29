@@ -213,7 +213,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 					spriteComponent->SetDrawOrder(layers[i]->GetParseOrder());
 
 					for (int k = tileSets.size() - 1; k >= 0; k--)
-	{
+	                {
 						Tmx::Tileset* ts = tileSets[k];
 
 						bool flipped_horizontally = (object->GetGid() & FLIPPED_HORIZONTALLY_FLAG);
@@ -223,7 +223,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 						int unflippedGid = object->GetGid() & ~(FLIPPED_VERTICALLY_FLAG | FLIPPED_HORIZONTALLY_FLAG | FLIPPED_DIAGONALLY_FLAG);
 
 						if (ts->GetFirstGid() <= unflippedGid)
-		{
+		                {
 							int localID = unflippedGid - ts->GetFirstGid();
 
 
@@ -250,7 +250,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 				}
 				else
-			{
+			    {
 					// This is a rect!
 					sf::Vector2f rectSize = sf::Vector2f(object->GetWidth(), object->GetHeight());
 					
