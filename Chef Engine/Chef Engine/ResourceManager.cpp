@@ -1,6 +1,6 @@
 #include "ResourceManager.h"
 #include "Texture.h"
-#include "SoudBuffer.h"
+#include "SoundBuffer.h"
 
 std::map<const std::string, ce::Resource*> ce::ResourceManager::stringToResource;
 

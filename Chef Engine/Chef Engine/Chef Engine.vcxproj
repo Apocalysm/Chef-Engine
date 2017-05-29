@@ -143,8 +143,9 @@
     <ClCompile Include="SFMLKeyboard.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
-    <ClCompile Include="SoudBuffer.cpp" />
+    <ClCompile Include="SoundBuffer.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="TileMapLayer.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -166,9 +167,10 @@
     <ClInclude Include="Math.h" />
     <ClInclude Include="SFMLKeyboard.h" />
     <ClInclude Include="SFML_LuaBind.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceManager.h" />
-    <ClInclude Include="SoudBuffer.h" />
+    <ClInclude Include="SoundBuffer.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TileMapLayer.h" />
     <ClInclude Include="Sprite.h" />

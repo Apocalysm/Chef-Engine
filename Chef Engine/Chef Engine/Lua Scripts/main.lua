@@ -14,13 +14,11 @@ object.transform.scale = Chef.Vector2f(10, 10);
 
 sprite = object:AddSprite()
 sprite:SetSprite("player.png")
-sprite.drawOrder = 0
-sprite.color = Chef.Color(0, 222, 0, 255)
+sprite.drawOrder = 1
 
 
 -- This is the main loop of the engine, it will be called every frame
 main = {}
 function main.UpdateLoop()
-print("maining...")
 
 end

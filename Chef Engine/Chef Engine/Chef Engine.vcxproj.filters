@@ -64,6 +64,10 @@
     <ClCompile Include="SoudBuffer.cpp">
       <Filter>Source Files\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="SoundBuffer.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -108,13 +112,13 @@
     <ClInclude Include="Math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SFML_LuaBind.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SFMLKeyboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ContactListener.h">
@@ -129,8 +133,14 @@
     <ClInclude Include="Texture.h">
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="SoundBuffer.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
     <ClInclude Include="SoudBuffer.h">
       <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML_LuaBind.h">
+      <Filter>Header Files\Lua Binding</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

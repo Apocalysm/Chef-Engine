@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "ContactListener.h"
 #include "SFMLKeyboard.h"
+#include "SoundManager.h"
 
 #include <SFML/Graphics.hpp>
 #include <Tmx\TmxTile.h>
@@ -46,9 +47,25 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Test");
+
+	ce::SoundManager* sM = new ce::SoundManager();
+
+	window.setFramerateLimit(60);
+    float count = 10;
+    float timer = 0;
     ce::Camera::window = &window;
     window.setFramerateLimit(60);
 
+	map->LoadMap("RefferenceMap.tmx");
+	std::string* mapName = new std::string("RefferenceMap.tmx");
+	map->RegisterMap(0, mapName);
+	map->LoadObject();
+
+	window.setKeyRepeatEnabled(false);
+	ce::SFMLKeyboard::Initialize();
+	sf::SoundBuffer buffer3;
+	sf::Sound* sound = new sf::Sound();
+	sf::Sound* buffer2 = new sf::Sound();
     window.setKeyRepeatEnabled(false);
     ce::SFMLKeyboard::Initialize();
 
@@ -87,6 +104,19 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		
         collManager->UpdateCollision();
 
+		if (ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::M))
+		{
+			sM->PlaySFX("sound.wav", sound);
+			
+		}
+		else if (ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::N))
+		{
+			sM->PlayMusic("music.wav", true);
+		}
+		else if (ce::SFMLKeyboard::GetKeyUp(1))
+		{
+			sM->PlaySFX("sound2.wav", buffer2);
+		}
         // Updates the camera if there is one
         if (ce::Camera::main != nullptr)
         {
