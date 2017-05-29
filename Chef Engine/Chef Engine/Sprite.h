@@ -1,7 +1,9 @@
 #pragma once
+
 #include "Component.h"
 #include "Transform.h"
 #include "LuaBridgeBinder.h"
+#include "Texture.h"
 
 namespace ce
 {
@@ -83,7 +85,8 @@ namespace ce
 		friend class DrawEventManager;
 
 		sf::Sprite* sprite;
-		sf::Texture texture;
+		//sf::Texture texture;
+		ce::Texture* texture;
 
         ////////////////////////////////////////////////////////////
         /// \brief Tints the Sprite in a specified Color

@@ -12,13 +12,13 @@ Resource::~Resource()
 }
 
 
-const std::string * Resource::getPath() const
+const std::string Resource::GetPath() const
 {
 	return path;
 }
 
 
-void Resource::loadResource(const std::string * path)
+void Resource::LoadResource(const std::string path)
 {
 	this->path = path;
 }
