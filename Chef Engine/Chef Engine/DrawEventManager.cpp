@@ -100,23 +100,26 @@ void ce::DrawEventManager::Draw(sf::RenderWindow& window)
 	{
 		for (auto outer_it = enumToMapSpr.begin(); outer_it != enumToMapSpr.end(); outer_it++)
 		{
+            auto map = outer_it->second;
 			// Draws the layer that has the same order as tha current order to draw
 			if (outer_it->first < tileMapLayers.size())
 			{
 				for (auto layer_it = tileMapLayers[outer_it->first].begin(); layer_it != tileMapLayers[outer_it->first].end(); layer_it++)
 				{
+               
 					window.draw(layer_it->second->GetVertexArray(), renderStates[layer_it->first]);
 				}
 			}
 			
 			// If there is any sprite in the map
-			if (!outer_it->second.empty())
+			if (!map.empty())
 			{
-				for (auto inner_it = outer_it->second.begin(); inner_it != outer_it->second.end(); inner_it++)
+				for (auto inner_it : map)
 				{
+                    auto sprite = inner_it.second;
 					// Draws the sprite if both the component and its gameObject is enabled and active
-					if (inner_it->second->GetEnabled() && inner_it->second->gameObject->GetActive())
-						window.draw(*inner_it->second->sprite);
+					if (sprite->GetEnabled() && sprite->gameObject->GetActive())
+						window.draw(*sprite->sprite);
 				}
 			}
 		}
@@ -126,19 +129,22 @@ void ce::DrawEventManager::Draw(sf::RenderWindow& window)
 	{
 		for (auto outer_it = enumToMapNewSpr.begin(); outer_it != enumToMapNewSpr.end(); outer_it++)
 		{
-			// If there is any sprite in the map
-			if (!outer_it->second.empty())
-			{
-				for (auto inner_it = outer_it->second.begin(); inner_it != outer_it->second.end(); inner_it++)
-				{
-					// Draws the sprite if both the component and its gameObject is enabled and active
-					if (inner_it->second->GetEnabled() && inner_it->second->gameObject->GetActive())
-						window.draw(*inner_it->second->sprite);
+            auto map = outer_it->second;
 
-					inner_it->second->isNew = false;
+			// If there is any sprite in the map
+			if (!map.empty())
+			{
+				for (auto inner_it : map)
+				{
+                    auto sprite = inner_it.second;
+					// Draws the sprite if both the component and its gameObject is enabled and active
+					if (sprite->GetEnabled() && sprite->gameObject->GetActive())
+						window.draw(*sprite->sprite);
+
+                    sprite->isNew = false;
 
 					// Adds the new object to the other map since it isn't new anymore
-					enumToMapSpr[inner_it->second->drawOrder].insert(std::make_pair(inner_it->second->gameObject->GetID(), inner_it->second));
+					enumToMapSpr[sprite->drawOrder].insert(std::make_pair(sprite->gameObject->GetID(), sprite));
 				}
 
 				// Clears all the inner maps since they shouldn't contain anything anymore

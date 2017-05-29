@@ -121,7 +121,8 @@ luabridge::LuaRef LuaComponent::LoadComponent(luabridge::LuaRef component)
 }
 
 
-std::pair<std::unordered_map<std::string, luabridge::LuaRef>, std::unordered_map<int, luabridge::LuaRef>> LuaComponent::getKeyValueMap(const luabridge::LuaRef& table)
+std::pair<std::unordered_map<std::string, luabridge::LuaRef>, std::unordered_map<int, luabridge::LuaRef>> 
+LuaComponent::getKeyValueMap(const luabridge::LuaRef& table)
 {
     std::unordered_map<std::string, luabridge::LuaRef> string_result;
     std::unordered_map<int, luabridge::LuaRef> number_result;

@@ -9,7 +9,7 @@ Camera* Camera::main;
 sf::RenderWindow* Camera::window;
 
 Camera::Camera()
-    : zoom(1), follow(false)
+    : zoom(1), follow(false), step(1)
 {
     if (main == nullptr)
     {
@@ -36,21 +36,33 @@ sf::Vector2f ce::Camera::GetSize() const
 	return size;
 }
 
+
 void ce::Camera::SetZoom(float zoom)
 {
 	view.zoom(zoom);
 	this->zoom *= zoom;
 }
 
+
 float ce::Camera::GetZoom() const
 {
-	return 0.0f;
+	return this->zoom;
+}
+
+void ce::Camera::SetStep(float step)
+{
+    this->step = step;
+}
+
+float ce::Camera::GetStep() const
+{
+    return this->step;
 }
 
 
 sf::View ce::Camera::GetView() const
 {
-	return view;
+	return this->view;
 }
 
 
@@ -69,7 +81,7 @@ sf::Vector2f ce::Camera::GetCenter() const
 
 bool ce::Camera::GetFollow() const
 {
-	return follow;
+	return this->follow;
 }
 
 
@@ -83,7 +95,8 @@ void ce::Camera::UpdateCamera()
 {
     if (follow)
     {
-        center = gameObject->GetTransform()->GetPosition();
+        center = sf::Vector2f(ce::Math::Lerp(center.x, gameObject->GetTransform()->GetPosition().x, step),
+                              ce::Math::Lerp(center.y, gameObject->GetTransform()->GetPosition().y, step));
         view.setCenter(center);
     }
 
@@ -113,8 +126,7 @@ void ce::Camera::DoBind(lua_State * L)
 				.addProperty("follow", &Camera::GetFollow, &Camera::SetFollow)
 				.addProperty("zoom", &Camera::GetZoom, &Camera::SetZoom)
 				.addProperty("view", &Camera::GetView)
+                .addProperty("step", &Camera::GetStep, &Camera::SetStep)
 			.endClass()
 		.endNamespace();
 }
-
-

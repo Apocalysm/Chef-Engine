@@ -122,8 +122,21 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 				if (tileMapLayers[k].find(tile.tilesetId) == tileMapLayers[k].end())
 				{
+                    /*int counter = 0;
+
+                    for (size_t n = 0; n < mapHeight; n++)
+                    {
+                        for (size_t m = 0; m < mapWidth; m++)
+                        {                   
+                            if (tileLayers[k]->GetTile(m, n).gid > 0)
+                            {
+                                counter++;
+                            }
+                        }
+                    }*/
+
 					tileMapLayers[k].insert(std::make_pair(tile.tilesetId, 
-						new TileMapLayer(new sf::VertexArray(sf::Quads, mapHeight * mapWidth * 4), tileTextures[tile.tilesetId])));
+						new TileMapLayer(new sf::VertexArray(sf::Quads, mapWidth * mapHeight * 4), tileTextures[tile.tilesetId])));
 				}
 				
 				//Get the current layer

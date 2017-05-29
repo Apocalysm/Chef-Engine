@@ -28,8 +28,6 @@ namespace ce
         void OnTriggerEnter(ce::Collider* collider);
         void OnTriggerExit(ce::Collider* collider);
 
-        void LoadScript(lua_State* L, const std::string* scriptFilename, const std::string* tableName);
-
     private:
         friend class ce::GameObject;
 

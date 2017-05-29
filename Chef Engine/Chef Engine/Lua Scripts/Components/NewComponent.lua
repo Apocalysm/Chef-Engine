@@ -24,43 +24,40 @@ end
 
 -- Used for initialization
 function NewComponent.Start(self)
-	self.other = self.gameObject:AddLuaComponent(OtherComponent)
-
 	self.collision = self.gameObject:AddCollider()
 	self.collision:SetFitSprite(true, true, false)
-
+	
 end
 
 
 --Gets called every frame
 function NewComponent.Update(self)
 	
-	if(self.other.canMove)
-	then
+	--if(self.other.canMove) then
 		if Chef.Input.GetKey(Chef.A) == true then
-			self.transform:Move(Chef.Vector2f(-self.speed, 0))
-			self.other.canMove = false
+			self.transform:Move(Chef.Vector2f(-1, 0))
+			--self.other.canMove = false
 		end
 		if Chef.Input.GetKey(Chef.D)== true then
-			self.transform:Move(Chef.Vector2f(self.speed, 0))
-			self.other.canMove = false
+			self.transform:Move(Chef.Vector2f(1, 0))
+			--self.other.canMove = false
 		end
 		if Chef.Input.GetKey(Chef.W)== true then
-			self.transform:Move(Chef.Vector2f(0, -self.speed))
-			self.other.canMove = false
+			self.transform:Move(Chef.Vector2f(0, -1))
+			--self.other.canMove = false
 		end
 		if Chef.Input.GetKey(Chef.S)== true then
-			self.transform:Move(Chef.Vector2f(0, self.speed))
-			self.other.canMove = false
+			self.transform:Move(Chef.Vector2f(0, 1))
+			--self.other.canMove = false
 		end
-	end
+	--end
 
 end
 
 function NewComponent.OnCollisionEnter(self, collider)
-	print("Hello there")
+	print("Enter Collision")
 end
 function NewComponent.OnCollisionExit(self, collider)
-	print("Auf Wiedersehen")
+	print("Quit Colliding")
 end
 

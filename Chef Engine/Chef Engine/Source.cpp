@@ -1,15 +1,18 @@
 #include "Component.h"
 #include "GameObject.h"
 #include "Transform.h"
-#include "MapHandler.h"
 #include "Sprite.h"
+#include "Collider.h"
+#include "Camera.h"
+
+#include "MapHandler.h"
 #include "GameObjectManager.h"
 #include "DrawEventManager.h"
-#include "Collider.h"
 #include "CollisionManager.h"
-#include "Camera.h"
 #include "ContactListener.h"
 #include "SFMLKeyboard.h"
+
+#include "Math.h"
 
 #include <SFML/Graphics.hpp>
 #include <Tmx\TmxTile.h>
@@ -71,7 +74,8 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     ce::Collider* coll2 = obj2->AddComponent<ce::Collider>();
     coll2->SetFitSprite(true, true, false);
     obj2->GetTransform()->SetPosition(sf::Vector2f(150, 0));
-
+    float value = 0;
+    float goal = 100;
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -81,7 +85,7 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 				window.close();
         
 			else if (event.type == sf::Event::KeyPressed)
-        {          
+            {          
 				ce::SFMLKeyboard::SetKeyDown(event.key.code);
             }
 			else if (event.type == sf::Event::KeyReleased)
@@ -93,9 +97,9 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 				ce::SFMLKeyboard::ResetKeyboard();
             }
         }
-        obj->GetTransform()->Move(sf::Vector2f(0.5, 0));
-        obj2->GetTransform()->Move(sf::Vector2f(-0.5, 0));
-     
+        //obj->GetTransform()->Move(sf::Vector2f(0.5, 0));
+        //obj2->GetTransform()->Move(sf::Vector2f(-0.5, 0));
+
 		window.clear(sf::Color::Cyan);
         objManager->CallUpdate();
         collManager->UpdateCollision();

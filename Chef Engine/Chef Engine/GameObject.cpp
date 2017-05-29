@@ -204,7 +204,7 @@ void GameObject::Destroy()
 
         int id = ref["ID"];
          
-        //if (luaComponents.find(id) == luaComponents.end())
+        if (luaComponents.find(id) == luaComponents.end())
         {
             // Creates a new LuaComponent with the ref we passed as an argument
             LuaComponent* newComponent = new ce::LuaComponent(ref);
@@ -224,8 +224,8 @@ void GameObject::Destroy()
             // Sends the newRef back into Lua
             return newRef;
         }
-        //std::cerr << "You sadly can't add the same component type twice to a GameObject. Yet..." << std::endl;
-        //assert(false);
+        std::cerr << "You sadly can't add the same component type twice to a GameObject. Yet..." << std::endl;
+        assert(false);
     }
     
     // Gets a LuaComponent and returns that components specified LuaRef

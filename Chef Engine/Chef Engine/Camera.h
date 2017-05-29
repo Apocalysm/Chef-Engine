@@ -61,6 +61,9 @@ namespace ce
 		void SetZoom(float zoom);
 		float GetZoom() const;
 
+        void SetStep(float step);
+        float GetStep() const;
+
 		void SetCenter(const sf::Vector2f & center);
 		sf::Vector2f GetCenter() const;
 
@@ -104,5 +107,8 @@ namespace ce
 
         /// \brief Resize the view rectangle relatively to its current size. 
         float zoom;
+
+        /// \brief How fast the camera will follow it's gameObject from 0-1
+        float step;
 	};
 }
