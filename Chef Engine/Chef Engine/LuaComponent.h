@@ -11,6 +11,12 @@
 
 namespace ce
 {
+    struct LuaKeyValue
+    {
+        std::unordered_map<std::string, luabridge::LuaRef> stringKeys;
+        std::unordered_map<int, luabridge::LuaRef> numberKeys;
+    };
+
     class LuaComponent : public ce::Component
     {
         // Befriends the templated Bind function so it can access our protected functions
@@ -60,7 +66,7 @@ namespace ce
 
         static void DoBind(lua_State* L);
         
-        static std::pair<std::unordered_map<std::string, luabridge::LuaRef>, std::unordered_map<int, luabridge::LuaRef>> getKeyValueMap(const luabridge::LuaRef & table);
+        static LuaKeyValue* getKeyValueMap(const luabridge::LuaRef & table);
     };
 }
 

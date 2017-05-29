@@ -39,12 +39,18 @@ const std::string LUA_SCRIPTS_PATH = "Lua Scripts";
 // The folder that needs to be placed in Lua Scripts to register components
 const std::string LUA_COMPONENTS_PATH = "Lua Scripts\\Components";
 
+// The path where the main lua script should be
+const std::string MAIN_PATH = "Lua Scripts\\main.lua";
+
 // Values of directory entries representing a directory and a file
 const int DIRECTORY_FLAG = (1 << 14);
 const int FILE_FLAG = (1 << 15);
 
 // Initializes static variable
 int ce::LuaBridgeBinder::componentIDCounter = 0;
+
+// A ref to the main loop in the main script in Lua
+std::unique_ptr<luabridge::LuaRef> ce::LuaBridgeBinder::mainFunc;
 
 // Loads a directory and gets all the .lua-files
 static const std::vector<std::string*> LoadDirectory(const std::string dir_path)
@@ -172,6 +178,20 @@ void ce::LuaBridgeBinder::LoadLua(lua_State * L, const std::string & tableName, 
     {
         luabridge::LuaRef table = luabridge::getGlobal(L, tableName.c_str());
         RegisterComponent(table);   
+    }
+    // Checks if we found our main script
+    else if (path == MAIN_PATH)
+    {
+        luabridge::LuaRef table = luabridge::getGlobal(L, "main");
+
+        // Tries to find the function "main" in Lua
+        if (!table["UpdateLoop"].isFunction())
+        {
+            std::cerr << lua_tostring(table.state(), -1);
+            assert(false);
+        }
+        // Sets the mainFunc ref to the function "main", this will be our main loop
+        mainFunc = std::make_unique<luabridge::LuaRef>(table["UpdateLoop"]);
     }
 }
 
