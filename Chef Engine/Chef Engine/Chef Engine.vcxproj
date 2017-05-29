@@ -140,6 +140,7 @@
     <ClCompile Include="LuaBridgeBinder.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="SFMLKeyboard.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="TileMapLayer.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Math.h" />
     <ClInclude Include="SFMLKeyboard.h" />
     <ClInclude Include="SFML_LuaBind.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="TileMapLayer.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Transform.h" />

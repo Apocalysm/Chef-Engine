@@ -7,6 +7,7 @@
 #include "DrawEventManager.h"
 #include "Camera.h"
 #include "SFMLKeyboard.h"
+#include "SoundManager.h"
 
 #include <SFML/Graphics.hpp>
 #include <Tmx\TmxTile.h>
@@ -67,6 +68,8 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Test");
 
+	ce::SoundManager* sM = new ce::SoundManager();
+
 	window.setFramerateLimit(60);
     float count = 10;
     float timer = 0;
@@ -78,6 +81,9 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	window.setKeyRepeatEnabled(false);
 	ce::SFMLKeyboard::Initialize();
+	sf::SoundBuffer buffer3;
+	sf::Sound* sound = new sf::Sound();
+	sf::Sound* buffer2 = new sf::Sound();
 
 	while (window.isOpen())
 	{
@@ -151,15 +157,16 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		if (ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::M))
 		{
-			std::cout << "Key Pressed" << std::endl;
+			sM->PlaySFX("sound.wav", sound);
+			
 		}
-		else if (ce::SFMLKeyboard::GetKey(sf::Keyboard::N))
+		else if (ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::N))
 		{
-			std::cout << "Key Down" << std::endl;
+			sM->PlayMusic("music.wav", true);
 		}
-		else if (ce::SFMLKeyboard::GetKeyUp(sf::Keyboard::Key(1)))
+		else if (ce::SFMLKeyboard::GetKeyUp(1))
 		{
-			std::cout << "Key Released" << std::endl;
+			sM->PlaySFX("sound2.wav", buffer2);
 		}
 
         objManager->CallUpdate();
