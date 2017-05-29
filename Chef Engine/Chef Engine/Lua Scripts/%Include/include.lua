@@ -11,15 +11,14 @@ require "OtherComponent"
 Components = 
 {
 	-- Here you simply add more components as you go
-	[1] = OtherComponent,
-	[2] = NewComponent
-	
+	[1] = NewComponent,
+	[2] = OtherComponent
 }
 
 local IDTicker = 0
 
 -- Loops through the table above and gives every component their own ID
-for key, value in pairs(Components) do
-	value.ID = IDTicker
+for i = 1, #Components do
+	Components[i].ID = IDTicker
 	IDTicker = IDTicker + 1
 end

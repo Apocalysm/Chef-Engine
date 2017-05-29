@@ -7,6 +7,9 @@ namespace ce
 {
 	class GameObject;
 
+    ////////////////////////////////////////////////////////////
+    /// \brief Base class for all other Component classes
+    ////////////////////////////////////////////////////////////
 	class Component
 	{
 		// Befriends the templated Bind function so it can access our protected functions
@@ -16,13 +19,11 @@ namespace ce
 		Component();
 		virtual ~Component();
 
-        /*!
-        * Start is called on the frame when a script is enabled just before the Update method is Called for the first time.
-        */
+        
+        /// \brief Start is called on the frame when a script is enabled just before the Update method is Called for the first time.
 		virtual void Start();
 		
-        // Update gets called every frame from the GameObjectManager
-		/*! Update is called every frame.*/
+        /// \brief Update is called every frame
         virtual void Update();
 
 		// Getter for the 'ID'-variable
@@ -56,9 +57,9 @@ namespace ce
         bool isNew;
 
 		// This decides if the Component should be updated for example via the Update method
-        /*! Enabled Components are Updated, disabled Components are not.*/
+        /// \brief Enabled Components are updated, disabled Components are not.
         bool enabled;
-
+		
         static void DoBind(lua_State* L);
 
 	};

@@ -1,14 +1,15 @@
 #include "GameObjectManager.h"
 
 #include "GameObject.h"
+#include "Camera.h"
 
 #include <utility>
 
 // Map with GameObjects 
-std::map<unsigned long long, std::map<unsigned long long, ce::GameObject*>> ce::GameObjectManager::enumToMapObj;
+std::map<Common::uint64, std::map<Common::uint64, ce::GameObject*>> ce::GameObjectManager::enumToMapObj;
 
 // Map with GameObjects recently created
-std::map<unsigned long long,std::map<unsigned long long, ce::GameObject*>> ce::GameObjectManager::enumToMapNewObj;
+std::map<Common::uint64,std::map<Common::uint64, ce::GameObject*>> ce::GameObjectManager::enumToMapNewObj;
 
 
 ce::GameObjectManager::GameObjectManager()
@@ -53,15 +54,15 @@ void ce::GameObjectManager::RemoveObject(GameObject* object)
 void ce::GameObjectManager::CallUpdate()
 {
 	// If there is any object in the map
-	if (!enumToMapObj.empty())
-	{
-		// Iterates through every map in the map
-		for (auto outer_it = enumToMapObj.begin(); outer_it != enumToMapObj.end(); outer_it++)
-		{
-			// If there is any object in the map
-			if (!outer_it->second.empty())
-			{
-				// Iterates through every object in the map
+    if (!enumToMapObj.empty())
+    {
+        // Iterates through every map in the map
+        for (auto outer_it = enumToMapObj.begin(); outer_it != enumToMapObj.end(); outer_it++)
+        {
+            // If there is any object in the map
+            if (!outer_it->second.empty())
+            {
+                // Iterates through every object in the map
                 for (auto inner_it = outer_it->second.begin(); inner_it != outer_it->second.end(); inner_it++)
                 {
                     // Updates the object
@@ -73,9 +74,9 @@ void ce::GameObjectManager::CallUpdate()
                         inner_it->second->ComponentUpdate();
                     }
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 
 	// If there are any maps in the map
 	if (!enumToMapNewObj.empty())

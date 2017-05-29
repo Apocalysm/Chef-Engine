@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="3" tileheight="3" nextobjectid="245">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="3" tileheight="3" nextobjectid="258">
  <tileset firstgid="1" name="ElectionDay_002" tilewidth="3" tileheight="3" tilecount="1980" columns="66">
   <image source="Sprites/SpriteSheet_v002.png" width="198" height="90"/>
   <terraintypes>
@@ -437,6 +437,9 @@
   <object id="240" gid="1980" x="195" y="36" width="3" height="3"/>
   <object id="241" gid="1649" x="195" y="30" width="3" height="3"/>
   <object id="242" gid="1966" x="177" y="69" width="3" height="3"/>
+ </objectgroup>
+ <objectgroup name="Collision Layer" offsetx="-0.422222" offsety="-0.0444444">
+  <object id="257" x="66.9556" y="53.0444" width="1" height="1"/>
  </objectgroup>
  <layer name="Shadow" width="100" height="100">
   <data encoding="csv">

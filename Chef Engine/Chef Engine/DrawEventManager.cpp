@@ -8,10 +8,10 @@
 using ce::DrawEventManager;
 
 // Map with Sprites 
-std::map<ce::DrawEventManager::int64, std::map<ce::DrawEventManager::int64, ce::Sprite*>> ce::DrawEventManager::enumToMapSpr;
+std::map<ce::DrawEventManager::uint64, std::map<ce::DrawEventManager::uint64, ce::Sprite*>> ce::DrawEventManager::enumToMapSpr;
 
 // Map with Sprites recently created
-std::map<ce::DrawEventManager::int64, std::map<ce::DrawEventManager::int64, ce::Sprite*>> ce::DrawEventManager::enumToMapNewSpr;
+std::map<ce::DrawEventManager::uint64, std::map<ce::DrawEventManager::uint64, ce::Sprite*>> ce::DrawEventManager::enumToMapNewSpr;
 
 // Vector containing layers from Tiled to be drawn
 std::vector<std::map<int, ce::TileMapLayer*>> ce::DrawEventManager::tileMapLayers;
@@ -45,6 +45,26 @@ void ce::DrawEventManager::RemoveSprite(Sprite* sprite)
 		else
 			enumToMapSpr[sprite->drawOrder].erase(ID);
 	}
+}
+
+void ce::DrawEventManager::MoveSprite(Sprite* sprite, const int newDrawOrder)
+{
+    // Checks if the sprite isNew or not
+    if (!sprite->isNew)
+    {
+        // Removes the sprite from it's old position
+        enumToMapSpr[sprite->drawOrder].erase(sprite->gameObject->GetID());
+        // Adds it to the new position
+        enumToMapSpr[newDrawOrder][sprite->gameObject->GetID()] = sprite;
+    }
+    else
+    {
+        // Removes the sprite from it's old position
+        enumToMapNewSpr[sprite->drawOrder].erase(sprite->gameObject->GetID());
+        // Adds it to the new position
+        enumToMapNewSpr[newDrawOrder][sprite->gameObject->GetID()] = sprite;
+    }
+
 }
 
 

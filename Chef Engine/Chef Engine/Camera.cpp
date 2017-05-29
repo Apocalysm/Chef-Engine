@@ -5,9 +5,17 @@
 
 using ce::Camera;
 
+Camera* Camera::main;
+sf::RenderWindow* Camera::window;
+
 Camera::Camera()
+    : zoom(1), follow(false)
 {
-	follow = false;
+    if (main == nullptr)
+    {
+        main = this;
+        window->setView(this->GetView());
+    }
 }
 
 
@@ -46,7 +54,6 @@ sf::View ce::Camera::GetView() const
 }
 
 
-
 void ce::Camera::SetCenter(const sf::Vector2f &center)
 {
 	this->center = center;
@@ -65,26 +72,36 @@ bool ce::Camera::GetFollow() const
 	return follow;
 }
 
+
 void ce::Camera::SetFollow(const bool & follow)
 {
 	this->follow = follow;
 }
 
 
-void ce::Camera::Update()
+void ce::Camera::UpdateCamera()
 {
-	mapSize = ce::MapHandler::GetMapSize();
+    if (follow)
+    {
+        center = gameObject->GetTransform()->GetPosition();
+        view.setCenter(center);
+    }
 
-	if (follow)
-	{
-		view.setCenter(gameObject->GetTransform()->GetPosition());
-	}
+    mapSize = ce::MapHandler::GetMapSize();
 
-	sf::Vector2f clampedCenter = sf::Vector2f(ce::Math::ClampF(view.getCenter().x, mapSize.x - (size.x / 2) * zoom, 0 + (size.x / 2) * zoom),
-		ce::Math::ClampF(view.getCenter().y, mapSize.y - (size.y / 2) * zoom, 0 + (size.y / 2) * zoom));
+    sf::Vector2f clampedCenter = center;
+    
+    if (mapSize.x > 0 && mapSize.y > 0)
+    {
+        clampedCenter = sf::Vector2f(ce::Math::ClampF(view.getCenter().x, mapSize.x - (size.x / 2) * zoom, 0 + (size.x / 2) * zoom),
+        ce::Math::ClampF(view.getCenter().y, mapSize.y - (size.y / 2) * zoom, 0 + (size.y / 2) * zoom));
+    }
+    center = clampedCenter;
 
-	view.setCenter(clampedCenter);
+    view.setCenter(center);
+    window->setView(this->GetView());
 }
+
 
 void ce::Camera::DoBind(lua_State * L)
 {

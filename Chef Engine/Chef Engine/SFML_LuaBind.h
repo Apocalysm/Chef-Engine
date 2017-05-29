@@ -32,9 +32,14 @@ namespace ce
                         .addData("x", &sf::Vector2u::x)
                         .addData("y", &sf::Vector2u::y)
                     .endClass()
-                
+                    .beginClass<sf::Color>("Color")
+                        .addConstructor<void(*)(sf::Uint8, sf::Uint8, sf::Uint8, sf::Uint8)>()
+                        .addData("r", &sf::Color::r)
+                        .addData("g", &sf::Color::g)
+                        .addData("b", &sf::Color::b)
+                        .addData("a", &sf::Color::a)            
+                    .endClass()
                 .endNamespace();
-
         }
     };
 }

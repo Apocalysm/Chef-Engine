@@ -1,4 +1,6 @@
 #include "Transform.h"
+#include "GameObject.h"
+#include "Collider.h"
 
 
 using ce::Transform;
@@ -6,7 +8,7 @@ using ce::Transform;
 // Default Constructor
 Transform::Transform()
 {
-	SetPosition(0, 0);
+	position = sf::Vector2f(0.0f, 0.0f);
 	SetRotation(0);
 	SetScale(1, 1);
 }
@@ -30,10 +32,16 @@ void Transform::Start()
 }
 
 
-// Overload for SetPosition with floats instead of a sf::Vector2f
+void ce::Transform::Update()
+{
+
+}
+
+
+// Overload for SetPosition with floating numbers instead of a sf::Vector2f
 void Transform::SetPosition(const float x, const float y)
 {
-	SetPosition(sf::Vector2f(x, y));
+		SetPosition(sf::Vector2f(x, y));
 }
 
 
@@ -48,9 +56,10 @@ const sf::Vector2f& Transform::GetPosition() const
 	return position;
 }
 
+
 void ce::Transform::Move(sf::Vector2f movement)
 {
-    position += movement;
+		position += movement;
 }
 
 
@@ -92,6 +101,12 @@ void Transform::SetScale(const sf::Vector2f& newScale)
 }
 
 
+void ce::Transform::SetGameObject(GameObject * gameObject)
+{
+	this->gameObject = gameObject;
+}
+
+
 void Transform::DoBind(lua_State * L)
 {
     luabridge::getGlobalNamespace(L)
@@ -106,6 +121,3 @@ void Transform::DoBind(lua_State * L)
             .endClass()
         .endNamespace();
 }
-
-
-

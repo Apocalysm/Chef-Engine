@@ -36,14 +36,14 @@ void ce::SFMLKeyboard::SetKeyUp(sf::Keyboard::Key key)
 	keys[key] = 0;
 }
 
-bool ce::SFMLKeyboard::GetKey(sf::Keyboard::Key key)
+bool ce::SFMLKeyboard::GetKey(int key)
 {
-	return keys[key] == 2;
+	return keys[sf::Keyboard::Key(key)] == 2;
 }
 
-bool ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::Key key)
+bool ce::SFMLKeyboard::GetKeyDown(int key)
 {
-	return newKeys[key] == 2;
+    return newKeys[sf::Keyboard::Key(key)] == 2;
 }
 
 bool ce::SFMLKeyboard::GetKeyUp(int key)

@@ -1,6 +1,7 @@
 #include "MapHandler.h"
 #include "DrawEventManager.h"
 #include "Sprite.h"
+#include "Collider.h"
 
 #include <Tmx\TmxPolygon.h>
 #include <Tmx\TmxPolyline.h>
@@ -19,6 +20,7 @@ int MapHandler::tileHeight;
 
 MapHandler::MapHandler()
 {
+    map = nullptr;
 }
 
 
@@ -176,6 +178,10 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 			ce::GameObject* gameObject = new ce::GameObject(object->GetName());
 
+			gameObject->GetTransform()->SetPosition(object->GetX(), object->GetY());
+
+			gameObject->GetTransform()->SetRotation(object->GetRot());
+
 			gameObjects.push_back(gameObject);
 
 			//Check what type the object is
@@ -206,13 +212,8 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 					spriteComponent->SetDrawOrder(layers[i]->GetParseOrder());
 
-					spriteComponent->SetRotation(object->GetRot());
-
-					spriteComponent->SetPosition(object->GetX(), object->GetY());
-
-
 					for (int k = tileSets.size() - 1; k >= 0; k--)
-	{
+	                {
 						Tmx::Tileset* ts = tileSets[k];
 
 						bool flipped_horizontally = (object->GetGid() & FLIPPED_HORIZONTALLY_FLAG);
@@ -222,7 +223,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 						int unflippedGid = object->GetGid() & ~(FLIPPED_VERTICALLY_FLAG | FLIPPED_HORIZONTALLY_FLAG | FLIPPED_DIAGONALLY_FLAG);
 
 						if (ts->GetFirstGid() <= unflippedGid)
-		{
+		                {
 							int localID = unflippedGid - ts->GetFirstGid();
 
 
@@ -249,13 +250,13 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 				}
 				else
-			{
+			    {
 					// This is a rect!
-					/*sf::RectangleShape* rectShape = new sf::RectangleShape;
-					rectShape->setSize(sf::Vector2f(object->GetWidth(), object->GetHeight()));
-					rectShape->setPosition(sf::Vector2f(object->GetX(), object->GetY()));
-					rectShape->setRotation(object->GetRot());*/
+					sf::Vector2f rectSize = sf::Vector2f(object->GetWidth(), object->GetHeight());
 					
+					ce::Collider* collider = gameObject->AddComponent<ce::Collider>();
+					collider->SetupTMX(rectSize,false,false);
+
 					break;
 				}
 

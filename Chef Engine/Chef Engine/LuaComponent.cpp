@@ -14,11 +14,45 @@ LuaComponent::LuaComponent(luabridge::LuaRef ref) :
     if (ref["Awake"].isFunction())
     {
         ref["Awake"](ref);
-    }
+}       
 
     // Sets the Start and Update methods of the Lua Script
-    startFunc = std::make_unique<luabridge::LuaRef>(ref["Start"]);
-    updateFunc = std::make_unique<luabridge::LuaRef>(ref["Update"]);
+    if (ref["Start"].isFunction())
+    {
+        startFunc = std::make_unique<luabridge::LuaRef>(ref["Start"]);
+    }
+    if (ref["Update"].isFunction())
+    {
+        updateFunc = std::make_unique<luabridge::LuaRef>(ref["Update"]);
+    }
+
+
+    // Sets all the Collision Event methods of the Lua Script
+    if (ref["OnCollisionEnter"].isFunction())
+	{
+        onCollisionEnterFunc = std::make_unique<luabridge::LuaRef>(ref["OnCollisionEnter"]);
+	}
+    if (ref["OnCollisionExit"].isFunction())
+    {
+        onCollisionExitFunc = std::make_unique<luabridge::LuaRef>(ref["OnCollisionExit"]);
+    }
+	if (ref["OnCollisionStay"].isFunction())
+	{
+		onCollisionStayFunc = std::make_unique<luabridge::LuaRef>(ref["OnCollisionStay"]);
+	}
+    if (ref["OnTriggerEnter"].isFunction())
+    {
+        onTriggerEnterFunc = std::make_unique<luabridge::LuaRef>(ref["OnTriggerEnter"]);
+    }
+    if (ref["OnTriggerExit"].isFunction())
+    {
+        onTriggerExitFunc = std::make_unique<luabridge::LuaRef>(ref["OnTriggerExit"]);
+    }
+	if (ref["OnTriggerStay"].isFunction())
+	{
+		onTriggerStayFunc = std::make_unique<luabridge::LuaRef>(ref["OnTriggerStay"]);
+	}
+
 }
 
 
@@ -26,7 +60,8 @@ LuaComponent::~LuaComponent()
 {
 }
 
-
+// All the "Lua Functions" are methods that call on functions in Lua using LuaRefs
+#pragma region Lua Functions
 void LuaComponent::Start()
 {
     if (startFunc != nullptr)
@@ -40,88 +75,120 @@ void LuaComponent::Update()
 {
     if (updateFunc != nullptr)
     {
+        int id = ref["ID"];
         (*updateFunc)(ref);
     }
 }
 
-
-void LuaComponent::LoadScript(lua_State* L, const std::string* scriptPath, const std::string* tableName)
+void ce::LuaComponent::OnCollisionEnter(ce::Collider * collider)
 {
-    // If luaL_dofile doesn't find anything at the scriptPath, we get an error
-    if (luaL_dofile(L, scriptPath->c_str()))
+    if (onCollisionEnterFunc != nullptr)
     {
-        std::cerr << lua_tostring(L, -1) << std::endl;
-    }
-
-    // Gets the specified table to see if it exists, if not, we get an error
-    luabridge::LuaRef table = luabridge::getGlobal(L, tableName->c_str());
-
-    if (!table.isTable())
-    {
-        std::cerr << lua_tostring(L, -1) << std::endl;
-    }
-
-
-    // Checks if a function called "Start" exists in the table 
-    if (table["Start"].isFunction())
-    {
-        // If it is, we add it to the startFunc pointer
-        startFunc = std::make_unique<luabridge::LuaRef>(table["Start"]);
-    }
-    else
-    {
-        // If not, we make sure it's pointing to null
-        startFunc = nullptr;
-    }
-
-    // Checks if a function called "Update" exists in the table 
-    if (table["Update"].isFunction())
-    {
-        // If it is, we add it to the updateFunc pointer
-        updateFunc = std::make_unique<luabridge::LuaRef>(table["Update"]);
-    }
-    else
-    {
-        // If not, we make sure it's pointing to null
-        updateFunc = nullptr;
+        (*onCollisionEnterFunc)(ref, collider);
     }
 }
 
+void ce::LuaComponent::OnCollisionExit(ce::Collider * collider)
+{
+    if (onCollisionExitFunc != nullptr)
+    {
+        (*onCollisionExitFunc)(ref, collider);
+    }
+}
+
+void ce::LuaComponent::OnCollisionStay(ce::Collider * collider)
+{
+	if (onCollisionStayFunc != nullptr)
+	{
+		(*onCollisionStayFunc)(ref, collider);
+	}
+}
+
+void ce::LuaComponent::OnTriggerEnter(ce::Collider * collider)
+{
+    if (onTriggerEnterFunc != nullptr)
+    {
+        (*onTriggerEnterFunc)(ref, collider);
+    }
+}
+
+void ce::LuaComponent::OnTriggerExit(ce::Collider * collider)
+{
+    if (onTriggerExitFunc != nullptr)
+    {
+        (*onTriggerExitFunc)(ref, collider);
+    }
+}
+
+void ce::LuaComponent::OnTriggerStay(ce::Collider * collider)
+{
+	if (onTriggerStayFunc != nullptr)
+	{
+		(*onTriggerStayFunc)(ref, collider);
+	}
+}
+#pragma endregion
 
 luabridge::LuaRef LuaComponent::LoadComponent(luabridge::LuaRef component)
 {
     // Creates an empty table in the same state as the component we want to copy
     luabridge::LuaRef newComponent = luabridge::newTable(component.state());
-    
-    // Loops through all the members of the component-table we want to copy 
-    for (auto pair : getKeyValueMap(component))
+
+    ce::LuaKeyValue* keys = getKeyValueMap(component);
+
+    // Loops through all the members with string keys in the table
+    for (auto pair : keys->stringKeys)
     {
         // Sets a key on our new, copied table to have the correct coresponding value
         newComponent[pair.first] = pair.second;
     }
+    // Does the same with the number keys
+    for (auto pair : keys->numberKeys)
+    {
+        newComponent[pair.first] = pair.second;
+    }
+
+    delete keys;
 
     return newComponent;
 }
 
 
-std::unordered_map<std::string, luabridge::LuaRef> LuaComponent::getKeyValueMap(const luabridge::LuaRef& table)
+ce::LuaKeyValue* LuaComponent::getKeyValueMap(const luabridge::LuaRef& table)
 {
-    std::unordered_map<std::string, luabridge::LuaRef> result;
-    if (table.isNil()) { return result; }
+    ce::LuaKeyValue* keys = new ce::LuaKeyValue();
 
+    // Returns immediately if their isn't anything on the LuaRef
+    if (table.isNil()) { return keys; }
+
+    // Gets the state of the table and pushes it up again so it's on the top of the stack
     auto L = table.state();
-    push(L, table); // push table
+    push(L, table);
 
-    lua_pushnil(L);  // push nil, so lua_next removes it from stack and puts (k, v) on stack
-    while (lua_next(L, -2) != 0) { // -2, because we have table at -1
-        if (lua_isstring(L, -2)) { // only store stuff with string keys
-            result.emplace(lua_tostring(L, -2), luabridge::LuaRef::fromStack(L, -1));
+    // Pushes nil so lua_next takes it from the stack and instead put's (k, v) (the pairs in the table) on the stack
+    lua_pushnil(L);
+    // Checks if there is something on (-2) which is the first key
+    while (lua_next(L, -2) != 0) 
+    {        
+        if (lua_isnumber(L, -2))
+        {
+            // Stores the number key and it's value in the number map
+            keys->numberKeys.emplace(lua_tonumber(L, -2), luabridge::LuaRef::fromStack(L, -1));
         }
-        lua_pop(L, 1); // remove value, keep key for lua_next
-    }
+        // Checks if the key was a string
+        else if (lua_isstring(L, -2)) 
+        {
+                // Stores the string key and it's value in the string map
+                keys->stringKeys.emplace(lua_tostring(L, -2), luabridge::LuaRef::fromStack(L, -1));
+        }
 
-    lua_pop(L, 1); // pop table
-    return result;
+        // Removes the value we just checked so lua_next will go to the next one
+        lua_pop(L, 1);
+    }
+    // Removes the whole copied table;
+    lua_pop(L, 1); 
+
+    return keys;
 }
 
 
