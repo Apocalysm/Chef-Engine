@@ -1,6 +1,6 @@
 #include "ResourceManager.h"
 #include "Texture.h"
-#include "SoudBuffer.h"
+#include "SoundBuffer.h"
 
 std::map<const std::string, ce::Resource*> ce::ResourceManager::stringToResource;
 
@@ -34,7 +34,7 @@ ce::Resource* ce::ResourceManager::GetResource(const std::string path)
 		}
 		else if (path.find(".wav") || path.find(".ogg") || path.find(".flac") || path.find(".raw") || path.find(".aiff"))
 		{
-			res = new ce::SoudBuffer();
+			res = new ce::SoundBuffer();
 		}
 		else
 		{
