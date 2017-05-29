@@ -2,16 +2,6 @@
 
 using ce::Resource;
 
-Resource::Resource()
-{
-}
-
-
-Resource::~Resource()
-{
-}
-
-
 const std::string Resource::GetPath() const
 {
 	return path;

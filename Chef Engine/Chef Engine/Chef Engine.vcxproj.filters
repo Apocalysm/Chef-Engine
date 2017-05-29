@@ -61,7 +61,9 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="SoudBuffer.cpp" />
+    <ClCompile Include="SoudBuffer.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -127,7 +129,9 @@
     <ClInclude Include="Texture.h">
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="SoudBuffer.h" />
+    <ClInclude Include="SoudBuffer.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

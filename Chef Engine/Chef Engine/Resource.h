@@ -7,11 +7,9 @@ namespace ce
 	class Resource
 	{
 	public:
-		Resource();
-		~Resource();
+		virtual void LoadResource(const std::string path);
 
 		const std::string GetPath() const;
-		virtual void LoadResource(const std::string path);
 
 	protected:
 		std::string path;
