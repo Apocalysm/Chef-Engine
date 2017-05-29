@@ -1,7 +1,7 @@
 #include "Sprite.h"
-
 #include "GameObject.h"
 #include "DrawEventManager.h"
+#include "ResourceManager.h"
 
 using ce::Sprite;
 
@@ -43,9 +43,9 @@ void Sprite::Update()
 
 void Sprite::SetSprite(const std::string& fileName)
 {
-	texture.loadFromFile(fileName);
+	texture = (ce::Texture*)ce::ResourceManager::GetResource(fileName);
 
-	sprite->setTexture(texture);
+	sprite->setTexture(*texture->GetTexture());
 
 	sprite->setPosition(transform->GetPosition());
 }

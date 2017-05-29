@@ -6,16 +6,16 @@
 
 namespace ce
 {
-	class ResourceManager
+	class ResourceManager 
 	{
 	public:
 		ResourceManager();
 		~ResourceManager();
 		
-		Resource* getResource(const std::string* path);
-		void unloadREsource(const std::string* path);
+		static Resource* GetResource(const std::string path);
+		static void UnloadResource(const std::string path);
 
 	private:
-		std::map<const std::string*, Resource*> stringToResource;
+		static std::map<const std::string, Resource*> stringToResource;
 	};
 }

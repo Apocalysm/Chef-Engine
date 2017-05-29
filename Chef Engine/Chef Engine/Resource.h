@@ -10,10 +10,10 @@ namespace ce
 		Resource();
 		~Resource();
 
-		const std::string* getPath() const;
-		void loadResource(const std::string* path);
+		const std::string GetPath() const;
+		virtual void LoadResource(const std::string path);
 
 	protected:
-		const std::string* path;
+		std::string path;
 	};
 }

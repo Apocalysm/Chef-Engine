@@ -10,6 +10,7 @@ mapHandler:LoadMap("RefferenceMap.tmx")
 object = Chef.GameObject("Green")
 comp = object:AddLuaComponent(NewComponent)
 object.transform.position = Chef.Vector2f(100, 50)
+object.transform.scale = Chef.Vector2f(10, 10);
 
 sprite = object:AddSprite()
 sprite:SetSprite("player.png")

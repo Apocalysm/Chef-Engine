@@ -6,10 +6,10 @@
 #include <utility>
 
 // Map with GameObjects 
-std::map<unsigned long long, std::map<unsigned long long, ce::GameObject*>> ce::GameObjectManager::enumToMapObj;
+std::map<Common::uint64, std::map<Common::uint64, ce::GameObject*>> ce::GameObjectManager::enumToMapObj;
 
 // Map with GameObjects recently created
-std::map<unsigned long long,std::map<unsigned long long, ce::GameObject*>> ce::GameObjectManager::enumToMapNewObj;
+std::map<Common::uint64,std::map<Common::uint64, ce::GameObject*>> ce::GameObjectManager::enumToMapNewObj;
 
 
 ce::GameObjectManager::GameObjectManager()
