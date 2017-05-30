@@ -6,20 +6,12 @@ std::map<const std::string, ce::Resource*> ce::ResourceManager::stringToResource
 
 using ce::ResourceManager;
 
-ResourceManager::ResourceManager()
-{
-}
-
-
-ResourceManager::~ResourceManager()
-{
-}
-
-
 ce::Resource* ce::ResourceManager::GetResource(const std::string path)
 {
+	// Gets resource with the path passed in this method
 	auto resource = stringToResource.find(path);
 
+	// If the resource was found
 	if (resource != stringToResource.end())
 	{
 		return (*resource).second;
@@ -33,19 +25,28 @@ ce::Resource* ce::ResourceManager::GetResource(const std::string path)
 
 		if (fileType == ".png" || fileType == ".jpg" || fileType == ".bmp" || fileType == ".gif" || fileType == ".tga" || fileType == ".psd" || fileType == ".hdr" || fileType == ".pic")
 		{
+			// Creates resource as a Texture
 			res = new ce::Texture();
 		}
 		else if (fileType == ".wav" || fileType == ".ogg" || fileType == ".flac" || fileType == ".raw" || fileType == ".aiff")
 		{
+			// Creates resource as a SoundBuffer
 			res = new ce::SoundBuffer();
 		}
+		// If the requested resource is a font
+		/*else if ()
+		{
+
+		}*/
 		else
 		{
 			res = new Resource();
 		}
 
 		res->LoadResource(path);
+
 		stringToResource[path] = res;
+
 		return res;
 	}
 }
@@ -53,10 +54,13 @@ ce::Resource* ce::ResourceManager::GetResource(const std::string path)
 
 void ce::ResourceManager::UnloadResource(const std::string path)
 {
+	// Gets requseted resource
 	auto resource = stringToResource.find(path);
 
+	// If resource was found
 	if (resource != stringToResource.end())
 	{
+		// Deletes and erases resource from the map
 		delete stringToResource[path];
 		stringToResource.erase(resource);
 	}

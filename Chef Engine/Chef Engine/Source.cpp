@@ -52,11 +52,12 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	ce::SoundManager* sM = new ce::SoundManager("sound.wav");
 	ce::SoundManager* sM2 = new ce::SoundManager("sound2.wav");
 
+	ce::MapHandler* map = new ce::MapHandler(); 
+
 	window.setFramerateLimit(60);
     float count = 10;
     float timer = 0;
     ce::Camera::window = &window;
-    window.setFramerateLimit(60);
 
 	map->LoadMap("RefferenceMap.tmx");
 	std::string* mapName = new std::string("RefferenceMap.tmx");
