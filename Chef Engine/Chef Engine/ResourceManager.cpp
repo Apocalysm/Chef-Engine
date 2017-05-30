@@ -30,8 +30,13 @@ ce::Resource* ce::ResourceManager::GetResource(const std::string path)
 		else if (path.find(".wav") || path.find(".ogg") || path.find(".flac") || path.find(".raw") || path.find(".aiff"))
 		{
 			// Creates resource as a SoundBuffer
-			res = new ce::SoudBuffer();
+			res = new ce::SoundBuffer();
 		}
+		// If the requested resource is a font
+		/*else if ()
+		{
+
+		}*/
 		else
 		{
 			res = new Resource();

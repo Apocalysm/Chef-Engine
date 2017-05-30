@@ -134,6 +134,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ContactListener.cpp" />
     <ClCompile Include="DrawEventManager.cpp" />
+    <ClCompile Include="Font.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="LuaComponent.cpp" />
     <ClCompile Include="MapHandler.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="ContactListener.h" />
     <ClInclude Include="DrawEventManager.h" />
+    <ClInclude Include="Font.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="LuaComponent.h" />
