@@ -8,6 +8,7 @@
 #include "Sprite.h"
 #include "Camera.h"
 #include "Collider.h"
+#include "Text.h"
 
 #include "MapHandler.h"
 #include "SFMLKeyboard.h"
@@ -21,7 +22,6 @@
 
 // Linking a library through code
 #pragma comment(lib, "lua53.lib")
-
 
 using ce::LuaBridgeBinder;
 
@@ -139,6 +139,8 @@ void ce::LuaBridgeBinder::BindAll()
     Bind<ce::Transform>(L);
     Bind<ce::Camera>(L);
     Bind<ce::Collider>(L);
+	Bind<ce::DrawableComponent>(L);
+	Bind<ce::Text>(L);
 
     Bind<ce::MapHandler>(L);
     Bind<ce::SFMLKeyboard>(L);

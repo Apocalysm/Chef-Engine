@@ -6,33 +6,30 @@
 #include <vector>
 #include <map>
 
-
 namespace ce
 {
-	class Sprite;
+	class DrawableComponent;
 
 	class DrawEventManager
 	{
 	public:
-		DrawEventManager();
-
-        static void AddSprite(Sprite* sprite);
-		static void RemoveSprite(Sprite* sprite);
-        static void MoveSprite(Sprite * sprite, int newDrawOrder);
+        static void AddDrawable(DrawableComponent* drawable);
+		static void RemoveDrawable(DrawableComponent* drawable);
+        static void MoveDrawable(DrawableComponent* drawable, int newDrawOrder);
 		static void AddTmxLayers(std::vector<std::map<int, ce::TileMapLayer*>> tileMapLayers);
 		void Draw(sf::RenderWindow& window);
 
 	private:
         typedef unsigned long long uint64;
 
-		typedef std::map<uint64, Sprite*> SpriteMap;
-		typedef std::map<uint64, SpriteMap> OrderSpriteMap;
+		typedef std::map<uint64, DrawableComponent*> DrawableMap;
+		typedef std::map<uint64, DrawableMap> OrderDrawableMap;
 
-		// OrderSpriteMap with Sprite components recently created
-		static OrderSpriteMap enumToMapNewSpr;
+		// OrderDrawableMap with DrawableComponents recently created
+		static OrderDrawableMap enumToMapNewDrawable;
 
-		// Map with Sprite components
-		static OrderSpriteMap enumToMapSpr;
+		// Map with DrawableComponents
+		static OrderDrawableMap enumToMapDrawable;
 
 		// Vector containing layers from Tiled to be drawn
         static std::vector<std::map<int, ce::TileMapLayer*>> tileMapLayers;

@@ -27,7 +27,7 @@ Sprite::Sprite(const int newDrawOrder)
 
 Sprite::~Sprite()
 {
-	ce::DrawEventManager::RemoveSprite(this);
+	ce::DrawEventManager::RemoveDrawable(this);
 	delete sprite;
 }
 
@@ -69,7 +69,7 @@ void Sprite::SetOrigin(const sf::Vector2f newOrigin)
 }
 
 
-void Sprite::SetColor(const sf::Color color)
+void Sprite::SetColor(const sf::Color& color)
 {
 	sprite->setColor(color);
 }
@@ -81,15 +81,13 @@ void Sprite::SetColor(const int r, const int g, const int b, const int a)
 }
 
 
-void Sprite::SetDrawOrder(const int newDrawOrder)
+sf::Sprite* Sprite::GetSprite() const
 {
-    ce::DrawEventManager::MoveSprite(this, newDrawOrder);
-
-	drawOrder = newDrawOrder;
+	return sprite;
 }
 
 
-sf::Sprite* Sprite::GetSprite() const
+sf::Drawable* ce::Sprite::GetDrawable() const
 {
 	return sprite;
 }
@@ -107,12 +105,6 @@ sf::Color Sprite::GetColor() const
 }
 
 
-int Sprite::GetDrawOrder() const
-{
-	return drawOrder;
-}
-
-
 void ce::Sprite::SetGameObject(GameObject* gameObject)
 {
 	this->gameObject = gameObject;
@@ -120,7 +112,7 @@ void ce::Sprite::SetGameObject(GameObject* gameObject)
 	// Gets the transform of the owner of this sprite-component
 	transform = gameObject->GetTransform();
 	
-	ce::DrawEventManager::AddSprite(this);
+	ce::DrawEventManager::AddDrawable(this);
 }
 
 

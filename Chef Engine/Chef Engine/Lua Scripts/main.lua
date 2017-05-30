@@ -16,6 +16,14 @@ sprite = object:AddSprite()
 sprite:SetSprite("player.png")
 sprite.drawOrder = 1
 
+textObj = Chef.GameObject("Text")
+--textObj.transform.scale = Chef.Vector2f(0.01,0.01)
+text = object:AddText()
+text.font = "fancy font.ttf"
+text.string = "This is very fancy"
+text.size = 8
+text.drawOrder = 3
+
 
 -- This is the main loop of the engine, it will be called every frame
 main = {}

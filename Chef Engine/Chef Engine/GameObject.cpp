@@ -4,6 +4,7 @@
 #include "Sprite.h"
 #include "Collider.h"
 #include "Camera.h"
+#include "Text.h"
 
 #include "GameObjectManager.h"
 #include "DrawEventManager.h"
@@ -253,36 +254,40 @@ luabridge::LuaRef GameObject::AddLuaComponent(luabridge::LuaRef ref)
 
 void GameObject::DoBind(lua_State * L)
 {
-    luabridge::getGlobalNamespace(L)
-            .beginNamespace("Chef")
-                
-            .beginClass<GameObject>("GameObject")
-                .addConstructor<void (*) (std::string)>()
-                
-                .addProperty("active", &GameObject::GetActive, &GameObject::SetActive)
-                .addProperty("layer", &GameObject::GetLayer, &GameObject::SetLayer)
-                .addProperty("instanceID", &GameObject::GetID)
-                .addProperty("name", &GameObject::GetName, &GameObject::SetName)
-                .addProperty("transform", &GameObject::GetTransform)
-                .addFunction("Equals", &GameObject::operator==)
-                   
-                .addFunction("AddLuaComponent", &GameObject::AddLuaComponent)
-                .addFunction("GetLuaComponent", &GameObject::GetLuaComponent)
-                .addFunction("RemoveLuaComponent", &GameObject::RemoveLuaComponent)  
+	luabridge::getGlobalNamespace(L)
+		.beginNamespace("Chef")
 
-                .addFunction("GetTransform", &GameObject::GetComponent<ce::Transform>)
+		.beginClass<GameObject>("GameObject")
+		.addConstructor<void(*) (std::string)>()
 
-                .addFunction("AddSprite", &GameObject::AddComponent<ce::Sprite>)
-                .addFunction("GetSprite", &GameObject::GetComponent<ce::Sprite>)
-                .addFunction("RemoveSprite", &GameObject::RemoveComponent<ce::Sprite>)
-                    
-                .addFunction("AddCollider", &GameObject::AddComponent<ce::Collider>)
-                .addFunction("GetCollider", &GameObject::GetComponent<ce::Collider>)
-                .addFunction("RemoveCollider", &GameObject::RemoveComponent<ce::Collider>)
+		.addProperty("active", &GameObject::GetActive, &GameObject::SetActive)
+		.addProperty("layer", &GameObject::GetLayer, &GameObject::SetLayer)
+		.addProperty("instanceID", &GameObject::GetID)
+		.addProperty("name", &GameObject::GetName, &GameObject::SetName)
+		.addProperty("transform", &GameObject::GetTransform)
+		.addFunction("Equals", &GameObject::operator==)
 
-                .addFunction("AddCamera", &GameObject::AddComponent<ce::Camera>)
-                .addFunction("GetCamera", &GameObject::GetComponent<ce::Camera>)
-                .addFunction("RemoveCamera", &GameObject::RemoveComponent<ce::Camera>)
+		.addFunction("AddLuaComponent", &GameObject::AddLuaComponent)
+		.addFunction("GetLuaComponent", &GameObject::GetLuaComponent)
+		.addFunction("RemoveLuaComponent", &GameObject::RemoveLuaComponent)
+
+		.addFunction("GetTransform", &GameObject::GetComponent<ce::Transform>)
+
+		.addFunction("AddSprite", &GameObject::AddComponent<ce::Sprite>)
+		.addFunction("GetSprite", &GameObject::GetComponent<ce::Sprite>)
+		.addFunction("RemoveSprite", &GameObject::RemoveComponent<ce::Sprite>)
+
+		.addFunction("AddCollider", &GameObject::AddComponent<ce::Collider>)
+		.addFunction("GetCollider", &GameObject::GetComponent<ce::Collider>)
+		.addFunction("RemoveCollider", &GameObject::RemoveComponent<ce::Collider>)
+
+		.addFunction("AddCamera", &GameObject::AddComponent<ce::Camera>)
+		.addFunction("GetCamera", &GameObject::GetComponent<ce::Camera>)
+		.addFunction("RemoveCamera", &GameObject::RemoveComponent<ce::Camera>)
+
+		.addFunction("AddText", &GameObject::AddComponent<ce::Text>)
+		.addFunction("GetText", &GameObject::GetComponent<ce::Text>)
+		.addFunction("RemoveText", &GameObject::RemoveComponent<ce::Text>)
 
                 /*.addStaticData("Default", Default, false)
                 .addStaticData("Player", Player, false)

@@ -1,6 +1,9 @@
 #include "ResourceManager.h"
 #include "Texture.h"
 #include "SoundBuffer.h"
+#include "Font.h"
+
+#include <assert.h>
 
 std::map<const std::string, ce::Resource*> ce::ResourceManager::stringToResource;
 
@@ -34,12 +37,15 @@ ce::Resource* ce::ResourceManager::GetResource(const std::string path)
 			res = new ce::SoundBuffer();
 		}
 		// If the requested resource is a font
-		/*else if ()
+		else if (fileType == ".fnt" || fileType == ".ttf" || fileType == ".lwfn" || fileType == ".cff" || fileType == ".otf" || fileType == ".sfnt" || fileType == ".bdf" || fileType == ".pfr")
 		{
-
-		}*/
+			// Creates resource as Font
+			res = new ce::Font();
+		}
 		else
 		{
+			assert(!"Unsupported file format!");
+
 			res = new Resource();
 		}
 

@@ -2,7 +2,12 @@
 
 #include "Resource.h"
 
-#include <SFML\Graphics.hpp>
+#include <string>
+
+namespace sf
+{
+	class Font;
+}
 
 namespace ce
 {

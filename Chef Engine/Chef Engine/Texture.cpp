@@ -1,5 +1,7 @@
 #include "Texture.h"
 
+#include <assert.h>
+
 using ce::Texture;
 
 Texture::Texture()
@@ -18,7 +20,10 @@ void Texture::LoadResource(const std::string path)
 {
 	this->path = path;
 
-	texture->loadFromFile(path);
+	if (!texture->loadFromFile(path))
+	{
+		assert(!"Couldn't load image file!");
+	}
 }
 
 

@@ -1,5 +1,7 @@
 #include "SoundBuffer.h"
 
+#include <assert.h>
+
 using ce::SoundBuffer;
 
 SoundBuffer::SoundBuffer()
@@ -18,7 +20,10 @@ void SoundBuffer::LoadResource(const std::string path)
 {
 	this->path = path;
 
-	soundBuffer->loadFromFile(path);
+	if (!soundBuffer->loadFromFile(path))
+	{
+		assert("Couldn't load sound file!");
+	}
 }
 
 

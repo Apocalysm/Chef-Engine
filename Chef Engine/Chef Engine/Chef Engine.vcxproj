@@ -133,6 +133,7 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ContactListener.cpp" />
+    <ClCompile Include="DrawableComponent.cpp" />
     <ClCompile Include="DrawEventManager.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -145,6 +146,7 @@
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="SoundBuffer.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="TileMapLayer.cpp" />
@@ -159,6 +161,7 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ContactListener.h" />
+    <ClInclude Include="DrawableComponent.h" />
     <ClInclude Include="DrawEventManager.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="GameObject.h" />
@@ -173,6 +176,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="SoundBuffer.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TileMapLayer.h" />
     <ClInclude Include="Sprite.h" />
