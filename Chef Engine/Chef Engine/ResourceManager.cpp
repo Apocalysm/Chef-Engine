@@ -28,11 +28,14 @@ ce::Resource* ce::ResourceManager::GetResource(const std::string path)
 	{
 		Resource* res;
 
-		if (path.find(".png") || path.find(".jpg") || path.find(".bmp") || path.find(".gif") || path.find(".tga") || path.find(".psd") || path.find(".hdr") || path.find(".pic"))
+		std::size_t strPos = path.find(".");
+		std::string fileType = path.substr(strPos);
+
+		if (fileType == ".png" || fileType == ".jpg" || fileType == ".bmp" || fileType == ".gif" || fileType == ".tga" || fileType == ".psd" || fileType == ".hdr" || fileType == ".pic")
 		{
 			res = new ce::Texture();
 		}
-		else if (path.find(".wav") || path.find(".ogg") || path.find(".flac") || path.find(".raw") || path.find(".aiff"))
+		else if (fileType == ".wav" || fileType == ".ogg" || fileType == ".flac" || fileType == ".raw" || fileType == ".aiff")
 		{
 			res = new ce::SoundBuffer();
 		}

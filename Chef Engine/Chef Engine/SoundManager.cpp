@@ -1,8 +1,18 @@
 #include "SoundManager.h"
-#include <assert.h>
+#include "ResourceManager.h"
 
-ce::SoundManager::SoundManager()
+#include <assert.h>
+#include <iostream>
+
+
+float ce::SoundManager::sfxVolume;
+
+ce::SoundManager::SoundManager(std::string fileName) :
+	sound(new sf::Sound()), fileName(fileName)
 {
+	sfxVolume = 1;
+	buffer = (ce::SoundBuffer*) ce::ResourceManager::GetResource(fileName);
+	this->sound->setBuffer(*buffer->GetSoundBuffer());
 }
 
 
@@ -12,10 +22,6 @@ ce::SoundManager::~SoundManager()
 }
 
 
-
-
-
-
 void ce::SoundManager::PlayMusic(const std::string fileName, bool loop)
 {
 	if (!music.openFromFile(fileName))
@@ -23,28 +29,46 @@ void ce::SoundManager::PlayMusic(const std::string fileName, bool loop)
 		assert(!"Couldnt load file");
 	}
 	music.setLoop(loop);
+	music.setVolume(musicVolume);
 	music.play();
 }
 
-void ce::SoundManager::SetMusicVolume(int volume)
-{
-	music.setVolume(volume);
-}
 
 
 void ce::SoundManager::PlaySFX(const std::string fileName, sf::Sound* sound)
 {
+	buffer = (ce::SoundBuffer*) ce::ResourceManager::GetResource(fileName);
 
-	if (!buffer.loadFromFile(fileName))
-	{
-		assert(!"Couldnt load file");
-	}
+	sound->setBuffer(*buffer->GetSoundBuffer());
+	sound->setVolume(sfxVolume);
+	sound->play();
 
-	sound->setBuffer(buffer);
+	
+}
+
+void ce::SoundManager::PlaySFXSOUND()
+{
+	sound->setVolume(sfxVolume);
 	sound->play();
 }
 
-/*void ce::SoundManager::SetSFXVolume(float volume)
+void ce::SoundManager::SetSFXVolume(float volume)
 {
-	sound.setVolume(volume);
-}*/
+	sfxVolume = volume;
+}
+
+float ce::SoundManager::GetSFXVolume()
+{
+	return sfxVolume;
+}
+
+void ce::SoundManager::SetMusicVolume(float volume)
+{
+	musicVolume = volume;
+}
+
+float ce::SoundManager::GetMusicVolume()
+{
+	return musicVolume;
+}
+

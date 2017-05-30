@@ -45,10 +45,12 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	ce::ContactListener contactListener;
 	collManager->GetWorld()->SetContactListener(&contactListener);
 
+	ce::MapHandler* map = new ce::MapHandler();
 
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Test");
 
-	ce::SoundManager* sM = new ce::SoundManager();
+	ce::SoundManager* sM = new ce::SoundManager("sound.wav");
+	ce::SoundManager* sM2 = new ce::SoundManager("sound2.wav");
 
 	window.setFramerateLimit(60);
     float count = 10;
@@ -106,16 +108,14 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		if (ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::M))
 		{
-			sM->PlaySFX("sound.wav", sound);
-			
+			sM->PlaySFXSOUND();
 		}
 		else if (ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::N))
 		{
-			sM->PlayMusic("music.wav", true);
+			sM2->PlaySFXSOUND();
 		}
 		else if (ce::SFMLKeyboard::GetKeyUp(1))
 		{
-			sM->PlaySFX("sound2.wav", buffer2);
 		}
         // Updates the camera if there is one
         if (ce::Camera::main != nullptr)

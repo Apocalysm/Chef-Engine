@@ -115,9 +115,6 @@
     <ClInclude Include="Common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SoundManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ContactListener.h">
       <Filter>Header Files\Manager/Handler Classes</Filter>
     </ClInclude>
@@ -135,6 +132,9 @@
     </ClInclude>
     <ClInclude Include="SFML_LuaBind.h">
       <Filter>Header Files\Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Header Files\Manager/Handler Classes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
