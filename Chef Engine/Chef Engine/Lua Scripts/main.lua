@@ -23,10 +23,18 @@ text = textObj:AddText()
 text.font = "fancy font.ttf"
 text.string = "This is a text"
 text.size = 60
-
+text.drawOrder = 3
+text.fillColor = Chef.Color(0, 0, 255, 255)
+text.outlineThickness = 5
+text.outlineColor = Chef.Color(255, 0, 0, 255)
 
 -- This is the main loop of the engine, it will be called every frame
 main = {}
 function main.UpdateLoop()
+
+if Chef.Input.GetKeyDown(Chef.Q) == true then
+	textObj:Destroy()
+	textObj = nil
+	end
 
 end

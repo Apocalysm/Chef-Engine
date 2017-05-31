@@ -8,10 +8,6 @@ using ce::Sprite;
 Sprite::Sprite()
 {
 	sprite = new sf::Sprite();
-
-	drawOrder = 0;
-
-	isNew = true;
 }
 
 
@@ -20,15 +16,14 @@ Sprite::Sprite(const int newDrawOrder)
 	sprite = new sf::Sprite();
 
 	drawOrder = newDrawOrder;
-
-	isNew = true;
 }
 
 
 Sprite::~Sprite()
 {
-	ce::DrawEventManager::RemoveDrawable(this);
 	delete sprite;
+
+	texture->DecrementUseCount();
 }
 
 
@@ -102,17 +97,6 @@ sf::Vector2f Sprite::GetOrigin() const
 sf::Color Sprite::GetColor() const
 {
 	return sprite->getColor();
-}
-
-
-void ce::Sprite::SetGameObject(GameObject* gameObject)
-{
-	this->gameObject = gameObject;
-
-	// Gets the transform of the owner of this sprite-component
-	transform = gameObject->GetTransform();
-	
-	ce::DrawEventManager::AddDrawable(this);
 }
 
 

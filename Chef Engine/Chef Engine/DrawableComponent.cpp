@@ -1,7 +1,22 @@
 #include "DrawableComponent.h"
 #include "DrawEventManager.h"
+#include "GameObject.h"
 
-sf::Drawable * ce::DrawableComponent::GetDrawable() const
+ce::DrawableComponent::DrawableComponent()
+{
+	isNew = true;
+
+	drawOrder = 0;
+}
+
+
+ce::DrawableComponent::~DrawableComponent()
+{
+	ce::DrawEventManager::RemoveDrawable(this);
+}
+
+
+sf::Drawable* ce::DrawableComponent::GetDrawable() const
 {
 	return nullptr;
 }
@@ -18,6 +33,17 @@ void ce::DrawableComponent::SetDrawOrder(const int drawOrder)
 int ce::DrawableComponent::GetDrawOrder() const
 {
 	return drawOrder;
+}
+
+
+void ce::DrawableComponent::SetGameObject(GameObject* gameObject)
+{
+	this->gameObject = gameObject;
+
+	// Gets the transform of the owner of this sprite-component
+	transform = gameObject->GetTransform();
+
+	ce::DrawEventManager::AddDrawable(this);
 }
 
 

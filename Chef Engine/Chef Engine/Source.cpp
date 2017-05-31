@@ -11,6 +11,8 @@
 #include "ContactListener.h"
 #include "SFMLKeyboard.h"
 #include "SoundManager.h"
+#include "ResourceManager.h"
+#include "Text.h"
 
 #include <SFML/Graphics.hpp>
 #include <Tmx\TmxTile.h>
@@ -73,6 +75,23 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     // Binds all defined classes with LuaBridge
     ce::LuaBridgeBinder::BindAll();
 
+
+
+	ce::GameObject* testObj = new ce::GameObject();
+	ce::Text* text = testObj->AddComponent<ce::Text>();
+	ce::Sprite* spr = testObj->AddComponent<ce::Sprite>();
+	text->SetFont("times.ttf");
+	text->SetString("DESTROY THIS");
+	text->SetSize(60);
+	text->SetDrawOrder(4);
+	spr->SetSprite("image2.jpg");
+	spr->SetDrawOrder(3);
+	testObj->GetTransform()->SetPosition(50, 50);
+	testObj->GetTransform()->SetScale(0.1f, 0.1f);
+
+
+
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -116,11 +135,19 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		else if (ce::SFMLKeyboard::GetKeyUp(1))
 		{
 		}
+
+		if (ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::E))
+		{
+			delete testObj;
+		}
+
         // Updates the camera if there is one
         if (ce::Camera::main != nullptr)
         {
             ce::Camera::main->UpdateCamera();
         }
+
+		ce::ResourceManager::Update();
 
 		drawManager->Draw(window);
 

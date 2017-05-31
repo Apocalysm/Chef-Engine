@@ -49,11 +49,36 @@ ce::Resource* ce::ResourceManager::GetResource(const std::string path)
 			res = new Resource();
 		}
 
+		res->IncrementUseCount();
+
 		res->LoadResource(path);
 
 		stringToResource[path] = res;
 
 		return res;
+	}
+}
+
+
+void ce::ResourceManager::Update()
+{
+	// If there are any resources
+	if (stringToResource.size() != 0)
+	{
+		for (auto it = stringToResource.begin(); it != stringToResource.end();)
+		{
+			// If the resource isn't being used
+			if (it->second->GetUseCount() == 0)
+			{
+				// Deletes and erases the resource
+				delete it->second;
+				it = stringToResource.erase(it);
+			}
+			else
+			{
+				it++;
+			}
+		}
 	}
 }
 

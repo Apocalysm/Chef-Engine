@@ -1,4 +1,5 @@
 #include "Text.h"
+#include "DrawEventManager.h"
 #include "GameObject.h"
 #include "ResourceManager.h"
 #include "Font.h"
@@ -16,15 +17,17 @@ Text::Text()
 Text::~Text()
 {
 	delete text;
+
+	font->DecrementUseCount();
 }
 
 
 void ce::Text::Update()
 {
 	// Makes the texts transform the same as the gameObjects transform
-	text->setPosition(gameObject->GetTransform()->GetPosition());
-	text->setRotation(gameObject->GetTransform()->GetRotation());
-	text->setScale(gameObject->GetTransform()->GetScale());
+	text->setPosition(transform->GetPosition());
+	text->setRotation(transform->GetRotation());
+	text->setScale(transform->GetScale());
 }
 
 

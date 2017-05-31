@@ -79,8 +79,6 @@ namespace ce
 
 		sf::Drawable* GetDrawable() const;
 
-		void SetGameObject(GameObject* gameObject);
-
 	private:
 		friend class DrawEventManager;
 
@@ -98,11 +96,6 @@ namespace ce
 		sf::Color color;
         /// \brief How far up the Sprite is drawn in the game, the higher the number, the higer it is drawn
 		//int drawOrder;
-
-		bool isNew;
-
-		// The transform of this components GameObject
-		ce::Transform* transform;
 
 		// Binds parts of this script to Lua
 		static void DoBind(lua_State* L);
