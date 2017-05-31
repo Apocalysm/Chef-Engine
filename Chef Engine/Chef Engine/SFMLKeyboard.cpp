@@ -48,6 +48,7 @@ bool ce::SFMLKeyboard::GetKeyDown(int key)
 
 bool ce::SFMLKeyboard::GetKeyUp(int key)
 {
+	//If the current key is 0 that means its released and we can return true
 	if (newKeys[sf::Keyboard::Key(key)] == 0)
 	{
 		return true;

@@ -64,9 +64,14 @@
     <ClCompile Include="SoundBuffer.cpp">
       <Filter>Source Files\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Font.cpp">
       <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Source Files\Manager/Handler Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="MusicManager.cpp">
+      <Filter>Source Files\Manager/Handler Classes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +145,9 @@
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
     <ClInclude Include="SoundManager.h">
+      <Filter>Header Files\Manager/Handler Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="MusicManager.h">
       <Filter>Header Files\Manager/Handler Classes</Filter>
     </ClInclude>
   </ItemGroup>

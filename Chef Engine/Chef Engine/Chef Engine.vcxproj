@@ -141,6 +141,7 @@
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="LuaBridgeBinder.cpp" />
     <ClCompile Include="Math.cpp" />
+    <ClCompile Include="MusicManager.cpp" />
     <ClCompile Include="SFMLKeyboard.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="MapHandler.h" />
     <ClInclude Include="LuaBridgeBinder.h" />
     <ClInclude Include="Math.h" />
+    <ClInclude Include="MusicManager.h" />
     <ClInclude Include="SFMLKeyboard.h" />
     <ClInclude Include="SFML_LuaBind.h" />
     <ClInclude Include="SoundManager.h" />
