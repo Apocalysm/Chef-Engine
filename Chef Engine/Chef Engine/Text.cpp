@@ -36,13 +36,15 @@ sf::Drawable* ce::Text::GetDrawable() const
 
 void ce::Text::SetFont(const std::string path)
 {
+	// Gets the font from the resource manager
 	font = (Font*)ResourceManager::GetResource(path);
 
+	// Sets the font to the text object
 	text->setFont(*font->GetFont());
 }
 
 
-sf::Font * ce::Text::GetFont() const
+sf::Font* ce::Text::GetFont() const
 {
 	return font->GetFont();
 }

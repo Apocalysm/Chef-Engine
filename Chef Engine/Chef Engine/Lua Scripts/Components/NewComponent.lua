@@ -25,11 +25,11 @@ end
 
 -- Used for initialization
 function NewComponent.Start(self)
---[[
+
 	self.camera = self.gameObject:AddCamera()
-	self.camera.size = Chef.Vector2f(640, 360)
+	self.camera.size = Chef.Vector2f(128, 72)
 	self.camera.follow = true
-	]]--
+	
 	
 	self.collision = self.gameObject:AddCollider()
 	self.collision:SetFitSprite(true, true, false)
