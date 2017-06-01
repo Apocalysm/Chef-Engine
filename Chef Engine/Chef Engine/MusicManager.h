@@ -17,11 +17,13 @@ namespace ce
 		MusicManager();
 		~MusicManager();
 
-		void PlayMusic(std::string fileName, bool loop);
+		void PlayMusic(const std::string& fileName, bool loop);
 		void SetVolume(float volume);
 		float GetVolume() const;
 
 	private:
+        sf::Music* music;
+
 		static void DoBind(lua_State* L);
 		float volume;
 	};

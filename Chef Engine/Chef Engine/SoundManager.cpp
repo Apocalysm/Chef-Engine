@@ -10,7 +10,7 @@
 using namespace ce;
 float SoundManager::sfxMasterVolume = 1;
 
-ce::SoundManager::SoundManager(std::string fileName) : sfxVolume(1)
+ce::SoundManager::SoundManager(const std::string& fileName) : sfxVolume(1)
 {
 	sounds.push_back(new sf::Sound());
 	buffer = (ce::SoundBuffer*) ce::ResourceManager::GetResource(fileName);
@@ -102,6 +102,7 @@ void ce::SoundManager::DoBind(lua_State * L)
 	luabridge::getGlobalNamespace(L)
 		.beginNamespace("Chef")
 			.beginClass<SoundManager>("Sound")
+                .addConstructor<void(*)(const std::string&)>()
 				.addFunction("PlaySound", &SoundManager::PlaySFX)
 				.addProperty("volume", &SoundManager::GetSoundVolume, &SoundManager::SetSoundVolume)
 				.addProperty("masterVolume", &SoundManager::GetMasterVolume, &SoundManager::SetMasterVolume)

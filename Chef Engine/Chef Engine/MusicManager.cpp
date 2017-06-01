@@ -6,7 +6,9 @@
 
 using namespace ce;
 
-MusicManager::MusicManager() : volume(1)
+MusicManager::MusicManager() : 
+    volume(1),
+    music(new sf::Music())
 {
 }
 
@@ -15,18 +17,17 @@ MusicManager::~MusicManager()
 {
 }
 
-void ce::MusicManager::PlayMusic(std::string fileName, bool loop)
+void ce::MusicManager::PlayMusic(const std::string& fileName, bool loop)
 {
-	sf::Music music;
 	//Load the music file
-	if (!music.openFromFile(fileName))
+	if (!music->openFromFile(fileName))
 	{
-
+        assert(false);
 	}
 	//Set the volume for the music
-	music.setVolume(volume);
+	music->setVolume(volume);
 	//Play the music
-	music.play();
+	music->play();
 }
 
 
@@ -47,8 +48,9 @@ void ce::MusicManager::DoBind(lua_State * L)
 {
 	luabridge::getGlobalNamespace(L)
 		.beginNamespace("Chef")
-			.beginClass<MusicManager>("Sound")
-				.addFunction("PlaySound", &MusicManager::PlayMusic)
+			.beginClass<MusicManager>("Music")
+                .addConstructor<void(*)(void)>()
+				.addFunction("PlayMusic", &MusicManager::PlayMusic)
 				.addProperty("volume", &MusicManager::GetVolume, &MusicManager::SetVolume)
 			.endClass()
 		.endNamespace();

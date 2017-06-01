@@ -30,6 +30,7 @@
 
 #pragma once
 #include "LuaBridgeBinder.h"
+#include "Vec2.h"
 
 namespace ce
 {

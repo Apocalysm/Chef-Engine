@@ -32,6 +32,9 @@ function NewComponent.Start(self)
 	self.collision:SetFitSprite(true, true, false)
 	
 	self.other = self.gameObject:AddLuaComponent(OtherComponent)
+	
+	
+	self.sfx = Chef.Sound("Sounds\\sound.wav")
 end
 
 
@@ -56,6 +59,10 @@ function NewComponent.Update(self)
 			self.transform:Move(Chef.Vector2f(0, self.speed))
 			self.other.canMove = false
 		end
+	end
+	
+	if Chef.Input.GetKeyDown(Chef.Space) == true then
+		self.sfx:PlaySound()
 	end
 
 end

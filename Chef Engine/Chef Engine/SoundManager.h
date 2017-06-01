@@ -17,7 +17,7 @@ namespace ce
 		friend void LuaBridgeBinder::Bind<ce::SoundManager>(lua_State*);
 
 	public:
-		SoundManager(std::string fileName);
+		SoundManager(const std::string& fileName);
 		~SoundManager();
 
 
