@@ -95,6 +95,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 	{	
 		delete map;
 
+		//Delete all the tile map layers on the old map
 		for (auto outer_it = tileMapLayers.begin(); outer_it != tileMapLayers.end(); outer_it++)
 		{
 			for (auto inner_it = outer_it->begin(); inner_it != outer_it->end();inner_it++)
@@ -103,6 +104,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 			}
 			outer_it->clear();
 		}
+		//Delete all the object from tiled on the old map
 		for (auto i = gameObjects.begin(); i != gameObjects.end(); i++)
 		{
 			(*i)->Destroy();
@@ -143,6 +145,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 			const Tmx::Color* color = tileSets[i]->GetImage()->GetTransparentColor();
 			image.createMaskFromColor(sf::Color(color->GetRed(), color->GetGreen(), color->GetBlue(), 255));
 		}
+		//Load in the texture
 		texture.loadFromImage(image);
 		tileTextures.push_back(texture);
 	}
@@ -219,6 +222,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 			ce::GameObject* gameObject = new ce::GameObject(object->GetName());
 
+			//Set all transform values for the object
 			gameObject->GetTransform()->SetPosition(object->GetX(), object->GetY());
 
 			gameObject->GetTransform()->SetRotation(object->GetRot());
@@ -259,12 +263,14 @@ void MapHandler::LoadMap(const std::string& fileName)
 	                {
 						Tmx::Tileset* ts = tileSets[k];
 
-						bool flipped_horizontally = (object->GetGid() & FLIPPED_HORIZONTALLY_FLAG);
-						bool flipped_vertically = (object->GetGid() & FLIPPED_VERTICALLY_FLAG);
-						bool flipped_diagonally = (object->GetGid() & FLIPPED_DIAGONALLY_FLAG);
+						bool flippedHorizontally = (object->GetGid() & FLIPPED_HORIZONTALLY_FLAG);
+						bool flippedVertically = (object->GetGid() & FLIPPED_VERTICALLY_FLAG);
+						bool flippedDiagonally = (object->GetGid() & FLIPPED_DIAGONALLY_FLAG);
 
+						//Get the unflipped gid for the object in the tile map
 						int unflippedGid = object->GetGid() & ~(FLIPPED_VERTICALLY_FLAG | FLIPPED_HORIZONTALLY_FLAG | FLIPPED_DIAGONALLY_FLAG);
 
+						//Check if the gid is a part of the current tileMap
 						if (ts->GetFirstGid() <= unflippedGid)
 		                {
 							int localID = unflippedGid - ts->GetFirstGid();
@@ -277,13 +283,17 @@ void MapHandler::LoadMap(const std::string& fileName)
 							sprite->setTexture(tileTextures[k]);
 							sprite->setTextureRect(sf::IntRect(tu * object->GetWidth(), tv * object->GetHeight(), object->GetWidth(), object->GetHeight()));
 
-							if (flipped_diagonally)
+							//Flip the sprite diagonally
+							if (flippedDiagonally)
 								sprite->setTextureRect(sf::IntRect(tu * (object->GetWidth() + 1) - 1, tv * (object->GetHeight() + 1) + 5, -object->GetWidth(), -object->GetHeight()));
-							else if (flipped_vertically)
+							//Flip the sprite vertically
+							else if (flippedVertically)
 								sprite->setTextureRect(sf::IntRect(tu * object->GetWidth(), tv * (object->GetHeight() + 1) + 5, object->GetWidth(), -object->GetHeight()));
-							else if (flipped_horizontally)
+							//Flip the sprite Horizontally
+							else if (flippedHorizontally)
 								sprite->setTextureRect(sf::IntRect(tu * (object->GetWidth() + 1) - 1, tv * object->GetHeight(), -object->GetWidth(), object->GetHeight()));
 
+							//Set the origin because the objects in tiled have an offset 
 							sprite->setOrigin(0, tileHeight);
 							spriteComponent->ChangeSprite(sprite);
 

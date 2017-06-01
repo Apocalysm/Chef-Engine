@@ -50,8 +50,6 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	ce::ContactListener contactListener;
 	collManager->GetWorld()->SetContactListener(&contactListener);
 
-	ce::MapHandler* map = new ce::MapHandler();
-
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Test");
 
 	ce::SoundManager* sM = new ce::SoundManager("sound.wav");
@@ -62,10 +60,6 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     float timer = 0;
     ce::Camera::window = &window;
 
-	map->LoadMap("RefferenceMap.tmx");
-	std::string* mapName = new std::string("RefferenceMap.tmx");
-	map->RegisterMap(0, mapName);
-	map->LoadObject();
 
 	window.setKeyRepeatEnabled(false);
 	ce::SFMLKeyboard::Initialize();
@@ -130,11 +124,13 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		if (ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::M))
 		{
-			sM->PlaySFXSOUND();
+			sM->PlaySFX();
+			//sM->SetSFXVolume(2);
 		}
 		else if (ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::N))
 		{
-			sM2->PlaySFXSOUND();
+			sM2->PlaySFX();
+			//sM->SetSFXVolume(1);
 		}
 		else if (ce::SFMLKeyboard::GetKeyUp(1))
 		{
