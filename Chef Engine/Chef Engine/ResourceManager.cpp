@@ -17,6 +17,7 @@ ce::Resource* ce::ResourceManager::GetResource(const std::string path)
 	// If the resource was found
 	if (resource != stringToResource.end())
 	{
+		(*resource).second->IncrementUseCount();
 		return (*resource).second;
 	}
 	else
