@@ -48,6 +48,8 @@ namespace ce
 
 		unsigned int AsMilliseconds() const;
 
+		signed long long AsMicroseconds() const;
+
 	private:
 		sf::Time* time;
 	};
