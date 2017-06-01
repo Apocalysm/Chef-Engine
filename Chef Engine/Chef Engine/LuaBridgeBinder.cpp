@@ -39,6 +39,9 @@
 #include "SFMLKeyboard.h"
 #include "SFMLLuaBind.h"
 
+#include "SoundManager.h"
+#include "MusicManager.h"
+
 #include "Vec2.h"
 
 #include "LuaBind.h"
@@ -174,6 +177,9 @@ void ce::LuaBridgeBinder::BindAll()
     Bind<ce::Collider>(L);
 	Bind<ce::DrawableComponent>(L);
 	Bind<ce::Text>(L);
+
+    Bind<ce::SoundManager>(L);
+    Bind<ce::MusicManager>(L);
 
     Bind<ce::MapHandler>(L);
     Bind<ce::SFMLKeyboard>(L);

@@ -24,35 +24,21 @@
 
 
 #include "SFMLLuaBind.h"
-
+#include "Camera.h"
 #include "LuaBind.h"
 
 #include <SFML\Graphics.hpp>
+
+void SetWindowSize(const ce::Vec2u& size)
+{
+    ce::Camera::window->setSize(size.ToSfVector2());
+}
 
 void ce::SFMLLuaBind::DoBind(lua_State* L)
 {
     luabridge::getGlobalNamespace(L)
         .beginNamespace("Chef")
-        // Binds the three templated types of sf::Vector2
-            /*.beginClass<sf::Vector2f>("Vector2f")
-                .addConstructor<void(*)(float, float)>()
-                .addData("x", &sf::Vector2f::x)
-                .addData("y", &sf::Vector2f::y)
-            .endClass()
-
-            .beginClass<sf::Vector2i>("Vector2i")
-                .addConstructor<void(*)(int, int)>()
-                .addData("x", &sf::Vector2i::x)
-                .addData("y", &sf::Vector2i::y)
-            .endClass()
-
-            .beginClass<sf::Vector2u>("Vector2u")
-                .addConstructor<void(*)(unsigned, unsigned)>()
-                .addData("x", &sf::Vector2u::x)
-                .addData("y", &sf::Vector2u::y)
-            .endClass()*/
-
-        // Binds SFML's Color class
+            // Binds SFML Color
             .beginClass<sf::Color>("Color")
                 .addConstructor<void(*)(sf::Uint8, sf::Uint8, sf::Uint8, sf::Uint8)>()
                 .addData("r", &sf::Color::r)
@@ -60,5 +46,11 @@ void ce::SFMLLuaBind::DoBind(lua_State* L)
                 .addData("b", &sf::Color::b)
                 .addData("a", &sf::Color::a)
             .endClass()
+
+            // Binds SFML RenderWindow
+            .beginNamespace("Window")
+                .addFunction("SetSize", &SetWindowSize)
+            .endNamespace()
+            
         .endNamespace();
 }

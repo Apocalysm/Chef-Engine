@@ -22,10 +22,13 @@
 //
 ////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////
+//
+// Author: Rasmus Andersson
+//
+////////////////////////////////////////////////////////////
 
 #pragma once
-
-// Make sure that the stl can include this! (not)
 
 namespace ce
 {
@@ -37,6 +40,9 @@ namespace ce
 
         template <typename T>
         static T Clamp(T value, T maxValue, T minValue);
+
+        template <typename T>
+        static T Lerp(T value, T goal, T step);
 	};
 }
 
@@ -53,5 +59,11 @@ T ce::Mathf::Clamp(T value, T maxValue, T minValue)
     }
 
     return value;
+}
+
+template <typename T>
+T ce::Mathf::Lerp(T value, T goal, T step)
+{
+    return value + (goal - value) * step;
 }
 
