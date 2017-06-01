@@ -27,11 +27,13 @@ ce::Resource* ce::ResourceManager::GetResource(const std::string path)
 		std::size_t strPos = path.find(".");
 		std::string fileType = path.substr(strPos);
 
+		// If the requested resource is an image
 		if (fileType == ".png" || fileType == ".jpg" || fileType == ".bmp" || fileType == ".gif" || fileType == ".tga" || fileType == ".psd" || fileType == ".hdr" || fileType == ".pic")
 		{
 			// Creates resource as a Texture
 			res = new ce::Texture();
 		}
+		// If the requested resource is a sound
 		else if (fileType == ".wav" || fileType == ".ogg" || fileType == ".flac" || fileType == ".raw" || fileType == ".aiff")
 		{
 			// Creates resource as a SoundBuffer
