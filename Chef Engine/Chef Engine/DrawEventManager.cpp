@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////////
 //
 // Chef Engine
-// Copyright (C) 2017 
-//
+// Copyright (C) 2017 Oskar Svensson
+//  
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
 //
@@ -21,6 +21,13 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 ////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////
+//
+// Author: Dennis Karlsson
+//
+////////////////////////////////////////////////////////////
+
 
 #include "DrawEventManager.h"
 
