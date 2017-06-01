@@ -43,6 +43,20 @@ namespace sf
 
 namespace ce
 {
+    ////////////////////////////////////////////////////////////
+    /// \brief This is the class you want to use when playing sounds
+    /// Don't be fooled by the name SoundManager, in Lua it's actually
+    /// just called Sound. You use the class by simply constructing it with
+    /// the path of the sound file you want to use, and then using the PlaySound method
+    /// 
+    /// \code
+    /// -- Creates a new sound and plays it
+    /// 
+    /// self.hitSound = Chef.Sound("Sounds\\hit.wav")
+    /// self.hitSound:PlaySound()
+    /// \endcode
+    ///
+    ////////////////////////////////////////////////////////////
 	class SoundManager
 	{
 		friend void LuaBridgeBinder::Bind<ce::SoundManager>(lua_State*);
@@ -66,8 +80,27 @@ namespace ce
 		std::string fileName;
 		ce::SoundBuffer* buffer;
 
+        ////////////////////////////////////////////////////////////
+        /// \brief Global volume of all sound clips
+        /// The individual volume of all sound clips is multiplied by this value
+        /// \code
+        /// -- Sets the global volume to be higher of all sounds
+        /// 
+        /// Chef.Sound.masterVolume = 1.5
+        /// \endcode
+        ////////////////////////////////////////////////////////////
 		static float sfxMasterVolume;
 
+        ////////////////////////////////////////////////////////////
+        /// \brief Volume of the individual sound-file
+        /// The max volume of a sound is 2 
+        /// \code
+        /// -- Sets the volume to be higher of the sound
+        /// 
+        /// self.sound = Chef.Sound("Sounds\\hit.wav")
+        /// self.sound.volume = self.sound.volume * 0.5
+        /// \endcode
+        ////////////////////////////////////////////////////////////
 		float sfxVolume;
 
 	};

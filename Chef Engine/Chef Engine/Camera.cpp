@@ -132,8 +132,8 @@ void ce::Camera::UpdateCamera()
     
     if (mapSize.x > 0 && mapSize.y > 0)
     {
-        clampedCenter = ce::Vec2f(ce::Mathf::Clamp<float>(view->getCenter().x, mapSize.x - (size.x / 2) * zoom, 0 + (size.x / 2) * zoom),
-                                  ce::Mathf::Clamp<float>(view->getCenter().y, mapSize.y - (size.y / 2) * zoom, 0 + (size.y / 2) * zoom));
+        clampedCenter = ce::Vec2f(ce::Mathf<float>::Clamp(view->getCenter().x, mapSize.x - (size.x / 2) * zoom, 0 + (size.x / 2) * zoom),
+                                  ce::Mathf<float>::Clamp(view->getCenter().y, mapSize.y - (size.y / 2) * zoom, 0 + (size.y / 2) * zoom));
     }
     center = clampedCenter;
 

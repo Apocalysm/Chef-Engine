@@ -50,6 +50,12 @@ struct b2Vec2;
 
 namespace ce
 {
+    ////////////////////////////////////////////////////////////
+    /// \brief Representation of 2D vectors and points
+    /// In Lua the class is called with it's full name: Vector2
+    /// The available variants of this class are: Vector2f(float), Vector2i(int) and Vector2u(unsigned int).
+    /// In the examples of this class, I will only be using the float kind, Vector2f.
+    ////////////////////////////////////////////////////////////
     template<typename T>
     class Vec2
     {
@@ -59,6 +65,16 @@ namespace ce
     public:
         // Internal
         Vec2();
+        ////////////////////////////////////////////////////////////
+        /// \brief Constructor for Vector2
+        /// Constructs a new Vector2 with the given x, y values
+        /// 
+        /// \code
+        /// -- Creates a new Vector2f
+        /// 
+        /// spawnPoint = Chef.Vector2f(50, 60)
+        /// \endcode
+        ////////////////////////////////////////////////////////////
         Vec2(T _x, T _y);
         Vec2(const Vec2<T>& other);
 
