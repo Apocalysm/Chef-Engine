@@ -3,6 +3,12 @@
 
 #include <string>
 
+namespace sf
+{
+    class Music;
+    class Sound;
+}
+
 namespace ce
 {
 	class SoundManager
@@ -22,7 +28,7 @@ namespace ce
 
 
 	private:
-		sf::Music music;
+		sf::Music* music;
 		sf::Sound* sound;
 		std::string fileName;
 		ce::SoundBuffer* buffer;

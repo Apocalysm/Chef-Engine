@@ -24,12 +24,9 @@
 
 
 #pragma once
-#include "Component.h"
+#include "DrawableComponent.h"
 
 #include "Vec2.h"
-
-#include "Component.h"
-
 #include "LuaBridgeBinder.h"
 
 #include <string>

@@ -2,6 +2,8 @@
 #include "DrawEventManager.h"
 #include "GameObject.h"
 
+#include "LuaBind.h"
+
 ce::DrawableComponent::DrawableComponent()
 {
 	isNew = true;

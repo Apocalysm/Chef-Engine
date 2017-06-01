@@ -4,6 +4,7 @@
 #include <Sprite.h>
 #include <Camera.h>
 #include <Collider.h>
+#include <DrawableComponent.h>
 
 #include <GameObjectManager.h>
 #include <DrawEventManager.h>

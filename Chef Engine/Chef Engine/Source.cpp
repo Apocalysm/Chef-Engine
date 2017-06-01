@@ -14,7 +14,8 @@
 #include "ResourceManager.h"
 #include "Text.h"
 
-#include <SFML/Graphics.hpp>
+#include <SFML\Graphics.hpp>
+#include <SFML\Audio.hpp>
 #include <Tmx\TmxTile.h>
 
 #include <Windows.h>

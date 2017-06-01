@@ -24,6 +24,7 @@
 
 #include "DrawEventManager.h"
 
+#include "DrawableComponent.h"
 #include "Component.h"
 #include "GameObject.h"
 #include "TileMapLayer.h"
@@ -42,6 +43,11 @@ std::map<ce::DrawEventManager::uint64, std::map<ce::DrawEventManager::uint64, ce
 std::vector<std::map<int, ce::TileMapLayer*>> ce::DrawEventManager::tileMapLayers;
 
 std::vector<sf::RenderStates> ce::DrawEventManager::renderStates;
+
+ce::DrawEventManager::DrawEventManager()
+{
+}
+
 
 void ce::DrawEventManager::AddDrawable(ce::DrawableComponent* drawable)
 {

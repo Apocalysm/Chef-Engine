@@ -1,6 +1,8 @@
 #include "SoundManager.h"
 #include "ResourceManager.h"
 
+#include <SFML\Audio.hpp>
+
 #include <assert.h>
 #include <iostream>
 
@@ -24,13 +26,13 @@ ce::SoundManager::~SoundManager()
 
 void ce::SoundManager::PlayMusic(const std::string fileName, bool loop)
 {
-	if (!music.openFromFile(fileName))
+	if (!music->openFromFile(fileName))
 	{
 		assert(!"Couldnt load file");
 	}
-	music.setLoop(loop);
-	music.setVolume(musicVolume);
-	music.play();
+	music->setLoop(loop);
+	music->setVolume(musicVolume);
+	music->play();
 }
 
 
