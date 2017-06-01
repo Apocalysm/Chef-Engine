@@ -1,5 +1,4 @@
 #pragma once
-
 #include <string>
 
 namespace ce
@@ -11,7 +10,16 @@ namespace ce
 
 		const std::string GetPath() const;
 
+		void IncrementUseCount();
+
+		void DecrementUseCount();
+
+		int GetUseCount() const;
+
 	protected:
 		std::string path;
+
+		// The amount of objects using this resource
+		int useCount;
 	};
 }

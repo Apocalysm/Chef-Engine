@@ -1,7 +1,32 @@
+////////////////////////////////////////////////////////////
+//
+// Chef Engine
+// Copyright (C) 2017 Oskar Svensson
+//  
+// This software is provided 'as-is', without any express or implied warranty.
+// In no event will the authors be held liable for any damages arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it freely,
+// subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented;
+//    you must not claim that you wrote the original software.
+//    If you use this software in a product, an acknowledgment
+//    in the product documentation would be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such,
+//    and must not be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source distribution.
+//
+////////////////////////////////////////////////////////////
+
+
 #pragma once
+#include "LuaBridgeBinder.h"
+#include "Common.h"
 #include "LuaComponent.h"
-#include "Transform.h"
-#include "ContactListener.h"
 
 #include <vector>
 #include <map>
@@ -13,9 +38,11 @@
 
 namespace ce
 {
-	// Forward declaration to Component since Component includes GameObject
 	class Component;
-	
+    class Transform;
+    class ContactListener;
+
+
 ////////////////////////////////////////////////////////////
 /// \brief Base Class that holds Components
 /// 
@@ -25,10 +52,8 @@ namespace ce
 		// Befriends the templated Bind function so it can access our protected functions
 		friend void LuaBridgeBinder::Bind<ce::GameObject>(lua_State*);
 
-        typedef unsigned long long int64;
-
 	public:
-		GameObject();
+        CHEF_API GameObject();
 
         ////////////////////////////////////////////////////////////
         /// \brief Constructor to use in Lua
@@ -41,9 +66,9 @@ namespace ce
         /// object = Chef.GameObject("name")
         /// \endcode
         ////////////////////////////////////////////////////////////
-		GameObject(std::string name);
+        CHEF_API GameObject(std::string name);
 
-		~GameObject();
+        CHEF_API ~GameObject();
 
 
         #pragma region Component Methods
@@ -75,7 +100,7 @@ namespace ce
         /// controller = object:GetLuaComponent(PlayerController.ID)
         /// \endcode
         ////////////////////////////////////////////////////////////
-        luabridge::LuaRef AddLuaComponent(luabridge::LuaRef ref);
+        luabridge::LuaRef AddLuaComponent( luabridge::LuaRef ref);
 
         ////////////////////////////////////////////////////////////
         /// \brief Gets the specified Lua Component in the GameObject
@@ -123,12 +148,12 @@ namespace ce
 		Transform* GetTransform() const;
 
 		// Getter and setter methods for 'name' variable
-		std::string GetName() const;
-		void SetName(std::string name);
+		const std::string& GetName() const;
+		void SetName(const std::string& name);
 
 		// Getter and setter methods for 'tag' variable
-		std::string GetTag() const;
-		void SetTag(std::string tag);
+		const std::string& GetTag() const;
+		void SetTag(const std::string& tag);
 
         ////////////////////////////////////////////////////////////
 		/// \brief Removes the GameObject and all its Components from the game
@@ -142,7 +167,7 @@ namespace ce
 		void Destroy();
 
 		// Getter for instanceID
-        int64 GetID() const;
+        const uint64& GetID() const;
 
 		// Overloads the == operator to a method
 		bool operator==(const GameObject& other);
@@ -155,7 +180,7 @@ namespace ce
 		// All the components the GameObject is currently holding
 		std::map<int, Component*> components;
 
-        std::map<int, LuaComponent*> luaComponents;
+        std::map<int, ce::LuaComponent*> luaComponents;
 
         /// \brief What the GameObject is called
 		std::string name;
@@ -170,10 +195,10 @@ namespace ce
 		Layers layer;
 
 		// number to differentiate our different GameObject
-        int64 instanceID;
+        uint64 instanceID;
 
 		// We set instanceID with this value 
-		static int64 uniqueIDCounter;
+		static uint64 uniqueIDCounter;
 
 		// If we created the object this frame
 		bool isNew;
@@ -284,5 +309,4 @@ namespace ce
 			}
 		}
 	}
-
 }

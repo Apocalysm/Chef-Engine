@@ -1,12 +1,49 @@
+////////////////////////////////////////////////////////////
+//
+// Chef Engine
+// Copyright (C) 2017 Oskar Svensson
+//  
+// This software is provided 'as-is', without any express or implied warranty.
+// In no event will the authors be held liable for any damages arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it freely,
+// subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented;
+//    you must not claim that you wrote the original software.
+//    If you use this software in a product, an acknowledgment
+//    in the product documentation would be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such,
+//    and must not be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source distribution.
+//
+////////////////////////////////////////////////////////////
+
+
 #include "Collider.h"
+
 #include "GameObject.h"
+#include "Component.h"
+#include "Transform.h"
 #include "Sprite.h"
+
 #include "CollisionManager.h"
+#include "LuaBind.h"
+
+#include <SFML\Graphics.hpp>
+#include <Box2D\Box2D.h>
 
 using ce::Collider;
 
 
-Collider::Collider()
+Collider::Collider() :
+    sprite(nullptr),
+    bodyDef(new b2BodyDef()),
+    shape(new b2PolygonShape()),
+    fixtureDef(new b2FixtureDef())
 {
 }
 
@@ -33,8 +70,8 @@ void ce::Collider::Update()
 	if (fitSprite)
 	{
 		// Calculates the position of the sprites center on screen
-		float sprCenterX = transPos.x + spriteSizeX / 2 * transScale.x - spriteOrigin.x * transScale.x;
-		float sprCenterY = transPos.y + spriteSizeY / 2 * transScale.y - spriteOrigin.y * transScale.y;
+		float sprCenterX = transPos.x + spriteSize.x / 2 * transScale.x - spriteOrigin.x * transScale.x;
+		float sprCenterY = transPos.y + spriteSize.y / 2 * transScale.y - spriteOrigin.y * transScale.y;
 	
 		center = b2Vec2(sprCenterX, sprCenterY);
 	}
@@ -60,16 +97,16 @@ void ce::Collider::Update()
 }
 
 
-void ce::Collider::SetupTMX(const sf::Vector2f rectSize, const bool dynamic, const bool isTrigger)
+void ce::Collider::SetupTMX(const ce::Vec2f& rectSize, const bool dynamic, const bool isTrigger)
 {
 	fitSprite = false;
 
 	// Makes bodies created from the bodyDef dynamic 
 	if (dynamic)
-		bodyDef.type = b2_dynamicBody;
+		bodyDef->type = b2_dynamicBody;
 
 	// Creates a body and adds it to the world
-	body = CollisionManager::GetWorld()->CreateBody(&bodyDef);
+	body = CollisionManager::GetWorld()->CreateBody(bodyDef);
 
 	// The body will now hold a pointer to this component
 	body->SetUserData(this);
@@ -83,7 +120,7 @@ void ce::Collider::SetupTMX(const sf::Vector2f rectSize, const bool dynamic, con
 	b2Vec2 center = b2Vec2(rectSize.x / 2, rectSize.y / 2);
 
 	// Makes the shape a box based on size of the box, the scale of the transform, the center of the Tiled box and the rotation of the transform
-	shape.SetAsBox(rectSize.x * transScale.x / 2, rectSize.y * transScale.y / 2, center, transRot);
+	shape->SetAsBox(rectSize.x * transScale.x / 2, rectSize.y * transScale.y / 2, center, transRot);
 
 	// The body will never "sleep" so that physics will always affect the body
 	body->SetSleepingAllowed(false);
@@ -94,16 +131,16 @@ void ce::Collider::SetupTMX(const sf::Vector2f rectSize, const bool dynamic, con
 		// Physics will no longer affect rotation
 		body->SetFixedRotation(true);
 
-		fixtureDef.shape = &shape;
-		fixtureDef.density = 1.0f;
-		fixtureDef.friction = 0.3f;
+		fixtureDef->shape = shape;
+		fixtureDef->density = 1.0f;
+		fixtureDef->friction = 0.3f;
 
 		// Creates a fixture that is aplied to the body
-		body->CreateFixture(&fixtureDef);
+		body->CreateFixture(fixtureDef);
 	}
 	else
 		// Creates a fixture that is aplied to the body
-		body->CreateFixture(&shape, 0.0f);
+		body->CreateFixture(shape, 0.0f);
 
 	// Makes the body a sensor or not based on if it should be
 	// Sensor is basically the same as Trigger in Unity
@@ -130,24 +167,23 @@ void ce::Collider::SetFitSprite(const bool fitSprite, const bool dynamic, const 
 
 		// Gets the sprite component and it's relevant info
 		sprite = gameObject->GetComponent<ce::Sprite>();
-		spriteSizeX = sprite->GetSprite()->getTexture()->getSize().x;
-		spriteSizeY = sprite->GetSprite()->getTexture()->getSize().y;
+        spriteSize = ce::Vec2u(sprite->GetSprite()->getTextureRect().width, sprite->GetSprite()->getTextureRect().height);
 		spriteOrigin = sprite->GetOrigin();
 
 		// Makes bodies created from the bodyDef dynamic 
 		if (dynamic)
-			bodyDef.type = b2_dynamicBody;
+			bodyDef->type = b2_dynamicBody;
 
-		bodyDef.position.Set(transPos.x, transPos.y);
+		bodyDef->position.Set(transPos.x, transPos.y);
 
 		// Creates a body and adds it to the world
-		body = CollisionManager::GetWorld()->CreateBody(&bodyDef);
+		body = CollisionManager::GetWorld()->CreateBody(bodyDef);
 
 		// The body will now hold a pointer to this component
 		body->SetUserData(this);
 
 		// Makes the shape a box based on size of the sprite and the scale of the transform
-		shape.SetAsBox(spriteSizeX * transScale.x / 2, spriteSizeY * transScale.y / 2);
+		shape->SetAsBox(spriteSize.x * transScale.x / 2, spriteSize.y * transScale.y / 2);
 
 		// The body will never "sleep" so that physics will always affect the body
 		body->SetSleepingAllowed(false);
@@ -158,16 +194,16 @@ void ce::Collider::SetFitSprite(const bool fitSprite, const bool dynamic, const 
 			// Physics will no longer affect rotation
 			body->SetFixedRotation(true);
 
-			fixtureDef.shape = &shape;
-			fixtureDef.density = 1.0f;
-			fixtureDef.friction = 0.3f;
+			fixtureDef->shape = shape;
+			fixtureDef->density = 1.0f;
+			fixtureDef->friction = 0.3f;
 
 			// Creates a fixture that is aplied to the body
-			body->CreateFixture(&fixtureDef);
+			body->CreateFixture(fixtureDef);
 		}
 		else
 			// Creates a fixture that is aplied to the body
-			body->CreateFixture(&shape, 0.0f);
+			body->CreateFixture(shape, 0.0f);
 
 		// Makes the body a sensor or not based on if it should be
 		// Sensor is basically the same as Trigger in Unity

@@ -1,7 +1,7 @@
-package.path = package.path .. ";../Chef Engine/Lua Scripts/Components/?.lua;../Chef Engine/Lua Scripts/?.lua;"
+package.path = package.path .. ";Lua Scripts/Components/?.lua;Lua Scripts/?.lua;"
 require "OtherComponent"
 
-NewComponent = {ID = -1, 3}
+NewComponent = {ID = -1}
 
 -- This is what you call to create a new instance of the component
 function NewComponent.Create(component)
@@ -22,11 +22,14 @@ function NewComponent.Awake(self)
 	self.speed = 1
 end
 
+
 -- Used for initialization
 function NewComponent.Start(self)
+
 	self.camera = self.gameObject:AddCamera()
-	self.camera.size = Chef.Vector2f(64, 36)
+	self.camera.size = Chef.Vector2f(128, 72)
 	self.camera.follow = true
+	
 	
 	self.collision = self.gameObject:AddCollider()
 	self.collision:SetFitSprite(true, true, false)

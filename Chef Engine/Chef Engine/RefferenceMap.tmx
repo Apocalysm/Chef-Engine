@@ -436,10 +436,14 @@
   <object id="239" gid="1972" x="204" y="69" width="3" height="3"/>
   <object id="240" gid="1980" x="195" y="36" width="3" height="3"/>
   <object id="241" gid="1649" x="195" y="30" width="3" height="3"/>
-  <object id="242" gid="1966" x="177" y="69" width="3" height="3"/>
+  <object id="242" gid="1966" x="177" y="69" width="3" height="3">
+   <properties>
+    <property name="Lua" value="npc.lua"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="Collision Layer" offsetx="-0.422222" offsety="-0.0444444">
-  <object id="257" x="66.9556" y="53.0444" width="1" height="1"/>
+  <object id="257" x="66.7112" y="53.0444" width="2.35556" height="1.91111"/>
  </objectgroup>
  <layer name="Shadow" width="100" height="100">
   <data encoding="csv">
