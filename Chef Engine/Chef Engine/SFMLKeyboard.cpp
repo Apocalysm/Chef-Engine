@@ -22,6 +22,12 @@
 //
 ////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////
+//
+// Author: Rasmus Andersson
+//
+////////////////////////////////////////////////////////////
+
 
 #include "SFMLKeyboard.h"
 
@@ -147,7 +153,7 @@ int Num6 = sf::Keyboard::Num6;
 int Num7 = sf::Keyboard::Num7;
 int Num8 = sf::Keyboard::Num8;
 int Num9 = sf::Keyboard::Num9;
-//int Escape = sf::Keyboard::Escape;
+int Esc = sf::Keyboard::Escape;
 int LControl = sf::Keyboard::LControl;
 int LShift = sf::Keyboard::LShift;
 int LAlt = sf::Keyboard::LAlt;
@@ -265,7 +271,7 @@ void ce::SFMLKeyboard::DoBind(lua_State * Lua)
 			.addVariable("Num7", &Num7)
 			.addVariable("Num8", &Num8)
 			.addVariable("Num9", &Num9)
-			//.addVariable("Escape", &Escape)
+			.addVariable("Escape", &Esc)
 			.addVariable("LControl", &LControl)
 			.addVariable("LShift", &LShift)
 			.addVariable("LAlt", &LAlt)
