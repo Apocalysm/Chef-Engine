@@ -30,31 +30,26 @@
 
 
 #pragma once
-#include "Common.h"
 
-#include <map>
+namespace sf
+{
+	class Time;
+}
 
 namespace ce
 {
-	class GameObject;
-
-	class GameObjectManager
+	class Time
 	{
 	public:
-        GameObjectManager();
+		Time();
+		~Time();
 
-		static void AddObject(GameObject* object);
-		static void RemoveObject(GameObject* object);
-        CHEF_API static void CallUpdate();
+		float AsSeconds() const;
+
+		unsigned int AsMilliseconds() const;
 
 	private:
-		typedef std::map<uint64, GameObject*> GameObjectMap;
-		typedef std::map<uint64, GameObjectMap> LayerObjectMap;
-
-		// Map with GameObjects 
-		static LayerObjectMap enumToMapObj;
-
-		// Map with GameObjects recently created
-		static LayerObjectMap enumToMapNewObj;
+		sf::Time* time;
 	};
 }
+

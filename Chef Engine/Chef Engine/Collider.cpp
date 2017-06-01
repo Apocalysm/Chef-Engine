@@ -30,12 +30,10 @@
 
 
 #include "Collider.h"
-
 #include "GameObject.h"
 #include "Component.h"
 #include "Transform.h"
 #include "Sprite.h"
-
 #include "CollisionManager.h"
 #include "LuaBind.h"
 
@@ -43,7 +41,6 @@
 #include <Box2D\Box2D.h>
 
 using ce::Collider;
-
 
 Collider::Collider() :
     sprite(nullptr),
@@ -235,7 +232,7 @@ bool ce::Collider::GetIsTrigger() const
 }
 
 
-void ce::Collider::SetGameObject(GameObject * gameObject)
+void ce::Collider::SetGameObject(GameObject* gameObject)
 {
 	this->gameObject = gameObject;
 
@@ -256,8 +253,6 @@ void ce::Collider::OnCollisionEnter(Collider* other)
 	{
 		component.second->OnCollisionEnter(other);
 	}
-
-	//std::cout << "Collision Enter" << std::endl;
 }
 
 
@@ -271,8 +266,6 @@ void ce::Collider::OnCollisionExit(Collider* other)
 	{
 		component.second->OnCollisionExit(other);
 	}
-
-	//std::cout << "Collision Exit" << std::endl;
 }
 
 
@@ -283,8 +276,6 @@ void ce::Collider::OnCollisionStay(Collider* other)
 	{
 		component.second->OnCollisionStay(other);
 	}
-
-	//std::cout << "Collision Stay" << std::endl;
 }
 
 
@@ -298,8 +289,6 @@ void ce::Collider::OnTriggerEnter(Collider* other)
 	{
 		component.second->OnTriggerEnter(other);
 	}
-
-	//std::cout << "Trigger Enter" << std::endl;
 }
 
 
@@ -313,8 +302,6 @@ void ce::Collider::OnTriggerExit(Collider* other)
 	{
 		component.second->OnTriggerExit(other);
 	}
-
-	//std::cout << "Trigger Exit" << std::endl;
 }
 
 
@@ -325,8 +312,6 @@ void ce::Collider::OnTriggerStay(Collider * other)
 	{
 		component.second->OnTriggerStay(other);
 	}
-
-	//std::cout << "Trigger Stay" << std::endl;
 }
 
 

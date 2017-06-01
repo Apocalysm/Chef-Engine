@@ -88,6 +88,7 @@
     <ClCompile Include="MusicManager.cpp">
       <Filter>Source Files\Manager/Handler Classes</Filter>
     </ClCompile>
+    <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -180,6 +181,7 @@
     <ClInclude Include="MusicManager.h">
       <Filter>Header Files\Manager/Handler Classes</Filter>
     </ClInclude>
+    <ClInclude Include="Time.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

@@ -50,12 +50,12 @@ namespace ce
 	class DrawEventManager
 	{
 	public:
-        CHEF_API DrawEventManager();
+        DrawEventManager();
         static void AddDrawable(DrawableComponent* drawable);
 		static void RemoveDrawable(DrawableComponent* drawable);
         static void MoveDrawable(DrawableComponent* drawable, int newDrawOrder);
 		static void AddTmxLayers(std::vector<std::map<int, ce::TileMapLayer*>> tileMapLayers);
-        CHEF_API void Draw(sf::RenderWindow& window);
+        CHEF_API static void Draw(sf::RenderWindow& window);
 
 	private:
         typedef unsigned long long uint64;

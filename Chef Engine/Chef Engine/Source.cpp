@@ -1,26 +1,17 @@
-#include "Component.h"
-#include "GameObject.h"
-#include "Transform.h"
 #include "MapHandler.h"
-#include "Sprite.h"
 #include "GameObjectManager.h"
 #include "DrawEventManager.h"
-#include "Collider.h"
 #include "CollisionManager.h"
 #include "Camera.h"
-#include "ContactListener.h"
 #include "SFMLKeyboard.h"
 #include "SoundManager.h"
 #include "ResourceManager.h"
-#include "Text.h"
 
 #include <SFML\Graphics.hpp>
-#include <SFML\Audio.hpp>
 #include <Tmx\TmxTile.h>
 
 #include <Windows.h>
 #include <typeinfo>
-#include <iostream>
 #include <vector>
 
 #include "LuaBind.h"
@@ -41,53 +32,18 @@ int main(int argc, char* argv[])
 int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #endif
 {
-	//ce::MapHandler* map = new ce::MapHandler;
-
-    ce::GameObjectManager* objManager = new ce::GameObjectManager();
-	ce::DrawEventManager* drawManager = new ce::DrawEventManager();
-
-	ce::CollisionManager* collManager = new ce::CollisionManager();
-	ce::ContactListener contactListener;
-	collManager->GetWorld()->SetContactListener(&contactListener);
-
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Test");
 
-	ce::SoundManager* sM = new ce::SoundManager("sound.wav");
-	ce::SoundManager* sM2 = new ce::SoundManager("sound2.wav");
-
 	window.setFramerateLimit(60);
-    float count = 10;
-    float timer = 0;
+
     ce::Camera::window = &window;
 
-
 	window.setKeyRepeatEnabled(false);
-	ce::SFMLKeyboard::Initialize();
-	sf::SoundBuffer buffer3;
-	sf::Sound* sound = new sf::Sound();
-	sf::Sound* buffer2 = new sf::Sound();
-    window.setKeyRepeatEnabled(false);
+
     ce::SFMLKeyboard::Initialize();
 
     // Binds all defined classes with LuaBridge
     ce::LuaBridgeBinder::BindAll();
-
-
-
-	ce::GameObject* testObj = new ce::GameObject();
-	ce::Text* text = testObj->AddComponent<ce::Text>();
-	ce::Sprite* spr = testObj->AddComponent<ce::Sprite>();
-	text->SetFont("times.ttf");
-	text->SetString("DESTROY THIS");
-	text->SetSize(60);
-	text->SetDrawOrder(4);
-	spr->SetSprite("image2.jpg");
-	spr->SetDrawOrder(3);
-	testObj->GetTransform()->SetPosition(50, 50);
-	testObj->GetTransform()->SetScale(0.1f, 0.1f);
-
-
-
 
 	while (window.isOpen())
 	{
@@ -117,29 +73,11 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         // Calls our main-loop in Lua
         (*ce::LuaBridgeBinder::mainFunc)();
         
-
-        objManager->CallUpdate();
+		// Calls all Update and Start-methods in all GameObject and Component classes
+        ce::GameObjectManager::CallUpdate();
 		
-        collManager->UpdateCollision();
-
-		if (ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::M))
-		{
-			sM->PlaySFX();
-			//sM->SetSFXVolume(2);
-		}
-		else if (ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::N))
-		{
-			sM2->PlaySFX();
-			//sM->SetSFXVolume(1);
-		}
-		else if (ce::SFMLKeyboard::GetKeyUp(1))
-		{
-		}
-
-		if (ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::E))
-		{
-			delete testObj;
-		}
+		// Updates collision and physics
+        ce::CollisionManager::UpdateCollision();
 
         // Updates the camera if there is one
         if (ce::Camera::main != nullptr)
@@ -147,9 +85,11 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
             ce::Camera::main->UpdateCamera();
         }
 
+		// Updates resource managment
 		ce::ResourceManager::Update();
 
-		drawManager->Draw(window);
+		// Draws all drawable objects
+		ce::DrawEventManager::Draw(window);
 
 		window.display();
 

@@ -159,6 +159,7 @@
     <ClCompile Include="TileMapLayer.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Time.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vec2.cpp" />
   </ItemGroup>
@@ -191,6 +192,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TileMapLayer.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Time.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vec2.h" />
   </ItemGroup>
