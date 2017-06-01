@@ -10,6 +10,9 @@
 #include "Camera.h"
 #include "ContactListener.h"
 #include "SFMLKeyboard.h"
+#include "SoundManager.h"
+#include "ResourceManager.h"
+#include "Text.h"
 
 #include <SFML/Graphics.hpp>
 #include <Tmx\TmxTile.h>
@@ -46,16 +49,50 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	ce::ContactListener contactListener;
 	collManager->GetWorld()->SetContactListener(&contactListener);
 
+	ce::MapHandler* map = new ce::MapHandler();
 
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Test");
-    ce::Camera::window = &window;
-    window.setFramerateLimit(60);
 
+	ce::SoundManager* sM = new ce::SoundManager("sound.wav");
+	ce::SoundManager* sM2 = new ce::SoundManager("sound2.wav");
+
+	window.setFramerateLimit(60);
+    float count = 10;
+    float timer = 0;
+    ce::Camera::window = &window;
+
+	map->LoadMap("RefferenceMap.tmx");
+	std::string* mapName = new std::string("RefferenceMap.tmx");
+	map->RegisterMap(0, mapName);
+	map->LoadObject();
+
+	window.setKeyRepeatEnabled(false);
+	ce::SFMLKeyboard::Initialize();
+	sf::SoundBuffer buffer3;
+	sf::Sound* sound = new sf::Sound();
+	sf::Sound* buffer2 = new sf::Sound();
     window.setKeyRepeatEnabled(false);
     ce::SFMLKeyboard::Initialize();
 
     // Binds all defined classes with LuaBridge
     ce::LuaBridgeBinder::BindAll();
+
+
+
+	ce::GameObject* testObj = new ce::GameObject();
+	ce::Text* text = testObj->AddComponent<ce::Text>();
+	ce::Sprite* spr = testObj->AddComponent<ce::Sprite>();
+	text->SetFont("times.ttf");
+	text->SetString("DESTROY THIS");
+	text->SetSize(60);
+	text->SetDrawOrder(4);
+	spr->SetSprite("image2.jpg");
+	spr->SetDrawOrder(3);
+	testObj->GetTransform()->SetPosition(50, 50);
+	testObj->GetTransform()->SetScale(0.1f, 0.1f);
+
+
+
 
 	while (window.isOpen())
 	{
@@ -90,11 +127,30 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		
         collManager->UpdateCollision();
 
+		if (ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::M))
+		{
+			sM->PlaySFXSOUND();
+		}
+		else if (ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::N))
+		{
+			sM2->PlaySFXSOUND();
+		}
+		else if (ce::SFMLKeyboard::GetKeyUp(1))
+		{
+		}
+
+		if (ce::SFMLKeyboard::GetKeyDown(sf::Keyboard::E))
+		{
+			delete testObj;
+		}
+
         // Updates the camera if there is one
         if (ce::Camera::main != nullptr)
         {
             ce::Camera::main->UpdateCamera();
         }
+
+		ce::ResourceManager::Update();
 
 		drawManager->Draw(window);
 

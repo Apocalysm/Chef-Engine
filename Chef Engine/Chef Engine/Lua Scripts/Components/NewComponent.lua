@@ -22,11 +22,14 @@ function NewComponent.Awake(self)
 	self.speed = 1
 end
 
+
 -- Used for initialization
 function NewComponent.Start(self)
+
 	self.camera = self.gameObject:AddCamera()
-	self.camera.size = Chef.Vector2f(64, 36)
+	self.camera.size = Chef.Vector2f(128, 72)
 	self.camera.follow = true
+	
 	
 	self.collision = self.gameObject:AddCollider()
 	self.collision:SetFitSprite(true, true, false)

@@ -33,6 +33,7 @@
 #include "Sprite.h"
 #include "Camera.h"
 #include "Collider.h"
+#include "Text.h"
 
 #include "MapHandler.h"
 #include "SFMLKeyboard.h"
@@ -55,7 +56,7 @@ using ce::LuaBridgeBinder;
 template<typename T>
 void ce::LuaBridgeBinder::Bind(lua_State* L)
 {
-    T::DoBind(L);
+	T::DoBind(L);
 }
 template<typename T>
 void ce::LuaBridgeBinder::Bind(lua_State* L, const std::string& s)
@@ -171,6 +172,8 @@ void ce::LuaBridgeBinder::BindAll()
     Bind<ce::Transform>(L);
     Bind<ce::Camera>(L);
     Bind<ce::Collider>(L);
+	Bind<ce::DrawableComponent>(L);
+	Bind<ce::Text>(L);
 
     Bind<ce::MapHandler>(L);
     Bind<ce::SFMLKeyboard>(L);
@@ -241,4 +244,5 @@ void ce::LuaBridgeBinder::RegisterComponent(luabridge::LuaRef table)
     // Registers the ID via our counter that we increment, 
     // thus creating a unique ID for each lua component
     table["ID"] = componentIDCounter++;
+
 }

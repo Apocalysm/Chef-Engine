@@ -15,7 +15,9 @@ namespace ce
 		Texture();
 		~Texture();
 
+		// Sets the 'path' variable and loads the file
 		void LoadResource(const std::string path);
+
 		sf::Texture* GetTexture() const;
 
 	private:

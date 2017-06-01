@@ -15,7 +15,6 @@ sprite = object:AddSprite()
 sprite:SetSprite("Sprites\\player.png")
 sprite.drawOrder = 1
 
-vec2 = Chef.Vector2f(7,5)
 
 -- This is the main loop of the engine, it will be called every frame
 main = {}

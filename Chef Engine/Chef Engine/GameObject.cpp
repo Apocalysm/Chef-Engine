@@ -30,6 +30,7 @@
 #include "Collider.h"
 #include "Camera.h"
 #include "Transform.h"
+#include "Text.h"
 
 #include "LuaBind.h"
 #include "ContactListener.h"
@@ -72,6 +73,7 @@ namespace ce
 
     GameObject::~GameObject()
     {
+		Destroy();
     }
 
 
@@ -211,9 +213,8 @@ void GameObject::Destroy()
     components.clear();
 
 	ce::GameObjectManager::RemoveObject(this);
-
-	delete this;
 }
+
 
 // Creates a new LuaComponent and adds it to this GameObject
 luabridge::LuaRef GameObject::AddLuaComponent(luabridge::LuaRef ref)
@@ -259,27 +260,27 @@ luabridge::LuaRef GameObject::AddLuaComponent(luabridge::LuaRef ref)
 }
 
     
-// Gets a LuaComponent and returns that components specified LuaRef
-luabridge::LuaRef GameObject::GetLuaComponent(int ID)
-{
-    // Checks if there is an element on index "ID" 
-    if (luaComponents.find(ID) != luaComponents.end())
+    // Gets a LuaComponent and returns that components specified LuaRef
+    luabridge::LuaRef GameObject::GetLuaComponent(int ID)
     {
+        // Checks if there is an element on index "ID" 
+    if (luaComponents.find(ID) != luaComponents.end())
+        {
         return *luaComponents[ID]->ref;
+        }
     }
-}
 
-// Removes LuaComponent from the luaComponents map
-void GameObject::RemoveLuaComponent(int ID)
-{
-    // Checks if there is an element on index "ID" 
-    if (luaComponents[ID])
-    {                    
-        delete luaComponents[ID];
+    // Removes LuaComponent from the luaComponents map
+    void GameObject::RemoveLuaComponent(int ID)
+    {
+        // Checks if there is an element on index "ID" 
+        if (luaComponents[ID])
+        {                    
+            delete luaComponents[ID];
         
-        luaComponents.erase(ID);
+            luaComponents.erase(ID);
+        }
     }
-}
 
 void GameObject::DoBind(lua_State * L)
 {
@@ -287,7 +288,7 @@ void GameObject::DoBind(lua_State * L)
             .beginNamespace("Chef")
                 
             .beginClass<GameObject>("GameObject")
-                .addConstructor<void (*) (std::string)>()
+			.addConstructor<void(*) (std::string)>()
                 
                 .addProperty("active", &GameObject::GetActive, &GameObject::SetActive)
                 .addProperty("layer", &GameObject::GetLayer, &GameObject::SetLayer)
@@ -313,6 +314,12 @@ void GameObject::DoBind(lua_State * L)
                 .addFunction("AddCamera", &GameObject::AddComponent<ce::Camera>)
                 .addFunction("GetCamera", &GameObject::GetComponent<ce::Camera>)
                 .addFunction("RemoveCamera", &GameObject::RemoveComponent<ce::Camera>)
+
+			.addFunction("AddText", &GameObject::AddComponent<ce::Text>)
+			.addFunction("GetText", &GameObject::GetComponent<ce::Text>)
+			.addFunction("RemoveText", &GameObject::RemoveComponent<ce::Text>)
+
+			.addFunction("Destroy", &GameObject::Destroy)
 
                 /*.addStaticData("Default", Default, false)
                 .addStaticData("Player", Player, false)

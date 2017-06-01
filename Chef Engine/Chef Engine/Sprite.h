@@ -28,6 +28,8 @@
 
 #include "Vec2.h"
 
+#include "Component.h"
+
 #include "LuaBridgeBinder.h"
 
 #include <string>
@@ -68,7 +70,7 @@ namespace ce
     /// object:RemoveSprite()
     /// \endcode
     ////////////////////////////////////////////////////////////
-	class Sprite : public ce::Component
+	class Sprite : public DrawableComponent
 	{
         // Befriends the templated Bind function so it can access our protected functions
         friend void LuaBridgeBinder::Bind<ce::Sprite>(lua_State*);
@@ -100,28 +102,24 @@ namespace ce
 		#pragma endregion
 
 		#pragma region Color Methods
-        void SetColor(const sf::Color color);
+        void SetColor(const sf::Color& color);
 		void SetColor(const int r, const int g, const int b, const int a);
 		
         sf::Color GetColor() const;
 		#pragma endregion
 
-		void SetDrawOrder(const int drawOrder);
-        int GetDrawOrder() const;
-		
         void SetSprite(const std::string &fileName);
 
         void ChangeSprite(sf::Sprite* sprite);
 
 		sf::Sprite* GetSprite() const;
 
-		void SetGameObject(GameObject* gameObject);
+		sf::Drawable* GetDrawable() const;
 
 	private:
 		friend class DrawEventManager;
 
 		sf::Sprite* sprite;
-		//sf::Texture texture;
 		ce::Texture* texture;
 
         ////////////////////////////////////////////////////////////
@@ -134,12 +132,7 @@ namespace ce
         ////////////////////////////////////////////////////////////
 		sf::Color* color;
         /// \brief How far up the Sprite is drawn in the game, the higher the number, the higer it is drawn
-		int drawOrder;
-
-		bool isNew;
-
-		// The transform of this components GameObject
-		ce::Transform* transform;
+		//int drawOrder;
 
 		// Binds parts of this script to Lua
 		static void DoBind(lua_State* L); 

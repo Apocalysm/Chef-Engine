@@ -49,7 +49,6 @@ ce::GameObjectManager::GameObjectManager()
 
 void ce::GameObjectManager::AddObject(GameObject* object)
 {
-	//newObjects[object->layer].push_back(object)
 	enumToMapNewObj[object->layer].insert(std::make_pair(object->instanceID, object));
 }
 
@@ -64,7 +63,6 @@ void ce::GameObjectManager::RemoveObject(GameObject* object)
 		// Deletes and erases the requested object from the map of new objects
 		//delete enumToMapNewObj[layer][ID];
 		enumToMapNewObj[layer].erase(ID);
-		//enumToMapNewObj[layer].
 	}
 	else
 	{

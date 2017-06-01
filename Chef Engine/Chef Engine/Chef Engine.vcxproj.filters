@@ -58,6 +58,16 @@
     <ClCompile Include="SoundBuffer.cpp">
       <Filter>Source Files\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="Font.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawableComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
     <ClCompile Include="Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -117,6 +127,9 @@
     <ClInclude Include="Common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="ContactListener.h">
       <Filter>Header Files\Manager/Handler Classes</Filter>
     </ClInclude>
@@ -146,6 +159,15 @@
     </ClInclude>
     <ClInclude Include="SFMLLuaBind.h">
       <Filter>Header Files\Lua Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawableComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Mathf.h">
       <Filter>Header Files</Filter>
