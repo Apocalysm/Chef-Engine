@@ -1,10 +1,38 @@
-#pragma once
+////////////////////////////////////////////////////////////
+//
+// Chef Engine
+// Copyright (C) 2017 Oskar Svensson
+//  
+// This software is provided 'as-is', without any express or implied warranty.
+// In no event will the authors be held liable for any damages arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it freely,
+// subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented;
+//    you must not claim that you wrote the original software.
+//    If you use this software in a product, an acknowledgment
+//    in the product documentation would be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such,
+//    and must not be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source distribution.
+//
+////////////////////////////////////////////////////////////
 
-#include <SFML\Graphics.hpp>
+
+#pragma once
+#include "Common.h"
 #include "LuaBridgeBinder.h"
+
+struct lua_State;
 
 namespace ce
 {
+    class LuaBridgeBinder;
+
     ////////////////////////////////////////////////////////////
     /// \brief Use this class to check for keyboard input in Lua.
     /// 
@@ -16,13 +44,13 @@ namespace ce
 		friend void LuaBridgeBinder::Bind<ce::SFMLKeyboard>(lua_State*);
 
 	public:
-		SFMLKeyboard();
-		~SFMLKeyboard();
+		CHEF_API SFMLKeyboard();
+		CHEF_API ~SFMLKeyboard();
 
-		static void Initialize();
-		static void ClearKeys();
-		static void SetKeyDown(sf::Keyboard::Key key);
-		static void SetKeyUp(sf::Keyboard::Key key);
+		CHEF_API static void Initialize();
+		CHEF_API static void ClearKeys();
+		CHEF_API static void SetKeyDown(int key);
+		CHEF_API static void SetKeyUp(int key);
 
         ////////////////////////////////////////////////////////////
         /// \brief Returns true every frame you're pressing the specified key
@@ -41,7 +69,7 @@ namespace ce
         /// end
         /// \endcode
         ////////////////////////////////////////////////////////////
-		static bool GetKey(int key);
+        CHEF_API static bool GetKey(int key);
 
         ////////////////////////////////////////////////////////////
         /// \brief Returns true the first frame you press the specified key
@@ -60,7 +88,7 @@ namespace ce
         /// end
         /// \endcode
         ////////////////////////////////////////////////////////////
-		static bool GetKeyDown(int key);
+        CHEF_API static bool GetKeyDown(int key);
 
         ////////////////////////////////////////////////////////////
         /// \brief Returns true when you release the specified key
@@ -79,9 +107,9 @@ namespace ce
         /// end
         /// \endcode
         ////////////////////////////////////////////////////////////
-		static bool GetKeyUp(int key);
+        CHEF_API static bool GetKeyUp(int key);
 
-		static void ResetKeyboard();
+        CHEF_API static void ResetKeyboard();
 		
 	private:
 		static void DoBind(lua_State* Lua);

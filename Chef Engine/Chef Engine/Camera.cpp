@@ -1,7 +1,38 @@
+////////////////////////////////////////////////////////////
+//
+// Chef Engine
+// Copyright (C) 2017 Oskar Svensson
+//  
+// This software is provided 'as-is', without any express or implied warranty.
+// In no event will the authors be held liable for any damages arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it freely,
+// subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented;
+//    you must not claim that you wrote the original software.
+//    If you use this software in a product, an acknowledgment
+//    in the product documentation would be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such,
+//    and must not be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source distribution.
+//
+////////////////////////////////////////////////////////////
+
+
 #include "Camera.h"
+
 #include "GameObject.h"
+#include "Transform.h"
+
 #include "MapHandler.h"
-#include "Math.h"
+#include "Mathf.h"
+#include "LuaBind.h"
+
+#include <SFML\Graphics.hpp>
 
 using ce::Camera;
 
@@ -9,12 +40,14 @@ Camera* Camera::main;
 sf::RenderWindow* Camera::window;
 
 Camera::Camera()
-    : zoom(1), follow(false)
+    : zoom(1)
+    , follow(false)
+    , view(new sf::View())
 {
     if (main == nullptr)
     {
         main = this;
-        window->setView(this->GetView());
+        window->setView(*this->GetView());
     }
 }
 
@@ -24,21 +57,21 @@ Camera::~Camera()
 }
 
 
-void ce::Camera::SetSize(const sf::Vector2f &size)
+void ce::Camera::SetSize(const ce::Vec2f& size)
 {
 	this->size = size;
-	view.setSize(size);
+	view->setSize(size.ToSfVector2());
 }
 
 
-sf::Vector2f ce::Camera::GetSize() const
+const ce::Vec2f& ce::Camera::GetSize() const
 {
 	return size;
 }
 
 void ce::Camera::SetZoom(float zoom)
 {
-	view.zoom(zoom);
+	view->zoom(zoom);
 	this->zoom *= zoom;
 }
 
@@ -48,20 +81,20 @@ float ce::Camera::GetZoom() const
 }
 
 
-sf::View ce::Camera::GetView() const
+const sf::View* ce::Camera::GetView() const
 {
 	return view;
 }
 
 
-void ce::Camera::SetCenter(const sf::Vector2f &center)
+void ce::Camera::SetCenter(const ce::Vec2f& center)
 {
 	this->center = center;
-	view.setCenter(center);
+	view->setCenter(center.ToSfVector2());
 }
 
 
-sf::Vector2f ce::Camera::GetCenter() const
+const ce::Vec2f& ce::Camera::GetCenter() const
 {
 	return this->center;
 }
@@ -84,22 +117,22 @@ void ce::Camera::UpdateCamera()
     if (follow)
     {
         center = gameObject->GetTransform()->GetPosition();
-        view.setCenter(center);
+        view->setCenter(center.ToSfVector2());
     }
 
-    mapSize = ce::MapHandler::GetMapSize();
+    mapSize = ce::Vec2i(ce::MapHandler::GetMapSize());
 
-    sf::Vector2f clampedCenter = center;
+    ce::Vec2f clampedCenter = center.ToSfVector2();
     
     if (mapSize.x > 0 && mapSize.y > 0)
     {
-        clampedCenter = sf::Vector2f(ce::Math::ClampF(view.getCenter().x, mapSize.x - (size.x / 2) * zoom, 0 + (size.x / 2) * zoom),
-        ce::Math::ClampF(view.getCenter().y, mapSize.y - (size.y / 2) * zoom, 0 + (size.y / 2) * zoom));
+        clampedCenter = ce::Vec2f(ce::Mathf::Clamp<float>(view->getCenter().x, mapSize.x - (size.x / 2) * zoom, 0 + (size.x / 2) * zoom),
+                                  ce::Mathf::Clamp<float>(view->getCenter().y, mapSize.y - (size.y / 2) * zoom, 0 + (size.y / 2) * zoom));
     }
     center = clampedCenter;
 
-    view.setCenter(center);
-    window->setView(this->GetView());
+    view->setCenter(center.ToSfVector2());
+    window->setView(*this->GetView());
 }
 
 

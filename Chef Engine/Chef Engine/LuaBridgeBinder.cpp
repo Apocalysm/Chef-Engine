@@ -1,3 +1,28 @@
+////////////////////////////////////////////////////////////
+//
+// Chef Engine
+// Copyright (C) 2017 Oskar Svensson
+//  
+// This software is provided 'as-is', without any express or implied warranty.
+// In no event will the authors be held liable for any damages arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it freely,
+// subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented;
+//    you must not claim that you wrote the original software.
+//    If you use this software in a product, an acknowledgment
+//    in the product documentation would be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such,
+//    and must not be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source distribution.
+//
+////////////////////////////////////////////////////////////
+
+
 #include "LuaBridgeBinder.h"
 
 // All the different classes we want to bind with Lua Bridge
@@ -12,16 +37,18 @@
 
 #include "MapHandler.h"
 #include "SFMLKeyboard.h"
-#include "SFML_LuaBind.h"
+#include "SFMLLuaBind.h"
+
+#include "Vec2.h"
+
+#include "LuaBind.h"
 
 // dirent.h Allows us to read directories easier
 #include <dirent.h>
 
 #include <iostream>
 #include <vector>
-
-// Linking a library through code
-#pragma comment(lib, "lua53.lib")
+#include <string>
 
 using ce::LuaBridgeBinder;
 
@@ -30,6 +57,12 @@ template<typename T>
 void ce::LuaBridgeBinder::Bind(lua_State* L)
 {
 	T::DoBind(L);
+}
+template<typename T>
+void ce::LuaBridgeBinder::Bind(lua_State* L, const std::string& s)
+{
+    assert(s != "");
+    T::DoBind(L, s);
 }
 
 
@@ -51,6 +84,8 @@ int ce::LuaBridgeBinder::componentIDCounter = 0;
 
 // A ref to the main loop in the main script in Lua
 std::unique_ptr<luabridge::LuaRef> ce::LuaBridgeBinder::mainFunc;
+
+lua_State* ce::LuaBridgeBinder::L = luaL_newstate();
 
 // Loads a directory and gets all the .lua-files
 static const std::vector<std::string*> LoadDirectory(const std::string dir_path)
@@ -121,14 +156,12 @@ static const std::vector<std::string*> LoadDirectory(const std::string dir_path)
 	}
 }
 
-
 // Call this to call the Bind method in all classes written here
 void ce::LuaBridgeBinder::BindAll()
 {
 	// Create a new lua_State and open default Lua-libraries
-	lua_State* L = luaL_newstate();
-	luaL_openlibs(L);
 
+	luaL_openlibs(L);
 
 	// Here you put all the method calls for the classes you want to bind
     Bind<ce::GameObject>(L);
@@ -144,8 +177,10 @@ void ce::LuaBridgeBinder::BindAll()
 
     Bind<ce::MapHandler>(L);
     Bind<ce::SFMLKeyboard>(L);
-    Bind<ce::SFML_Bind>(L);
-	
+    Bind<ce::SFMLLuaBind>(L);
+    Bind<ce::Vec2f>(L, "f");
+    Bind<ce::Vec2u>(L, "u");
+    Bind<ce::Vec2i>(L, "i");
 	
 	// Gets all the .lua file_paths
     std::vector<std::string*> file_paths = LoadDirectory(LUA_SCRIPTS_PATH);

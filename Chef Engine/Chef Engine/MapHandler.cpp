@@ -1,12 +1,53 @@
+////////////////////////////////////////////////////////////
+//
+// Chef Engine
+// Copyright (C) 2017 Oskar Svensson
+//  
+// This software is provided 'as-is', without any express or implied warranty.
+// In no event will the authors be held liable for any damages arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it freely,
+// subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented;
+//    you must not claim that you wrote the original software.
+//    If you use this software in a product, an acknowledgment
+//    in the product documentation would be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such,
+//    and must not be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source distribution.
+//
+////////////////////////////////////////////////////////////
+
+
 #include "MapHandler.h"
 #include "DrawEventManager.h"
+
+#include "GameObject.h"
+#include "Transform.h"
 #include "Sprite.h"
 #include "Collider.h"
+
+#include "LuaBind.h"
+#include "LuaBridgeBinder.h"
 
 #include <Tmx\TmxPolygon.h>
 #include <Tmx\TmxPolyline.h>
 #include <Tmx\TmxEllipse.h>
+#include <Tmx\TmxMap.h>
+#include <Tmx\TmxObjectGroup.h>
+#include <Tmx\TmxObject.h>
+#include <Tmx\TmxTileset.h>
+#include <Tmx\TmxTileLayer.h>
+#include <Tmx\TmxImage.h>
+#include <Tmx\TmxTile.h>
+#include <Tmx\TmxMapTile.h>
+#include <Tmx\TmxColor.h>
 
+#include <SFML\Graphics.hpp>
 
 #include <algorithm>
 #include <iostream>
@@ -54,6 +95,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 	{	
 		delete map;
 
+		//Delete all the tile map layers on the old map
 		for (auto outer_it = tileMapLayers.begin(); outer_it != tileMapLayers.end(); outer_it++)
 		{
 			for (auto inner_it = outer_it->begin(); inner_it != outer_it->end();inner_it++)
@@ -62,6 +104,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 			}
 			outer_it->clear();
 		}
+		//Delete all the object from tiled on the old map
 		for (auto i = gameObjects.begin(); i != gameObjects.end(); i++)
 		{
 			(*i)->Destroy();
@@ -102,6 +145,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 			const Tmx::Color* color = tileSets[i]->GetImage()->GetTransparentColor();
 			image.createMaskFromColor(sf::Color(color->GetRed(), color->GetGreen(), color->GetBlue(), 255));
 		}
+		//Load in the texture
 		texture.loadFromImage(image);
 		tileTextures.push_back(texture);
 	}
@@ -178,11 +222,14 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 			ce::GameObject* gameObject = new ce::GameObject(object->GetName());
 
+			//Set all transform values for the object
 			gameObject->GetTransform()->SetPosition(object->GetX(), object->GetY());
 
 			gameObject->GetTransform()->SetRotation(object->GetRot());
 
 			gameObjects.push_back(gameObject);
+
+            Tmx::PropertySet props = object->GetProperties();
 
 			//Check what type the object is
 			switch (object->GetPrimitiveType())
@@ -204,7 +251,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 			//Check if the object is an rect or a sprite object
 			case Tmx::TMX_PT_NONE:
-{
+            {
 				//Check if the object is part of an tileset
 				if (object->GetGid() != 0)
 				{
@@ -216,12 +263,14 @@ void MapHandler::LoadMap(const std::string& fileName)
 	                {
 						Tmx::Tileset* ts = tileSets[k];
 
-						bool flipped_horizontally = (object->GetGid() & FLIPPED_HORIZONTALLY_FLAG);
-						bool flipped_vertically = (object->GetGid() & FLIPPED_VERTICALLY_FLAG);
-						bool flipped_diagonally = (object->GetGid() & FLIPPED_DIAGONALLY_FLAG);
+						bool flippedHorizontally = (object->GetGid() & FLIPPED_HORIZONTALLY_FLAG);
+						bool flippedVertically = (object->GetGid() & FLIPPED_VERTICALLY_FLAG);
+						bool flippedDiagonally = (object->GetGid() & FLIPPED_DIAGONALLY_FLAG);
 
+						//Get the unflipped gid for the object in the tile map
 						int unflippedGid = object->GetGid() & ~(FLIPPED_VERTICALLY_FLAG | FLIPPED_HORIZONTALLY_FLAG | FLIPPED_DIAGONALLY_FLAG);
 
+						//Check if the gid is a part of the current tileMap
 						if (ts->GetFirstGid() <= unflippedGid)
 		                {
 							int localID = unflippedGid - ts->GetFirstGid();
@@ -234,38 +283,84 @@ void MapHandler::LoadMap(const std::string& fileName)
 							sprite->setTexture(tileTextures[k]);
 							sprite->setTextureRect(sf::IntRect(tu * object->GetWidth(), tv * object->GetHeight(), object->GetWidth(), object->GetHeight()));
 
-							if (flipped_diagonally)
+							//Flip the sprite diagonally
+							if (flippedDiagonally)
 								sprite->setTextureRect(sf::IntRect(tu * (object->GetWidth() + 1) - 1, tv * (object->GetHeight() + 1) + 5, -object->GetWidth(), -object->GetHeight()));
-							else if (flipped_vertically)
+							//Flip the sprite vertically
+							else if (flippedVertically)
 								sprite->setTextureRect(sf::IntRect(tu * object->GetWidth(), tv * (object->GetHeight() + 1) + 5, object->GetWidth(), -object->GetHeight()));
-							else if (flipped_horizontally)
+							//Flip the sprite Horizontally
+							else if (flippedHorizontally)
 								sprite->setTextureRect(sf::IntRect(tu * (object->GetWidth() + 1) - 1, tv * object->GetHeight(), -object->GetWidth(), object->GetHeight()));
 
+							//Set the origin because the objects in tiled have an offset 
 							sprite->setOrigin(0, tileHeight);
 							spriteComponent->ChangeSprite(sprite);
+
+
+                            bool addCollision = false;
+                            if (!props.Empty())
+                            {
+                                addCollision = props.GetBoolProperty("Collision");
+                            }
+                            if (addCollision)
+                            {
+                                ce::Collider* collider = gameObject->AddComponent<ce::Collider>();
+
+                                bool trigger = false;
+                                bool dynamic = false;
+                                if (!props.Empty())
+                                {
+                                    trigger = props.GetBoolProperty("Trigger");
+                                    dynamic = props.GetBoolProperty("Dynamic");
+                                }
+                                
+                                collider->SetFitSprite(true, dynamic, trigger);
+
+                                break;
+                            }
 
 							break;
 						}
 					}
 
 				}
-				else
+                else 
 			    {
 					// This is a rect!
 					sf::Vector2f rectSize = sf::Vector2f(object->GetWidth(), object->GetHeight());
 					
 					ce::Collider* collider = gameObject->AddComponent<ce::Collider>();
-					collider->SetupTMX(rectSize,false,false);
+
+                    bool trigger = false;
+                    bool dynamic = false;
+                    if (!props.Empty())
+                    {
+                        trigger = props.GetBoolProperty("Trigger");
+                        dynamic = props.GetBoolProperty("Dynamic");
+                    }
+
+					collider->SetupTMX(rectSize, dynamic, trigger);
 
 					break;
 				}
-
 			}
-
 
 			default:
 				break;
 			}
+
+            if (!props.Empty())
+            {
+                std::string tableName = props.GetStringProperty("Lua");
+                if (tableName != "")
+                {
+                    lua_State* L = ce::LuaBridgeBinder::L;
+
+                    luabridge::LuaRef table = luabridge::getGlobal(L, tableName.c_str());
+                    gameObject->AddLuaComponent(table);
+                }
+            }
 
 		}
 	}
@@ -286,9 +381,8 @@ void ce::MapHandler::LoadObject()
 {
 	}
 
-sf::Vector2i ce::MapHandler::GetMapSize()
+ce::Vec2i ce::MapHandler::GetMapSize()
 {
-	
 	return sf::Vector2i(mapWidth * tileWidth, mapHeight * tileHeight);
 }
 

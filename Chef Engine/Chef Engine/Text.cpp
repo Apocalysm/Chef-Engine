@@ -1,8 +1,11 @@
 #include "Text.h"
-#include "DrawEventManager.h"
+
 #include "GameObject.h"
-#include "ResourceManager.h"
 #include "Font.h"
+#include "Transform.h"
+#include "DrawEventManager.h"
+#include "ResourceManager.h"
+#include "LuaBind.h"
 
 #include <SFML\Graphics\Text.hpp>
 
@@ -25,9 +28,9 @@ Text::~Text()
 void ce::Text::Update()
 {
 	// Makes the texts transform the same as the gameObjects transform
-	text->setPosition(transform->GetPosition());
+	text->setPosition(transform->GetPosition().ToSfVector2());
 	text->setRotation(transform->GetRotation());
-	text->setScale(transform->GetScale());
+	text->setScale(transform->GetScale().ToSfVector2());
 }
 
 

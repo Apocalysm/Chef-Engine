@@ -1,33 +1,43 @@
 #pragma once
 #include "SoundBuffer.h"
+#include "LuaBridgeBinder.h"
 
 #include <string>
+
+namespace sf
+{
+    class Music;
+    class Sound;
+}
 
 namespace ce
 {
 	class SoundManager
 	{
+		friend void LuaBridgeBinder::Bind<ce::SoundManager>(lua_State*);
+
 	public:
 		SoundManager(std::string fileName);
 		~SoundManager();
 
-		void PlayMusic(const std::string fileName, bool loop);
-		void SetMusicVolume(float volume);
-		float GetMusicVolume();
 
-		void PlaySFX(const std::string fileName, sf::Sound* sound);
-		void PlaySFXSOUND();
-		void SetSFXVolume(float volume);
-		float GetSFXVolume();
+		void PlaySFX();
+		void SetSoundVolume(float volume);
+		float GetSoundVolume() const;
 
+		void SetMasterVolume(float volume);
+		float GetMasterVolume() const;
 
 	private:
-		sf::Music music;
-		sf::Sound* sound;
+		static void DoBind(lua_State* L);
+
+		std::vector<sf::Sound*> sounds;
 		std::string fileName;
 		ce::SoundBuffer* buffer;
-		static float sfxVolume;
-		float musicVolume;
+
+		static float sfxMasterVolume;
+
+		float sfxVolume;
 
 	};
 }

@@ -1,11 +1,10 @@
 #pragma once
-
-#include "Resource.h"
-
 #include <map>
 
 namespace ce
 {
+    class Resource;
+
 	class ResourceManager 
 	{
 	public:

@@ -1,6 +1,41 @@
+////////////////////////////////////////////////////////////
+//
+// Chef Engine
+// Copyright (C) 2017 Oskar Svensson
+//  
+// This software is provided 'as-is', without any express or implied warranty.
+// In no event will the authors be held liable for any damages arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it freely,
+// subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented;
+//    you must not claim that you wrote the original software.
+//    If you use this software in a product, an acknowledgment
+//    in the product documentation would be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such,
+//    and must not be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source distribution.
+//
+////////////////////////////////////////////////////////////
+
+
 #pragma once
+#include "Common.h"
 #include "Component.h"
+#include "Vec2.h"
 #include "LuaBridgeBinder.h"
+
+namespace sf
+{
+    class RenderWindow;
+    class View;
+}
+
+struct lua_State;
 
 namespace ce
 {
@@ -45,36 +80,36 @@ namespace ce
         /// camera = object:AddCamera()
         /// \endcode
         ////////////////////////////////////////////////////////////
-		Camera();
-		~Camera();
+		CHEF_API Camera();
+		CHEF_API ~Camera();
 
     
 
         // The main camera, the camera that's currently in use
-        static Camera* main;
+        CHEF_API static Camera* main;
         // The window of the game
-        static sf::RenderWindow* window;
+        CHEF_API static sf::RenderWindow* window;
 
-		void SetSize(const sf::Vector2f &size);
-		sf::Vector2f GetSize() const;
+		void SetSize(const ce::Vec2f& size);
+		const ce::Vec2f& GetSize() const;
 
 		void SetZoom(float zoom);
 		float GetZoom() const;
 
-		void SetCenter(const sf::Vector2f & center);
-		sf::Vector2f GetCenter() const;
+		void SetCenter(const ce::Vec2f& center);
+        const ce::Vec2f& GetCenter() const;
 
 		bool GetFollow() const;
 		void SetFollow(const bool &follow);
 
-		sf::View GetView() const;
+		const sf::View* GetView() const;
         
-        void UpdateCamera();
+        CHEF_API void UpdateCamera();
 
 	private:
 		static void DoBind(lua_State* L);
 
-		sf::View view;
+		sf::View* view;
 
         ////////////////////////////////////////////////////////////
         /// \brief How big the camera's viewport is
@@ -84,7 +119,7 @@ namespace ce
         /// camera.size = Chef.Vector2f(128, 128)
         /// \endcode
         ////////////////////////////////////////////////////////////
-		sf::Vector2f size;
+		ce::Vec2f size;
 
         ////////////////////////////////////////////////////////////
         /// \brief The position the Camera looks at
@@ -94,10 +129,10 @@ namespace ce
         /// camera.center = Chef.Vector2f(5, 100)
         /// \endcode
         ////////////////////////////////////////////////////////////
-		sf::Vector2f center;
+        ce::Vec2f center;
 
-		sf::Vector2f worldBounce;
-		sf::Vector2i mapSize;
+        ce::Vec2f worldBounce;
+        ce::Vec2i mapSize;
 
         /// \brief If the Camera should follow the GameObject is on
 		bool follow;

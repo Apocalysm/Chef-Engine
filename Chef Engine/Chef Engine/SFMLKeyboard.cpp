@@ -1,4 +1,33 @@
+////////////////////////////////////////////////////////////
+//
+// Chef Engine
+// Copyright (C) 2017 Oskar Svensson
+//  
+// This software is provided 'as-is', without any express or implied warranty.
+// In no event will the authors be held liable for any damages arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it freely,
+// subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented;
+//    you must not claim that you wrote the original software.
+//    If you use this software in a product, an acknowledgment
+//    in the product documentation would be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such,
+//    and must not be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source distribution.
+//
+////////////////////////////////////////////////////////////
+
+
 #include "SFMLKeyboard.h"
+
+#include "LuaBind.h"
+
+#include <SFML\Window\Keyboard.hpp>
 
 using ce::SFMLKeyboard;
 
@@ -13,6 +42,7 @@ SFMLKeyboard::~SFMLKeyboard()
 {
 }
 
+
 void ce::SFMLKeyboard::Initialize()
 {
 	newKeys = new char[sf::Keyboard::KeyCount];
@@ -24,30 +54,36 @@ void ce::SFMLKeyboard::Initialize()
 	}
 }
 
-void ce::SFMLKeyboard::SetKeyDown(sf::Keyboard::Key key)
+
+void ce::SFMLKeyboard::SetKeyDown(int key)
 {
 	newKeys[key] = 2;
 	keys[key] = 2;
 }
 
-void ce::SFMLKeyboard::SetKeyUp(sf::Keyboard::Key key)
+
+void ce::SFMLKeyboard::SetKeyUp(int key)
 {
 	newKeys[key] = 0;
 	keys[key] = 0;
 }
+
 
 bool ce::SFMLKeyboard::GetKey(int key)
 {
 	return keys[sf::Keyboard::Key(key)] == 2;
 }
 
+
 bool ce::SFMLKeyboard::GetKeyDown(int key)
 {
     return newKeys[sf::Keyboard::Key(key)] == 2;
 }
 
+
 bool ce::SFMLKeyboard::GetKeyUp(int key)
 {
+	//If the current key is 0 that means its released and we can return true
 	if (newKeys[sf::Keyboard::Key(key)] == 0)
 	{
 		return true;
@@ -55,6 +91,7 @@ bool ce::SFMLKeyboard::GetKeyUp(int key)
 
 	return false;
 }
+
 
 void ce::SFMLKeyboard::ResetKeyboard()
 {
@@ -71,6 +108,7 @@ void ce::SFMLKeyboard::ClearKeys()
 		newKeys[i] = 1;
 	}
 }
+
 
 #pragma region Keyboard definitions
 int A = sf::Keyboard::A;
@@ -109,7 +147,7 @@ int Num6 = sf::Keyboard::Num6;
 int Num7 = sf::Keyboard::Num7;
 int Num8 = sf::Keyboard::Num8;
 int Num9 = sf::Keyboard::Num9;
-int Escape = sf::Keyboard::Escape;
+//int Escape = sf::Keyboard::Escape;
 int LControl = sf::Keyboard::LControl;
 int LShift = sf::Keyboard::LShift;
 int LAlt = sf::Keyboard::LAlt;
@@ -176,7 +214,6 @@ int F15 = sf::Keyboard::F15;
 #pragma endregion
 
 
-
 void ce::SFMLKeyboard::DoBind(lua_State * Lua)
 {
 
@@ -228,7 +265,7 @@ void ce::SFMLKeyboard::DoBind(lua_State * Lua)
 			.addVariable("Num7", &Num7)
 			.addVariable("Num8", &Num8)
 			.addVariable("Num9", &Num9)
-			.addVariable("Escape", &Escape)
+			//.addVariable("Escape", &Escape)
 			.addVariable("LControl", &LControl)
 			.addVariable("LShift", &LShift)
 			.addVariable("LAlt", &LAlt)

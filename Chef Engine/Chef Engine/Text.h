@@ -5,6 +5,7 @@ namespace sf
 {
 	class Text;
 	class Font;
+    class Color;
 }
 
 namespace ce

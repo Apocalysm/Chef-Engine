@@ -1,22 +1,55 @@
+////////////////////////////////////////////////////////////
+//
+// Chef Engine
+// Copyright (C) 2017 Oskar Svensson
+//  
+// This software is provided 'as-is', without any express or implied warranty.
+// In no event will the authors be held liable for any damages arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it freely,
+// subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented;
+//    you must not claim that you wrote the original software.
+//    If you use this software in a product, an acknowledgment
+//    in the product documentation would be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such,
+//    and must not be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source distribution.
+//
+////////////////////////////////////////////////////////////
+
+
 #include "CollisionManager.h"
 #include "Collider.h"
+#include "Transform.h"
+#include "Sprite.h"
 #include "GameObject.h"
 
-b2World* ce::CollisionManager::world;
+#include <Box2D\Box2D.h>
 
-std::map<Common::uint64, ce::Collider*> ce::CollisionManager::intToCollider;
-//std::map<Common::uint64, ce::Collider*> ce::CollisionManager::intToNewRectangles;
+b2World* ce::CollisionManager::world = 0;
+
+std::map<uint64, ce::Collider*> ce::CollisionManager::intToCollider;
+//std::map<uint64, ce::Collider*> ce::CollisionManager::intToNewRectangles;
 
 using ce::CollisionManager;
 
 
 CollisionManager::CollisionManager()
+    : gravity(new b2Vec2(0, 0))
 {
-	// Zeroes gravity
-	gravity.SetZero();
+    world = new b2World(*gravity);
 
-	// Creates the physics world
-	world = new b2World(gravity);
+    /*
+     Zeroes gravity
+    gravity = new b2Vec2(0, 0);
+
+	 Creates the physics world
+	world = new b2World(*gravity);*/
 }
 
 
@@ -72,8 +105,8 @@ void ce::CollisionManager::UpdateCollision()
 			if (coll->fitSprite)
 			{
 				// Gets the position of the body with an offset since the transform should not be directly at the bodys position
-				posX = coll->body->GetPosition().x - coll->spriteSizeX / 2 * coll->transScale.x + coll->spriteOrigin.x * coll->transScale.x;
-				posY = coll->body->GetPosition().y - coll->spriteSizeY / 2 * coll->transScale.y + coll->spriteOrigin.y * coll->transScale.y;
+				posX = coll->body->GetPosition().x - coll->spriteSize.x / 2 * coll->transScale.x + coll->spriteOrigin.x * coll->transScale.x;
+				posY = coll->body->GetPosition().y - coll->spriteSize.y / 2 * coll->transScale.y + coll->spriteOrigin.y * coll->transScale.y;
 
 				// Moves the transform component to the calculated position
 				coll->transform->SetPosition(posX, posY);

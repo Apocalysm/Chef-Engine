@@ -2,17 +2,19 @@
 
 -- You have to include all the paths to all the component script
 -- i.e all the scripts in the Components folder and all it's subfolders
-package.path = package.path .. ";../Chef Engine/Lua Scripts/Components/?.lua;"
+package.path = package.path .. ";Lua Scripts/Components/?.lua;"
 
 -- You then have to write require "<filename>" for all the Component scripts
 require "NewComponent"
 require "OtherComponent"
+require "Groupie"
 
 Components = 
 {
 	-- Here you simply add more components as you go
-	[1] = NewComponent,
-	[2] = OtherComponent
+	[1] = Groupie,
+	[2] = NewComponent,
+	[3] = OtherComponent
 }
 
 local IDTicker = 0

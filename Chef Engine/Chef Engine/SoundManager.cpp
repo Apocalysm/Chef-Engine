@@ -1,18 +1,20 @@
 #include "SoundManager.h"
 #include "ResourceManager.h"
+#include "LuaBind.h"
+
+#include <SFML\Audio.hpp>
 
 #include <assert.h>
 #include <iostream>
 
+using namespace ce;
+float SoundManager::sfxMasterVolume = 1;
 
-float ce::SoundManager::sfxVolume;
-
-ce::SoundManager::SoundManager(std::string fileName) :
-	sound(new sf::Sound()), fileName(fileName)
+ce::SoundManager::SoundManager(std::string fileName) : sfxVolume(1)
 {
-	sfxVolume = 1;
+	sounds.push_back(new sf::Sound());
 	buffer = (ce::SoundBuffer*) ce::ResourceManager::GetResource(fileName);
-	this->sound->setBuffer(*buffer->GetSoundBuffer());
+	sounds[0]->setBuffer(*buffer->GetSoundBuffer());
 }
 
 
@@ -22,53 +24,89 @@ ce::SoundManager::~SoundManager()
 }
 
 
-void ce::SoundManager::PlayMusic(const std::string fileName, bool loop)
+
+void ce::SoundManager::PlaySFX()
 {
-	if (!music.openFromFile(fileName))
+	//Setting the volume for the sound
+	sfxVolume *= sfxMasterVolume;
+
+	int location = -1;
+	for (int i = 0; i < sounds.size(); i++)
 	{
-		assert(!"Couldnt load file");
+		//Check if the sound on position "i" is not playing
+		if (sounds[i]->getStatus() != sf::Sound::Playing && location == -1)
+		{
+			location = i;
 	}
-	music.setLoop(loop);
-	music.setVolume(musicVolume);
-	music.play();
 }
 
+	//Check if location is not equal to -1
+	if (location != -1)
+	{
+		//Plays the sound again on the same location as the sound that stopped in the vector 
+		sounds[location]->setBuffer(*buffer->GetSoundBuffer());
+		sounds[location]->setVolume(sfxVolume);
+		sounds[location]->play();
+	}
 
-
-void ce::SoundManager::PlaySFX(const std::string fileName, sf::Sound* sound)
+	//IF not create a new sound in the vector
+	else
 {
-	buffer = (ce::SoundBuffer*) ce::ResourceManager::GetResource(fileName);
+		sf::Sound* newSound = new sf::Sound();
 
-	sound->setBuffer(*buffer->GetSoundBuffer());
-	sound->setVolume(sfxVolume);
-	sound->play();
+		newSound->setBuffer(*buffer->GetSoundBuffer());
+		newSound->setVolume(sfxVolume);
+		newSound->play();
+		sounds.push_back(newSound);
+	}
+}
 
 	
-}
-
-void ce::SoundManager::PlaySFXSOUND()
-{
-	sound->setVolume(sfxVolume);
-	sound->play();
-}
-
-void ce::SoundManager::SetSFXVolume(float volume)
+//Set the volume for THIS sound
+void ce::SoundManager::SetSoundVolume(float volume)
 {
 	sfxVolume = volume;
 }
 
-float ce::SoundManager::GetSFXVolume()
+
+//Get the volume for THIS sound
+float ce::SoundManager::GetSoundVolume() const
 {
 	return sfxVolume;
 }
 
-void ce::SoundManager::SetMusicVolume(float volume)
+
+//Setting the a volume for ALL the sounds
+void ce::SoundManager::SetMasterVolume(float volume)
 {
-	musicVolume = volume;
+	sfxMasterVolume = volume;
 }
 
-float ce::SoundManager::GetMusicVolume()
+
+//Getting the a volume for ALL the sounds
+float ce::SoundManager::GetMasterVolume() const
 {
-	return musicVolume;
+	return sfxMasterVolume;
+
+	/*for (auto i = 0; i < sounds.size(); i++)
+	{
+		if (sounds[i]->getStatus != sounds[i]->Playing)
+{
+			//buffer->DecrementUseCount();
+		}
+	}*/
 }
+
+void ce::SoundManager::DoBind(lua_State * L)
+{
+	luabridge::getGlobalNamespace(L)
+		.beginNamespace("Chef")
+			.beginClass<SoundManager>("Sound")
+				.addFunction("PlaySound", &SoundManager::PlaySFX)
+				.addProperty("volume", &SoundManager::GetSoundVolume, &SoundManager::SetSoundVolume)
+				.addProperty("masterVolume", &SoundManager::GetMasterVolume, &SoundManager::SetMasterVolume)
+			.endClass()
+		.endNamespace();
+}
+
 

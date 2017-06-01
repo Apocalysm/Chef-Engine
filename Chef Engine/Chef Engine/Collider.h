@@ -1,13 +1,46 @@
+////////////////////////////////////////////////////////////
+//
+// Chef Engine
+// Copyright (C) 2017 Oskar Svensson
+//  
+// This software is provided 'as-is', without any express or implied warranty.
+// In no event will the authors be held liable for any damages arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it freely,
+// subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented;
+//    you must not claim that you wrote the original software.
+//    If you use this software in a product, an acknowledgment
+//    in the product documentation would be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such,
+//    and must not be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source distribution.
+//
+////////////////////////////////////////////////////////////
+
+
 #pragma once
-
 #include "Component.h"
-#include "Sprite.h"
 #include "Common.h"
+#include "LuaBridgeBinder.h"
 
-#include <Box2D/Box2D.h>
+#include "Vec2.h"
+
+struct b2BodyDef;
+class b2Body;
+class b2PolygonShape;
+struct b2FixtureDef;
+
+struct lua_State;
 
 namespace ce
 {
+    class Sprite;
+
     ////////////////////////////////////////////////////////////
     /// \brief Component that allows for collision with other GameObjects
     /// Add a Collider to a GameObject with GameObject:AddCollider()
@@ -57,7 +90,7 @@ namespace ce
 
 		// Creates a collision box based on the Vector2 values
 		// Should only be called when creating collision boxes from Tiled
-		void SetupTMX(const sf::Vector2f rectSize, const bool dynamic, const bool isTrigger);
+		void SetupTMX(const Vec2f& rectSize, const bool dynamic, const bool isTrigger);
 
         ////////////////////////////////////////////////////////////
         /// \brief Creates a collision box based on the sprite component attached to the same gameobject this component is attached to
@@ -113,16 +146,16 @@ namespace ce
 		bool isColliding;
 
 		// Bodies is created from this
-		b2BodyDef bodyDef;
+		b2BodyDef* bodyDef;
 
 		// Body holding collider and info
 		b2Body* body;
 
 		// Shape of the collider
-		b2PolygonShape shape;
+		b2PolygonShape* shape;
 
 		// Fixtures is created from this
-		b2FixtureDef fixtureDef;
+		b2FixtureDef* fixtureDef;
 
 		// Pointer to the sprite component that belongs the tha same gameobject as this component
 		ce::Sprite* sprite;
@@ -130,20 +163,18 @@ namespace ce
 		// Pointer to the transform component that belongs the tha same gameobject as this component
 		ce::Transform* transform;
 
-		sf::Vector2f transPos;
+		Vec2f transPos;
 
-		sf::Vector2f transScale;
+		Vec2f transScale;
 
 		float transRot;
 
-		float spriteSizeX;
+        Vec2u spriteSize;
 
-		float spriteSizeY;
-
-		sf::Vector2f spriteOrigin;
+		Vec2f spriteOrigin;
 
 		// Contains pointers to colliders that this collider is currently colliding with
-		std::map<Common::uint64, ce::Collider*> collidingColls;
+		std::map<uint64, ce::Collider*> collidingColls;
 
 		const double PI = 3.141592653589793;
 
