@@ -1,10 +1,38 @@
+////////////////////////////////////////////////////////////
+//
+// Chef Engine
+// Copyright (C) 2017 Oskar Svensson
+//  
+// This software is provided 'as-is', without any express or implied warranty.
+// In no event will the authors be held liable for any damages arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it freely,
+// subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented;
+//    you must not claim that you wrote the original software.
+//    If you use this software in a product, an acknowledgment
+//    in the product documentation would be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such,
+//    and must not be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source distribution.
+//
+////////////////////////////////////////////////////////////
+
+
 #include "GameObject.h"
 
 #include "Component.h"
 #include "Sprite.h"
 #include "Collider.h"
 #include "Camera.h"
+#include "Transform.h"
 
+#include "LuaBind.h"
+#include "ContactListener.h"
 #include "GameObjectManager.h"
 #include "DrawEventManager.h"
 
@@ -82,7 +110,7 @@ namespace ce
     }
 
 
-    unsigned long long GameObject::GetID() const
+    const uint64& GameObject::GetID() const
     {
         return instanceID;
     }
@@ -147,26 +175,26 @@ namespace ce
     }
 
     // Getter and setter methods for 'name' variable
-    std::string GameObject::GetName() const
+    const std::string& GameObject::GetName() const
     {
         return name;
     }
 
 
-    void GameObject::SetName(std::string name)
+    void GameObject::SetName(const std::string& name)
     {
         this->name = name;
     }
 
 
     // Getter and setter methods for 'tag' variable
-    std::string GameObject::GetTag() const
+    const std::string& GameObject::GetTag() const
     {
         return tag;
     }
 
 
-    void GameObject::SetTag(std::string tag)
+    void GameObject::SetTag(const std::string& tag)
     {
         this->tag = tag;
     }
@@ -207,49 +235,51 @@ luabridge::LuaRef GameObject::AddLuaComponent(luabridge::LuaRef ref)
     if (luaComponents.find(id) == luaComponents.end())
     {
         // Creates a new LuaComponent with the ref we passed as an argument
-        LuaComponent* newComponent = new ce::LuaComponent(ref);
+        LuaComponent* newComponent = new ce::LuaComponent();
 
         // Sets the component's gameObject reference
         newComponent->SetGameObject(this);
 
         // Passes this GameObject and the new luaComponent back to our new component instance in Lua
-        luabridge::LuaRef newRef = ref["Create"](newComponent);
+        luabridge::LuaRef* newRef = new luabridge::LuaRef(ref["Create"](newComponent));
 
         // Sets the LuaComponent's ref to the newly created one
-        newComponent->ref = newRef;
+        newComponent->SetRef(newRef);
 
         // Adds the new Lua Component to this GameObject
         luaComponents.insert(std::make_pair(id, newComponent));
 
         // Sends the newRef back into Lua
-        return newRef;
+        return *newRef;
     }
     std::cerr << "You sadly can't add the same component type twice to a GameObject. Yet..." << std::endl;
     assert(false);
+
+    return ref;
 }
 
     
-    // Gets a LuaComponent and returns that components specified LuaRef
-    luabridge::LuaRef GameObject::GetLuaComponent(int ID)
+// Gets a LuaComponent and returns that components specified LuaRef
+luabridge::LuaRef GameObject::GetLuaComponent(int ID)
+{
+    // Checks if there is an element on index "ID" 
+    if (luaComponents.find(ID) != luaComponents.end())
     {
-        // Checks if there is an element on index "ID" 
-        if (luaComponents[ID]->ref.isTable())
-        {
-            return luaComponents[ID]->ref;
-        }
+        return *luaComponents[ID]->ref;
     }
+}
 
-    // Removes LuaComponent from the luaComponents map
-    void GameObject::RemoveLuaComponent(int ID)
-    {
-        // Checks if there is an element on index "ID" 
-        if (luaComponents[ID])
-        {                    
-            delete luaComponents[ID];
+// Removes LuaComponent from the luaComponents map
+void GameObject::RemoveLuaComponent(int ID)
+{
+    // Checks if there is an element on index "ID" 
+    if (luaComponents[ID])
+    {                    
+        delete luaComponents[ID];
         
-            luaComponents.erase(ID);
-        }
+        luaComponents.erase(ID);
     }
+}
 
 void GameObject::DoBind(lua_State * L)
 {

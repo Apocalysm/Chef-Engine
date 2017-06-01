@@ -19,6 +19,8 @@
 #include <iostream>
 #include <vector>
 
+#include "LuaBind.h"
+
 //////////////////////////////////////////////
 ///   \mainpage Main Page
 ///
@@ -82,6 +84,7 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         
         // Calls our main-loop in Lua
         (*ce::LuaBridgeBinder::mainFunc)();
+        
 
         objManager->CallUpdate();
 		

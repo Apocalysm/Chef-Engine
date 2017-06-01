@@ -1,56 +1,82 @@
+////////////////////////////////////////////////////////////
+//
+// Chef Engine
+// Copyright (C) 2017 Oskar Svensson
+//  
+// This software is provided 'as-is', without any express or implied warranty.
+// In no event will the authors be held liable for any damages arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it freely,
+// subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented;
+//    you must not claim that you wrote the original software.
+//    If you use this software in a product, an acknowledgment
+//    in the product documentation would be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such,
+//    and must not be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source distribution.
+//
+////////////////////////////////////////////////////////////
+
+
 #include "LuaComponent.h"
+
+#include "LuaBind.h"
 
 #include <iostream>
 
 using ce::LuaComponent;
 
 
-LuaComponent::LuaComponent(luabridge::LuaRef ref) :
-    ref(ref.state())
+void LuaComponent::SetRef(luabridge::LuaRef* ref)
 {
     this->ref = ref;
 
     // Calls the Awake function in the lua script, if there is one
-    if (ref["Awake"].isFunction())
+    if ((*ref)["Awake"].isFunction())
     {
-        ref["Awake"](ref);
-}       
+        (*ref)["Awake"]((*ref));
+    }       
 
     // Sets the Start and Update methods of the Lua Script
-    if (ref["Start"].isFunction())
+    if ((*ref)["Start"].isFunction())
     {
-        startFunc = std::make_unique<luabridge::LuaRef>(ref["Start"]);
+        startFunc = std::make_unique<luabridge::LuaRef>((*ref)["Start"]);
     }
-    if (ref["Update"].isFunction())
+    if ((*ref)["Update"].isFunction())
     {
-        updateFunc = std::make_unique<luabridge::LuaRef>(ref["Update"]);
+        updateFunc = std::make_unique<luabridge::LuaRef>((*ref)["Update"]);
     }
-
+    
 
     // Sets all the Collision Event methods of the Lua Script
-    if (ref["OnCollisionEnter"].isFunction())
+    if ((*ref)["OnCollisionEnter"].isFunction())
 	{
-        onCollisionEnterFunc = std::make_unique<luabridge::LuaRef>(ref["OnCollisionEnter"]);
+        onCollisionEnterFunc = std::make_unique<luabridge::LuaRef>((*ref)["OnCollisionEnter"]);
 	}
-    if (ref["OnCollisionExit"].isFunction())
+    if ((*ref)["OnCollisionExit"].isFunction())
     {
-        onCollisionExitFunc = std::make_unique<luabridge::LuaRef>(ref["OnCollisionExit"]);
+        onCollisionExitFunc = std::make_unique<luabridge::LuaRef>((*ref)["OnCollisionExit"]);
     }
-	if (ref["OnCollisionStay"].isFunction())
+	if ((*ref)["OnCollisionStay"].isFunction())
 	{
-		onCollisionStayFunc = std::make_unique<luabridge::LuaRef>(ref["OnCollisionStay"]);
+		onCollisionStayFunc = std::make_unique<luabridge::LuaRef>((*ref)["OnCollisionStay"]);
 	}
-    if (ref["OnTriggerEnter"].isFunction())
+    if ((*ref)["OnTriggerEnter"].isFunction())
     {
-        onTriggerEnterFunc = std::make_unique<luabridge::LuaRef>(ref["OnTriggerEnter"]);
+        onTriggerEnterFunc = std::make_unique<luabridge::LuaRef>((*ref)["OnTriggerEnter"]);
     }
-    if (ref["OnTriggerExit"].isFunction())
+    if ((*ref)["OnTriggerExit"].isFunction())
     {
-        onTriggerExitFunc = std::make_unique<luabridge::LuaRef>(ref["OnTriggerExit"]);
+        onTriggerExitFunc = std::make_unique<luabridge::LuaRef>((*ref)["OnTriggerExit"]);
     }
-	if (ref["OnTriggerStay"].isFunction())
+	if ((*ref)["OnTriggerStay"].isFunction())
 	{
-		onTriggerStayFunc = std::make_unique<luabridge::LuaRef>(ref["OnTriggerStay"]);
+		onTriggerStayFunc = std::make_unique<luabridge::LuaRef>((*ref)["OnTriggerStay"]);
 	}
 
 }
@@ -64,67 +90,66 @@ LuaComponent::~LuaComponent()
 #pragma region Lua Functions
 void LuaComponent::Start()
 {
-    if (startFunc != nullptr)
+    if (startFunc)
     {
-        (*startFunc)(ref);
+        (*startFunc)(*ref);
     }
 }
 
 
 void LuaComponent::Update()
 {
-    if (updateFunc != nullptr)
+    if (updateFunc)
     {
-        int id = ref["ID"];
-        (*updateFunc)(ref);
+        (*updateFunc)(*ref);
     }
 }
 
 void ce::LuaComponent::OnCollisionEnter(ce::Collider * collider)
 {
-    if (onCollisionEnterFunc != nullptr)
+    if (onCollisionEnterFunc)
     {
-        (*onCollisionEnterFunc)(ref, collider);
+        (*onCollisionEnterFunc)(*ref, collider);
     }
 }
 
 void ce::LuaComponent::OnCollisionExit(ce::Collider * collider)
 {
-    if (onCollisionExitFunc != nullptr)
+    if (onCollisionExitFunc)
     {
-        (*onCollisionExitFunc)(ref, collider);
+        (*onCollisionExitFunc)(*ref, collider);
     }
 }
 
 void ce::LuaComponent::OnCollisionStay(ce::Collider * collider)
 {
-	if (onCollisionStayFunc != nullptr)
+	if (onCollisionStayFunc)
 	{
-		(*onCollisionStayFunc)(ref, collider);
+		(*onCollisionStayFunc)(*ref, collider);
 	}
 }
 
 void ce::LuaComponent::OnTriggerEnter(ce::Collider * collider)
 {
-    if (onTriggerEnterFunc != nullptr)
+    if (onTriggerEnterFunc)
     {
-        (*onTriggerEnterFunc)(ref, collider);
+        (*onTriggerEnterFunc)(*ref, collider);
     }
 }
 
 void ce::LuaComponent::OnTriggerExit(ce::Collider * collider)
 {
-    if (onTriggerExitFunc != nullptr)
+    if (onTriggerExitFunc)
     {
-        (*onTriggerExitFunc)(ref, collider);
+        (*onTriggerExitFunc)(*ref, collider);
     }
 }
 
 void ce::LuaComponent::OnTriggerStay(ce::Collider * collider)
 {
-	if (onTriggerStayFunc != nullptr)
+	if (onTriggerStayFunc)
 	{
-		(*onTriggerStayFunc)(ref, collider);
+		(*onTriggerStayFunc)(*ref, collider);
 	}
 }
 #pragma endregion

@@ -1,6 +1,35 @@
+////////////////////////////////////////////////////////////
+//
+// Chef Engine
+// Copyright (C) 2017 Oskar Svensson
+//  
+// This software is provided 'as-is', without any express or implied warranty.
+// In no event will the authors be held liable for any damages arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it freely,
+// subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented;
+//    you must not claim that you wrote the original software.
+//    If you use this software in a product, an acknowledgment
+//    in the product documentation would be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such,
+//    and must not be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source distribution.
+//
+////////////////////////////////////////////////////////////
+
+
 #pragma once
+#include "Vec2.h"
+
 #include "Component.h"
 #include "LuaBridgeBinder.h"
+
+struct lua_State;
 
 namespace ce
 {
@@ -24,7 +53,7 @@ namespace ce
 
 	public:
 		Transform();
-		Transform(const sf::Vector2f& position, const float rotation, const sf::Vector2f& scale);
+		Transform(const Vec2f& position, const float rotation, const Vec2f& scale);
 		~Transform();		
 
 		void Start();
@@ -32,10 +61,10 @@ namespace ce
 		void Update();
 
         #pragma region Position Methods
-		void SetPosition(const sf::Vector2f& newPosition);
+		void SetPosition(const Vec2f& newPosition);
 		void SetPosition(const float x, const float y);
 		
-		const sf::Vector2f& GetPosition() const;
+		const Vec2f& GetPosition() const;
 
         ////////////////////////////////////////////////////////////
         /// \brief Moves the object by a specified amount of units
@@ -45,12 +74,12 @@ namespace ce
         /// object.transform:Move(Chef.Vector2f(50, 0))
         /// \endcode
         ////////////////////////////////////////////////////////////
-        void Move(sf::Vector2f movement);
+        void Move(const Vec2f& movement);
 
         #pragma endregion
 
         #pragma region Rotation Methods
-		void SetRotation(float newRotation);
+		void SetRotation(const float newRotation);
 
 		float GetRotation() const;
 
@@ -63,14 +92,14 @@ namespace ce
         /// object.transform:Rotate(50)
         /// \endcode
         ////////////////////////////////////////////////////////////
-		void Rotate(float angle);
+		void Rotate(const float angle);
         #pragma endregion
 
         #pragma region Scale Methods
-		void SetScale(const sf::Vector2f& newScale);
+		void SetScale(const Vec2f& newScale);
 		void SetScale(const float x, const float y);
 
-		sf::Vector2f GetScale() const;
+		const Vec2f& GetScale() const;
         #pragma endregion
 
 		void SetGameObject(GameObject* gameObject);
@@ -87,7 +116,7 @@ namespace ce
         /// object.transform.position = Chef.Vector2f(100, 50)
         /// \endcode
         ////////////////////////////////////////////////////////////
-		sf::Vector2f position;
+		Vec2f position;
 
         ////////////////////////////////////////////////////////////
         /// \brief The world rotation of the object holding the Transform component
@@ -113,7 +142,7 @@ namespace ce
         /// object.transform.scale = Chef.Vector2f(3, 5)
         /// \endcode
         ////////////////////////////////////////////////////////////
-		sf::Vector2f scale;
+        Vec2f scale;
 
         // Binds parts of this script to Lua
         static void DoBind(lua_State* L);

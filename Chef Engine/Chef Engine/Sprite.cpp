@@ -1,7 +1,39 @@
+////////////////////////////////////////////////////////////
+//
+// Chef Engine
+// Copyright (C) 2017 Oskar Svensson
+//  
+// This software is provided 'as-is', without any express or implied warranty.
+// In no event will the authors be held liable for any damages arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it freely,
+// subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented;
+//    you must not claim that you wrote the original software.
+//    If you use this software in a product, an acknowledgment
+//    in the product documentation would be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such,
+//    and must not be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source distribution.
+//
+////////////////////////////////////////////////////////////
+
+
 #include "Sprite.h"
+#include "Transform.h"
 #include "GameObject.h"
+
 #include "DrawEventManager.h"
 #include "ResourceManager.h"
+#include "Texture.h"
+
+#include "LuaBind.h"
+
+#include <SFML\Graphics.hpp>
 
 using ce::Sprite;
 
@@ -35,9 +67,9 @@ Sprite::~Sprite()
 void Sprite::Update()
 {
 	// Updates psition, scale and rotation depending on the set values in the transform
-	sprite->setPosition(transform->GetPosition());
+	sprite->setPosition(transform->GetPosition().ToSfVector2());
 	sprite->setRotation(transform->GetRotation());
-	sprite->setScale(transform->GetScale());
+	sprite->setScale(transform->GetScale().ToSfVector2());
 }
 
 
@@ -46,8 +78,8 @@ void Sprite::SetSprite(const std::string& fileName)
 	texture = (ce::Texture*)ce::ResourceManager::GetResource(fileName);
 
 	sprite->setTexture(*texture->GetTexture());
-
-	sprite->setPosition(transform->GetPosition());
+    sprite->setTextureRect(sf::IntRect(sf::Vector2i(0,0), (sf::Vector2i)texture->GetTexture()->getSize()));
+	sprite->setPosition(transform->GetPosition().ToSfVector2());
 }
 
 void ce::Sprite::ChangeSprite(sf::Sprite* sprite)
@@ -95,9 +127,9 @@ sf::Sprite* Sprite::GetSprite() const
 }
 
 
-sf::Vector2f Sprite::GetOrigin() const
+const ce::Vec2f& Sprite::GetOrigin() const
 {
-	return sprite->getOrigin();
+	return ce::Vec2f(sprite->getOrigin());
 }
 
 

@@ -1,8 +1,11 @@
 #pragma once
-
 #include "Resource.h"
+#include <string>
 
-#include <SFML\Audio.hpp>
+namespace sf
+{
+    class SoundBuffer;
+}
 
 namespace ce
 {

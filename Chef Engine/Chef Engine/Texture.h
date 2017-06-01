@@ -1,8 +1,11 @@
 #pragma once
-
 #include "Resource.h"
+#include <string>
 
-#include <SFML\Graphics.hpp>
+namespace sf
+{
+    class Texture;
+}
 
 namespace ce
 {
