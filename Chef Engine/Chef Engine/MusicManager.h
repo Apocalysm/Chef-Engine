@@ -59,8 +59,7 @@ namespace ce
 	{
 		friend void LuaBridgeBinder::Bind<ce::MusicManager>(lua_State*);
 	public:
-		MusicManager();
-		~MusicManager();
+		MusicManager() = delete;
 
         ////////////////////////////////////////////////////////////
         /// \brief Starts to play the specified sound-file
@@ -72,12 +71,12 @@ namespace ce
         /// self.music:PlayMusic("Sounds\\platformer_music_happy.flac")
         /// \endcode
         ////////////////////////////////////////////////////////////
-		void PlayMusic(const std::string& fileName, bool loop);
-		void SetVolume(float volume);
-		float GetVolume() const;
+		static void PlayMusic(const std::string& fileName, bool loop);
+		static void SetVolume(float volume);
+		static float GetVolume();
 
 	private:
-        sf::Music* music;
+        static sf::Music* music;
 
 		static void DoBind(lua_State* L);
 
@@ -92,7 +91,7 @@ namespace ce
         /// self.music:PlayMusic("Sounds\\Beautiful_String_Concert.flac")
         /// \endcode
         ////////////////////////////////////////////////////////////
-		float volume;
+		static float volume;
 	};
 }
 
