@@ -44,18 +44,56 @@ namespace ce
 	class DrawableComponent;
 	class Font;
 
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Component that gives your texts a visual representation
+    /// Add a Text to a GameObject with GameObject:AddText()
+    /// \code
+    /// --Creates a GameObject and adds a Text to it
+    ///
+    /// object = Chef.GameObject("name")
+    ///
+    /// sprite = object:AddText() 
+    /// \endcode
+    /// 
+    /// \n Tries to get a Text from a GameObject with GameObject:GetText()
+    /// \code
+    /// --Gets a Text from the GameObject "object"
+    ///
+    /// text = object:GetText()
+    /// \endcode
+    ///
+    /// \n Remove a Text from a GameObject with GameObject:RemoveText()
+    /// \code
+    /// --Tries to remove a Text from the GameObject "object"
+    ///
+    /// object:RemoveText()
+    /// \endcode
+    ////////////////////////////////////////////////////////////
 	class Text : public DrawableComponent
 	{
 		// Befriends the templated Bind function so it can access our protected functions
 		friend void LuaBridgeBinder::Bind<ce::Text>(lua_State*);
 
 	public:
+        ////////////////////////////////////////////////////////////
+        /// \brief Default Text Constructor. 
+        /// In Lua you use GameObject:AddText()
+        /// \code
+        /// --Creates a GameObject and adds a Text to it
+        ///
+        /// object = Chef.GameObject("name")
+        ///
+        /// sprite = object:AddText() 
+        /// \endcode
+        ////////////////////////////////////////////////////////////
 		Text();
 		~Text();
 
 		void Update();
 
 		sf::Drawable* GetDrawable() const;
+
 
 		void SetFont(const std::string path);
 		sf::Font* GetFont() const;

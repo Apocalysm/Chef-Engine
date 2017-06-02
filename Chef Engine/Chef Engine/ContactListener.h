@@ -30,7 +30,7 @@
 
 
 #pragma once
-#include "Common.h"
+
 #include <Box2D\Box2D.h>
 
 namespace ce
@@ -38,8 +38,8 @@ namespace ce
 	class ContactListener : public b2ContactListener
 	{
 	public:
-		CHEF_API ContactListener();
-		CHEF_API ~ContactListener();
+		ContactListener();
+		~ContactListener();
 
 		// Is called when two colliders begin to touch
 		void BeginContact(b2Contact* contact);

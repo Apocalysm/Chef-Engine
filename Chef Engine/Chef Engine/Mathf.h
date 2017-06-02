@@ -24,46 +24,61 @@
 
 ////////////////////////////////////////////////////////////
 //
-// Author: Rasmus Andersson
+// Author: Rasmus Andersson, Oskar Svensson
 //
 ////////////////////////////////////////////////////////////
 
 #pragma once
+#include "LuaBridgeBinder.h"
+
+#include <string>
 
 namespace ce
 {
+    template <typename T>
+    ////////////////////////////////////////////////////////////
+    /// \brief Contains common Math functions
+    /// Is just called "Math" in Lua.
+    /// All functions have a suffix based on what data type you want to use.
+    /// For example, all the float functions have the suffix 'f', so the functions
+    /// are called "Clampf" and "Lerpf"
+    ////////////////////////////////////////////////////////////
 	class Mathf
 	{
-	public:
-		Mathf();
-		~Mathf();
+        // Befriends the templated Bind function so it can access our protected functions
+        friend void LuaBridgeBinder::Bind<ce::Mathf<T>>(lua_State*);
 
-        template <typename T>
+	public:
+        ////////////////////////////////////////////////////////////
+        /// \brief Clamps a value
+        /// 
+        /// \code
+        /// -- Clamps position of the player to not go outside a certain point
+        /// 
+        /// clampedX = Chef.Math.Clampf(self.transform.position.x, maxPosX, minPosX)
+        /// clampedY = Chef.Math.Clampf(self.transform.position.y, maxPosY, minPosY)
+        /// player.transform.position = Chef.Vector2f(clampedX, clampedY)
+        /// 
+        /// \endcode
+        ////////////////////////////////////////////////////////////
         static T Clamp(T value, T maxValue, T minValue);
 
-        template <typename T>
+        ////////////////////////////////////////////////////////////
+        /// \brief Linear interpolation of a value
+        /// 
+        /// \code
+        /// -- Lerps the camera to the player's position 50% every frame
+        /// 
+        /// lerpX = Chef.Math.Lerpf(self.transform.position.x, enemyPosX, 0.5)
+        /// lerpY = Chef.Math.Lerpf(self.transform.position.y, enemyPosY, 0.5)
+        /// player.transform.position = Chef.Vector2f(lerpX, lerpY)
+        /// 
+        /// \endcode
+        ////////////////////////////////////////////////////////////
         static T Lerp(T value, T goal, T step);
+
+    private:
+        // Binds parts of this script to Lua
+        static void DoBind(lua_State* L, const std::string& s);
 	};
 }
-
-template <typename T>
-T ce::Mathf::Clamp(T value, T maxValue, T minValue)
-{
-    if (value > maxValue)
-    {
-        value = maxValue;
-    }
-    else if (value < minValue)
-    {
-        value = minValue;
-    }
-
-    return value;
-}
-
-template <typename T>
-T ce::Mathf::Lerp(T value, T goal, T step)
-{
-    return value + (goal - value) * step;
-}
-

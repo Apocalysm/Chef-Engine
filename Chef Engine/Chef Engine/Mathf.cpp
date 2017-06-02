@@ -30,16 +30,62 @@
 
 
 #include "Mathf.h"
+#include "LuaBind.h"
 
 using ce::Mathf;
 
-Mathf::Mathf()
+
+/* Author: Rasmus Andersson */
+// Templated clamping method
+template <typename T>
+T ce::Mathf<T>::Clamp(T value, T maxValue, T minValue)
 {
+    if (value > maxValue)
+    {
+        value = maxValue;
+    }
+    else if (value < minValue)
+    {
+        value = minValue;
+    }
+
+    return value;
 }
 
 
-Mathf::~Mathf()
+/* Author: Oskar Svensson*/
+// Templated linear interpolation method
+template <typename T>
+T ce::Mathf<T>::Lerp(T value, T goal, T step)
 {
+    return value + (goal - value) * step;
 }
 
 
+template <typename T>
+void ce::Mathf<T>::DoBind(lua_State * L, const std::string& s)
+{
+    luabridge::getGlobalNamespace(L)
+        .beginNamespace("Chef")
+            .beginClass<ce::Mathf<T>>(std::string("Math" + s).c_str())
+                .addFunction(std::string("Clamp" + s).c_str(), &ce::Mathf<T>::Clamp)
+                .addFunction(std::string("Lerp" + s).c_str(), &ce::Mathf<T>::Lerp)
+            .endClass()
+        .endNamespace();
+              
+}
+
+
+template class Mathf<int>;
+template class Mathf<signed int>;
+template class Mathf<signed int>;
+template class Mathf<short int>;
+template class Mathf<unsigned short int>;
+template class Mathf<signed short int>;
+template class Mathf<long int>;
+template class Mathf<signed long int>;
+template class Mathf<unsigned long int>;
+
+template class Mathf<float>;
+template class Mathf<double>;
+template class Mathf<long double>;

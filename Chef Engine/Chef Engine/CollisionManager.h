@@ -40,12 +40,13 @@ struct b2Vec2;
 namespace ce
 {
 	class Collider;
+	class ContactListener;
 
 	class CollisionManager
 	{
 	public:
-		CHEF_API CollisionManager();
-		CHEF_API ~CollisionManager();
+		CollisionManager();
+		~CollisionManager();
 
 		// Returns the world holding bodies and handling physics
         CHEF_API static b2World* GetWorld();
@@ -53,7 +54,7 @@ namespace ce
 		static void AddCollider(ce::Collider* collider);
 		static void RemoveCollider(ce::Collider* collider);
 
-        CHEF_API void UpdateCollision();
+        CHEF_API static void UpdateCollision();
 		
 
 	private:
@@ -64,5 +65,7 @@ namespace ce
 
 		// Holds bodies and handles physics
 		static b2World* world;
+
+		ce::ContactListener* contactListener;
 	};
 }

@@ -111,6 +111,14 @@ namespace ce
         sf::Color GetColor() const;
 		#pragma endregion
 
+        ////////////////////////////////////////////////////////////
+        /// \brief Sets the texture of the sprite to the one specified
+        /// \code
+        /// -- Sets the Texture of the Sprite Component
+        ///
+        /// sprite:SetSprite("Sprites\\playerImage.png")
+        /// \endcode
+        ////////////////////////////////////////////////////////////
         void SetSprite(const std::string &fileName);
 
         void ChangeSprite(sf::Sprite* sprite);

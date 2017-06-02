@@ -41,6 +41,20 @@ namespace sf
 
 namespace ce
 {
+    ////////////////////////////////////////////////////////////
+    /// \brief This is the class you want to use when playing music
+    /// Don't be fooled by the name MusicManager, in Lua it's actually
+    /// just called Sound. You use the class by simply constructing it with
+    /// the path of the sound file you want to use, and then using the PlaySound method
+    /// 
+    /// \code
+    /// -- Creates a new sound and plays it
+    /// 
+    /// self.hitSound = Chef.Sound("Sounds\\hit.wav")
+    /// self.hitSound:PlaySound()
+    /// \endcode
+    ///
+    ////////////////////////////////////////////////////////////
 	class MusicManager
 	{
 		friend void LuaBridgeBinder::Bind<ce::MusicManager>(lua_State*);
@@ -48,6 +62,16 @@ namespace ce
 		MusicManager();
 		~MusicManager();
 
+        ////////////////////////////////////////////////////////////
+        /// \brief Starts to play the specified sound-file
+        /// You can choose to loop the music piece and then it will loop indefinetely
+        /// \code
+        /// -- Plays the music piece
+        /// 
+        /// self.music = Chef.Music()
+        /// self.music:PlayMusic("Sounds\\platformer_music_happy.flac")
+        /// \endcode
+        ////////////////////////////////////////////////////////////
 		void PlayMusic(const std::string& fileName, bool loop);
 		void SetVolume(float volume);
 		float GetVolume() const;
@@ -56,6 +80,18 @@ namespace ce
         sf::Music* music;
 
 		static void DoBind(lua_State* L);
+
+        ////////////////////////////////////////////////////////////
+        /// \brief Volume of the music
+        /// The max volume is 2 
+        /// \code
+        /// -- Sets the volume to be higher of the music
+        /// 
+        /// self.music = Chef.Music()
+        /// self.music.volume = 0.5
+        /// self.music:PlayMusic("Sounds\\Beautiful_String_Concert.flac")
+        /// \endcode
+        ////////////////////////////////////////////////////////////
 		float volume;
 	};
 }

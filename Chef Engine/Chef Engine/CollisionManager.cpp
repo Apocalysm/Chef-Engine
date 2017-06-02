@@ -34,6 +34,7 @@
 #include "Transform.h"
 #include "Sprite.h"
 #include "GameObject.h"
+#include "ContactListener.h"
 
 #include <Box2D\Box2D.h>
 
@@ -50,17 +51,18 @@ CollisionManager::CollisionManager()
 {
     world = new b2World(*gravity);
 
-    /*
-     Zeroes gravity
-    gravity = new b2Vec2(0, 0);
+	contactListener = new ce::ContactListener();
 
-	 Creates the physics world
-	world = new b2World(*gravity);*/
+	// The world will now check if collisions happen
+	world->SetContactListener(contactListener);
 }
 
 
 CollisionManager::~CollisionManager()
 {
+	delete contactListener;
+
+	delete world;
 }
 
 
