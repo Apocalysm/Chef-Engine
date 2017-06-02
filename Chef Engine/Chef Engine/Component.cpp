@@ -1,10 +1,42 @@
+////////////////////////////////////////////////////////////
+//
+// Chef Engine
+// Copyright (C) 2017 Oskar Svensson
+//  
+// This software is provided 'as-is', without any express or implied warranty.
+// In no event will the authors be held liable for any damages arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it freely,
+// subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented;
+//    you must not claim that you wrote the original software.
+//    If you use this software in a product, an acknowledgment
+//    in the product documentation would be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such,
+//    and must not be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source distribution.
+//
+////////////////////////////////////////////////////////////
+
+
 #include "Component.h"
+
 #include "GameObject.h"
+
+#include <lua.hpp>
+#include <LuaBridge.h>
+
 #include <typeinfo>
 
 
-ce::Component::Component()
+ce::Component::Component() :
+    isNew(true), gameObject(nullptr), enabled(true)
 {
+
 }
 
 
@@ -12,45 +44,67 @@ ce::Component::~Component()
 {
 }
 
+
 void ce::Component::Start()
 {
-
 }
+
 
 void ce::Component::Update()
 {
-
 }
 
-int ce::Component::GetHashCode() const
+
+int ce::Component::GetID() const
 {
-	return hash;
+	return this->ID;
 }
 
-void ce::Component::SetHashCode(int hash)
+
+void ce::Component::SetID(int ID)
 {
-	this->hash = hash;
+	this->ID = ID;
 }
+
 
 void ce::Component::SetEnabled(bool enabled)
 {
 	this->enabled = enabled;
 }
 
+
 bool ce::Component::GetEnabled() const
 {
-	return enabled;
+	return this->enabled;
 }
+
+void ce::Component::SetIsNew(bool isNew)
+{
+    this->isNew = isNew;
+}
+
+bool ce::Component::GetIsNew() const
+{
+    return this->isNew;
+}
+
 
 ce::GameObject* ce::Component::GetGameObject() const
 {
 	return gameObject;
 }
 
-// The == operator of Component compares the hash of the 
+
+void ce::Component::SetGameObject(GameObject * gameObject)
+{
+	this->gameObject = gameObject;
+}
+
+
+// The == operator of Component compares the ID of the component
 bool ce::Component::operator==(const Component& other)
 {
-	if (this->hash == other.hash)
+	if (this->ID == other.ID)
 	{
 		return true;
 	}
@@ -58,15 +112,14 @@ bool ce::Component::operator==(const Component& other)
 	return false;
 }
 
-void ce::Component::DoBind(lua_State * L)
+void ce::Component::DoBind(lua_State* L)
 {
-	luabridge::getGlobalNamespace(L)
-		.beginNamespace("Chef")
-			.beginClass<Component>("Component")
-				.addProperty("hash_code", &Component::GetHashCode)
-				.addProperty("enabled", &Component::GetEnabled, &Component::SetEnabled)
-				.addProperty("gameObject", &Component::GetGameObject)
-				.addFunction("Equals", &Component::operator==)
-			.endClass()
-		.endNamespace();
+    luabridge::getGlobalNamespace(L)
+        .beginNamespace("Chef")
+            .beginClass<ce::Component>("Component")
+                .addConstructor<void (*) (void)>()
+                .addProperty("gameObject", &Component::GetGameObject)
+                .addProperty("enabled", &Component::GetEnabled, &Component::SetEnabled)
+            .endClass()
+        .endNamespace();
 }

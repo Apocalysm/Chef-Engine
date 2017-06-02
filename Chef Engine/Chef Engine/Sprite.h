@@ -1,61 +1,151 @@
+////////////////////////////////////////////////////////////
+//
+// Chef Engine
+// Copyright (C) 2017 Oskar Svensson
+//  
+// This software is provided 'as-is', without any express or implied warranty.
+// In no event will the authors be held liable for any damages arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it freely,
+// subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented;
+//    you must not claim that you wrote the original software.
+//    If you use this software in a product, an acknowledgment
+//    in the product documentation would be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such,
+//    and must not be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source distribution.
+//
+////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////
+//
+// Author: Dennis Karlsson
+//
+////////////////////////////////////////////////////////////
+
+
 #pragma once
-#include "Component.h"
-#include "Transform.h"
+#include "DrawableComponent.h"
+
+#include "Vec2.h"
+#include "LuaBridgeBinder.h"
+
+#include <string>
+
+namespace sf
+{
+    class Sprite;
+    class Color;
+}
 
 namespace ce
 {
-	class Sprite : ce::Component
+    class Transform;
+    class Texture;
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Component that gives your objects a visual representation
+    /// Add a Sprite to a GameObject with GameObject:AddSprite()
+    /// \code
+    /// --Creates a GameObject and adds a Sprite to it
+    ///
+    /// object = Chef.GameObject("name")
+    ///
+    /// sprite = object:AddSprite() 
+    /// \endcode
+    /// 
+    /// \n Tries to get a Sprite from a GameObject with GameObject:GetSprite()
+    /// \code
+    /// --Gets a Sprite from the GameObject "object"
+    ///
+    /// sprite = object:GetSprite()
+    /// \endcode
+    ///
+    /// \n Remove a Sprite from a GameObject with GameObject:RemoveSprite()
+    /// \code
+    /// --Tries to remove a Sprite from the GameObject "object"
+    ///
+    /// object:RemoveSprite()
+    /// \endcode
+    ////////////////////////////////////////////////////////////
+	class Sprite : public DrawableComponent
 	{
+        // Befriends the templated Bind function so it can access our protected functions
+        friend void LuaBridgeBinder::Bind<ce::Sprite>(lua_State*);
+
 	public:
+
+        ////////////////////////////////////////////////////////////
+        /// \brief Default Sprite Constructor. 
+        /// In Lua you use GameObject:AddSprite()
+        /// \code
+        /// --Creates a GameObject and adds a Sprite to it
+        ///
+        /// object = Chef.GameObject("name")
+        ///
+        /// sprite = object:AddSprite() 
+        /// \endcode
+        ////////////////////////////////////////////////////////////
 		Sprite();
-		Sprite(const std::string& fileName, const int drawOrder);
+		Sprite(const int drawOrder);
+		~Sprite();
 
-		void Update();
+		void Update() override;
 
-		void SetSprite(const std::string &fileName);
-
-		void SetPosition(const float x, const float y);
-		void SetPosition(const sf::Vector2f newPosition);
-
-		void SetScale(const float x, const float y);
-		void SetScale(const sf::Vector2f newScale);
-
-		void SetOrigin(const float x, const float y);
+		#pragma region Origin Methods
+        void SetOrigin(const float x, const float y);
 		void SetOrigin(const sf::Vector2f newOrigin);
+        
+        const ce::Vec2f& GetOrigin() const;
+		#pragma endregion
 
-		void SetRotation(const float angle);
-
-		void SetColor(const sf::Color color);
+		#pragma region Color Methods
+        void SetColor(const sf::Color& color);
 		void SetColor(const int r, const int g, const int b, const int a);
+		
+        sf::Color GetColor() const;
+		#pragma endregion
 
-		void SetDrawOrder(const int drawOrder);
+        ////////////////////////////////////////////////////////////
+        /// \brief Sets the texture of the sprite to the one specified
+        /// \code
+        /// -- Sets the Texture of the Sprite Component
+        ///
+        /// sprite:SetSprite("Sprites\\playerImage.png")
+        /// \endcode
+        ////////////////////////////////////////////////////////////
+        void SetSprite(const std::string &fileName);
+
+        void ChangeSprite(sf::Sprite* sprite);
 
 		sf::Sprite* GetSprite() const;
 
-		sf::Vector2f GetPosition() const;
-
-		sf::Vector2f GetScale() const;
-
-		sf::Vector2f GetOrigin() const;
-
-		float GetRotation() const;
-
-		sf::Color GetColor() const;
-
-		int GetDrawOrder() const;
+		sf::Drawable* GetDrawable() const;
 
 	private:
+		friend class DrawEventManager;
+
 		sf::Sprite* sprite;
-		sf::Texture texture;
-		sf::Vector2f position;
-		sf::Vector2f scale;
-		float rotation;
-		sf::Color color;
-		int m_drawOrder = 0;
+		ce::Texture* texture;
 
-		ce::Transform* transform; // The transform of this components GameObject
+        ////////////////////////////////////////////////////////////
+        /// \brief Tints the Sprite in a specified Color
+        /// \code
+        /// -- Sets the Color of the Sprite to be blue
+        ///
+        /// sprite.color = Chef.Color(0, 0, 255, 255)
+        /// \endcode
+        ////////////////////////////////////////////////////////////
+		sf::Color* color;
+        /// \brief How far up the Sprite is drawn in the game, the higher the number, the higer it is drawn
+		//int drawOrder;
 
-		static void DoBind(lua_State* L); // Bridges parts of this script to Lua
+		// Binds parts of this script to Lua
+		static void DoBind(lua_State* L); 
 	};
 }
-
