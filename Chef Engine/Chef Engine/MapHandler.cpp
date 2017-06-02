@@ -304,6 +304,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 							spriteComponent->ChangeSprite(sprite);
 
 
+                            /* Author: Oskar Svensson */
                             bool addCollision = false;
                             if (!props.Empty())
                             {
@@ -355,7 +356,7 @@ void MapHandler::LoadMap(const std::string& fileName)
 			default:
 				break;
 			}
-
+            /* Author: Oskar Svensson */
             if (!props.Empty())
             {
                 std::string tableName = props.GetStringProperty("Lua");

@@ -76,6 +76,10 @@ void ce::Mathf<T>::DoBind(lua_State * L, const std::string& s)
 }
 
 
+template class Mathf<char>;
+template class Mathf<unsigned char>;
+template class Mathf<signed char>;
+
 template class Mathf<int>;
 template class Mathf<signed int>;
 template class Mathf<signed int>;
