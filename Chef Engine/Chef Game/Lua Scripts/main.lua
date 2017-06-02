@@ -8,8 +8,7 @@ Chef.Window.SetFrameRateLimit(60)
 
 mapHandler = Chef.MapHandler()
 mapHandler:LoadMap("Maps\\RefferenceMap.tmx")
-music = Chef.Music()
-music:PlayMusic("Sounds\\music.wav", true)
+-- Chef.Music.PlayMusic("Sounds\\music.wav", true)
 
 
 

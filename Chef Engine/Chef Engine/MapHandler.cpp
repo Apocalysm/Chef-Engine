@@ -125,6 +125,9 @@ void MapHandler::LoadMap(const std::string& fileName)
 
 	//Load the map file
 	map->ParseFile(fileName);
+	if (map->HasError())
+		return;
+
 	mapHeight = map->GetHeight();
 	mapWidth = map->GetWidth();
 	tileHeight = map->GetTileHeight();

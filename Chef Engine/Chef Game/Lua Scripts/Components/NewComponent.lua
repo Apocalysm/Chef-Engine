@@ -24,15 +24,19 @@ end
 
 -- Used for initialization
 function NewComponent.Start(self)
+	print(1)
 	self.camera = self.gameObject:AddCamera()
+	print(2)
 	self.camera.size = Chef.Vector2f(64, 36)
 	self.camera.follow = true
+	print(3)
 	
 	self.collision = self.gameObject:AddCollider()
+	print(4)
 	self.collision:SetFitSprite(true, true, false)
-	
+	print(5)
 	self.other = self.gameObject:AddLuaComponent(OtherComponent)
-	
+	print(6)
 	
 	self.sfx = Chef.Sound("Sounds\\sound.wav")
 end
@@ -40,7 +44,6 @@ end
 
 --Gets called every frame
 function NewComponent.Update(self)
-
 	if(self.other.canMove)
 	then
 		if Chef.Input.GetKey(Chef.A) == true then
@@ -64,7 +67,6 @@ function NewComponent.Update(self)
 	if Chef.Input.GetKeyDown(Chef.Space) == true then
 		self.sfx:PlaySound()
 	end
-
 end
 
 function NewComponent.OnCollisionEnter(self, collider)
