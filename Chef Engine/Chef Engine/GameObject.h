@@ -1,50 +1,142 @@
+////////////////////////////////////////////////////////////
+//
+// Chef Engine
+// Copyright (C) 2017 Oskar Svensson
+//  
+// This software is provided 'as-is', without any express or implied warranty.
+// In no event will the authors be held liable for any damages arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it freely,
+// subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented;
+//    you must not claim that you wrote the original software.
+//    If you use this software in a product, an acknowledgment
+//    in the product documentation would be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such,
+//    and must not be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source distribution.
+//
+////////////////////////////////////////////////////////////
+
+
 #pragma once
-#include "Object.h"
-#include "Transform.h"
+#include "LuaBridgeBinder.h"
+#include "Common.h"
+#include "LuaComponent.h"
+
 #include <vector>
+#include <map>
 #include <string>
 #include <iostream>
 #include <typeinfo>
+#include <utility>
+
 
 namespace ce
 {
-	// Forward declaration
 	class Component;
-	
-	class GameObject : public ce::Object
+    class Transform;
+    class ContactListener;
+
+
+////////////////////////////////////////////////////////////
+/// \brief Base Class that holds Components
+/// 
+////////////////////////////////////////////////////////////
+	class GameObject
 	{
 		// Befriends the templated Bind function so it can access our protected functions
 		friend void LuaBridgeBinder::Bind<ce::GameObject>(lua_State*);
 
 	public:
-		GameObject();
-		GameObject(std::string name);
+        CHEF_API GameObject();
 
+        ////////////////////////////////////////////////////////////
+        /// \brief Constructor to use in Lua
+        /// 
+        /// \param name The name given to the GameObject
+        ///
+        /// \code
+        /// --Creates a GameObject called "name"
+        ///
+        /// object = Chef.GameObject("name")
+        /// \endcode
+        ////////////////////////////////////////////////////////////
+        CHEF_API GameObject(std::string name);
+
+        CHEF_API ~GameObject();
+
+
+        #pragma region Component Methods
 		// Adds a new component to the GameObject based on the typename in the method call
-		template<typename T>
-		T* AddComponent();
-
-		Component* AddComponent(const int hash);
+		template<typename T> 
+        T* AddComponent();
 
 		// Tries to find the component of the specified typename
 		template<typename T>
 		T* GetComponent();
 
-		Component* GameObject::GetComponent(const int hash);
-
 		// Removes the component of the specified typename if the GameObject is holding one
 		template<typename T>
-		void RemoveComponent();
+		void RemoveComponent(T* component);
+        #pragma endregion
 
-		void RemoveComponent(const int hash);
+        #pragma region LuaComponent Methods
+        ////////////////////////////////////////////////////////////
+        /// \brief Adds a component created in Lua
+        /// 
+        ///\param ref This is the Component Type you want to
+        /// the GameObject
+        ///
+        /// \code
+        /// --Creates a GameObject and adds a component of type 'PlayerController' to it
+        ///
+        /// object = Chef.GameObject("name")
+        ///
+        /// controller = object:GetLuaComponent(PlayerController.ID)
+        /// \endcode
+        ////////////////////////////////////////////////////////////
+        luabridge::LuaRef AddLuaComponent( luabridge::LuaRef ref);
 
-		// An enumerator for differentiating our GameObjects between layers
-		enum Layers { Default, Player, Enemy, Terrain, UI };
+        ////////////////////////////////////////////////////////////
+        /// \brief Gets the specified Lua Component in the GameObject
+        /// 
+        ///\param ID The ID of the Component you want to get
+        ///
+        ///
+        ///\code
+        /// --Tries to get a 'PlayerController' component from the GameObject "object"
+        ///
+        /// controller = object:GetLuaComponent(PlayerController.ID)
+        /// \endcode
+        ////////////////////////////////////////////////////////////
+        luabridge::LuaRef GetLuaComponent(int ID);
+        
+        ////////////////////////////////////////////////////////////
+        /// \brief Removes the specified Lua Component from the GameObject
+        /// 
+        ///\param ID The ID of the Component you want to remove
+        ///
+        ///\code
+        /// --Tries to remove the 'PlayerController' component from the GameObject "object"
+        ///
+        /// controller = object:RemoveLuaComponent(PlayerController.ID)
+        /// \endcode
+        ////////////////////////////////////////////////////////////
+        void RemoveLuaComponent(int ID);
+      
+        #pragma endregion
 
-		// Overloads the == operator to a method
-		bool operator==(const GameObject& other);
+		enum Layers { Default, Player, Enemy, Terrain, UI};
 
-		// Getter and setter for m_active variable
+		// The amount of different values in the Layers enum
+		static const int LAYER_AMOUNT;
+
+		// Getter and setter for active variable
 		void SetActive(bool active);
 		bool GetActive() const;
 
@@ -55,53 +147,89 @@ namespace ce
 		void SetTransform(Transform* transform);
 		Transform* GetTransform() const;
 
+		// Getter and setter methods for 'name' variable
+		const std::string& GetName() const;
+		void SetName(const std::string& name);
+
+		// Getter and setter methods for 'tag' variable
+		const std::string& GetTag() const;
+		void SetTag(const std::string& tag);
+
+        ////////////////////////////////////////////////////////////
+		/// \brief Removes the GameObject and all its Components from the game
+        ///
+        /// \code
+        /// -- Removes the GameObject called "object"
+        ///
+        /// object:Destroy()
+        /// \endcode
+        ////////////////////////////////////////////////////////////
+		void Destroy();
+
 		// Getter for instanceID
-		unsigned long long GetID() const;
+        const uint64& GetID() const;
 
-	protected:
-		// Binds all relevant members of this class with LuaBridge
-		static void DoBind(lua_State* L);
+		// Overloads the == operator to a method
+		bool operator==(const GameObject& other);
 
-	private:
+    private:
 		// Lets GameObjectManager access the private members in GameObjects
 		friend class GameObjectManager;
+		friend class Collider;
 
 		// All the components the GameObject is currently holding
-		std::vector<Component*> components;
+		std::map<int, Component*> components;
 
-		// Updates all the components that our GameObject holds
-		void ComponentUpdate();
+        std::map<int, ce::LuaComponent*> luaComponents;
 
-		// If the gameObject should be considered active or not
-		bool m_active = true;
+        /// \brief What the GameObject is called
+		std::string name;
 
-		Layers layer = Default;
+		/// \brief The tag of this GameObject
+		std::string tag;
+
+		/// \brief If the GameObject will be updated or be interactive
+		bool active;
+
+        /// \brief Where the GameObject is sorted
+		Layers layer;
 
 		// number to differentiate our different GameObject
-		unsigned long long instanceID;
+        uint64 instanceID;
 
 		// We set instanceID with this value 
-		static unsigned long long uniqueIDCounter;
+		static uint64 uniqueIDCounter;
 
 		// If we created the object this frame
 		bool isNew;
 
+        /// \brief The Transform attached to this GameObject by default
 		Transform* transform;
+	    
+        // Calls the Start method on all the Components that are marked is new / was created this frame
+        void ComponentStart();
 
-		// Tries to find the component of the specified typename
+        // Updates all the components that our GameObject holds
+		void ComponentUpdate();
+		
+        // Tries to find the component of the specified typename
 		template<typename T>
 		T* GetComponentInternal();
 
-		// Tries to find the component of the specified typename
-		Component* GetComponentInternal(const int hash);
+        // Binds all relevant members of this class with LuaBridge
+        static void DoBind(lua_State* L);
 	};
+
 
 	// Adds a new component of the specified type
 	template<typename T>
-	T* GameObject::AddComponent()
+	T* ce::GameObject::AddComponent()
 	{
 		// Makes sure that this method only takes types derived from ce::Component
-		static_assert((std::is_base_of<ce::Component, T>::value), "Type <T> of GameObject.AddComponent<>() must be of type ce::Component");
+		//static_assert((std::is_base_of<ce::Component, T>::value), "Type <T> of GameObject.AddComponent<>() must be of type ce::Component");
+
+        if (!std::is_base_of<ce::Component, T>::value)
+            std::cerr << "Type <T> of GameObject.AddComponent<>() must be of type ce::Component" << std::endl;
 
 		// First checks if we don't already have a component of this type on the GameObject
 		if (GameObject::GetComponentInternal<T>() == nullptr)
@@ -109,22 +237,23 @@ namespace ce
 			// Creates a instance of our type T
 			T* t = new T();
 
-			components.push_back(t);
-
 			t->SetGameObject(this);
 
-			// Sets the int 'hash' of component to be equal to the types hash_code
-			components.back()->SetHashCode(typeid(dynamic_cast<T*>(components.back())).hash_code());
+			// Sets the int 'ID' of component to be equal to the types ID
+			t->SetID(typeid(t).hash_code());
+	        
+            components.insert(std::make_pair(t->GetID(), t));
 
 			return t;
 		}
+
+        return nullptr;
 	}
 
 	
-
 	// Tries to get a component of the specified type from GameObject's vector 'components'
 	template<typename T>
-	T* GameObject::GetComponentInternal()
+	T* ce::GameObject::GetComponentInternal()
 	{
 		// Makes sure that this method only takes types derived from ce::Component
 		static_assert((std::is_base_of<ce::Component, T>::value), "Type <T> of GameObject.GetComponent must be of type ce::Component");
@@ -132,11 +261,11 @@ namespace ce
 		// Iterates all of GameObject's components
 		for (auto it = components.begin(); it != components.end(); it++)
 		{
-			// Checks if we find the same hash_code on the two types we are comparing
-			if ((*it)->GetHashCode() == typeid(T*).hash_code())
+			// Checks if we find the same ID on the two types we are comparing
+			if ((*it).second->GetID() == typeid(T*).hash_code())
 			{
 				// We return the component and casts it to type T
-				return (T*)(*it);
+				return (T*)(*it).second;
 			}
 		}
 
@@ -144,28 +273,23 @@ namespace ce
 	}
 
 	
-
 	// Uses GetComponentInternal and also writes an error message to the console if we couldn't find anything
 	template<typename T>
-	T* GameObject::GetComponent()
+	T* ce::GameObject::GetComponent()
 	{
 		T* t = GetComponentInternal<T>();
 
 		if (t == nullptr)
 		{
 			std::cerr << "Could not find component of type <" << typeid(T).name() << ">" << std::endl;
-
-		return nullptr;
-	}
-
+		    return nullptr;
+	    }
 		return t;
 	}
 
 
-
-
 	template<typename T>
-	void GameObject::RemoveComponent()
+	void ce::GameObject::RemoveComponent(T* component)
 	{
 		// Makes sure that this method only takes types derived from ce::Component
 		static_assert((std::is_base_of<ce::Component, T>::value), "Type <T> of GameObject.RemoveComponent<>() must be of type ce::Component");
@@ -173,11 +297,11 @@ namespace ce
 		// Iterates all of GameObject's components
 		for (auto it = components.begin(); it != components.end(); it++)
 		{
-			// Checks if we find the same hash_code on the two types we are comparing
-			if ((*it)->hash == typeid(T*).hash_code())
+			// Checks if we find the same ID on the two types we are comparing
+			if (it->second->GetID() == component->GetID())
 			{
 				// We delete the object from the vector and the memory
-				delete (*it);
+				delete it->second;
 
 				it = components.erase(it);
 				
@@ -185,5 +309,4 @@ namespace ce
 			}
 		}
 	}
-
 }

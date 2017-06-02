@@ -30,17 +30,20 @@
 #include "TmxLayer.h"
 #include "TmxObjectGroup.h"
 #include "TmxObject.h"
+#include "TmxColor.h"
 
 namespace Tmx 
 {
     ObjectGroup::ObjectGroup(const Tmx::Map *_map)
         : Layer(_map, std::string(), 0, 0, 0, 0, 1.0f, true, TMX_LAYERTYPE_OBJECTGROUP)
-        , color()
+        , color(new Color())
         , objects()
     {}
 
     ObjectGroup::~ObjectGroup() 
     {
+		delete color;
+
         for(std::size_t i = 0; i < objects.size(); i++)
         {
             Object *obj = objects.at(i);
@@ -57,7 +60,7 @@ namespace Tmx
 
         if (objectGroupElem->Attribute("color"))
         {
-            color = objectGroupElem->Attribute("color");
+            color->SetColor(objectGroupElem->Attribute("color"));
         }
         
         objectGroupElem->QueryFloatAttribute("opacity", &opacity);
