@@ -35,17 +35,10 @@
 #include <SFML\Audio.hpp>
 
 using namespace ce;
+ 
+sf::Music* ce::MusicManager::music = nullptr;
+float ce::MusicManager::volume = 1;
 
-MusicManager::MusicManager() : 
-    volume(1),
-    music(new sf::Music())
-{
-}
-
-
-MusicManager::~MusicManager()
-{
-}
 
 void ce::MusicManager::PlayMusic(const std::string& fileName, bool loop)
 {
@@ -64,12 +57,12 @@ void ce::MusicManager::PlayMusic(const std::string& fileName, bool loop)
 //Setting the volume for the music
 void ce::MusicManager::SetVolume(float volume)
 {
-	this->volume = volume;
+	ce::MusicManager::volume = volume;
 }
 
 
 //Get the volume for the music
-float ce::MusicManager::GetVolume() const
+float ce::MusicManager::GetVolume()
 {
 	return volume;
 }
@@ -81,7 +74,7 @@ void ce::MusicManager::DoBind(lua_State * L)
 			.beginClass<MusicManager>("Music")
                 .addConstructor<void(*)(void)>()
 				.addFunction("PlayMusic", &MusicManager::PlayMusic)
-				.addProperty("volume", &MusicManager::GetVolume, &MusicManager::SetVolume)
+				.addStaticProperty("volume", &MusicManager::GetVolume, &MusicManager::SetVolume)
 			.endClass()
 		.endNamespace();
 }
