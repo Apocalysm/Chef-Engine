@@ -438,8 +438,10 @@
   <object id="241" gid="1649" x="195" y="30" width="3" height="3"/>
   <object id="242" gid="1966" x="177" y="69" width="3" height="3">
    <properties>
-    <property name="Collision" type="bool" value="false"/>
+    <property name="Collision" type="bool" value="true"/>
+    <property name="Dynamic" type="bool" value="false"/>
     <property name="Lua" value="NewComponent"/>
+    <property name="Trigger" type="bool" value="true"/>
    </properties>
   </object>
  </objectgroup>

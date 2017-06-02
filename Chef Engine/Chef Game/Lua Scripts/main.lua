@@ -3,7 +3,8 @@ require "NewComponent"
 --require "OtherComponent"
 require "include"
 
-Chef.Window.SetSize(Chef.Vector2u(1920, 1080))
+Chef.Window.SetSize(Chef.Vector2u(1280, 720))
+Chef.Window.SetFrameRateLimit(60)
 
 mapHandler = Chef.MapHandler()
 mapHandler:LoadMap("Maps\\RefferenceMap.tmx")

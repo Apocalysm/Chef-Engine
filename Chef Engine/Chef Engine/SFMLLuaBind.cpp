@@ -34,6 +34,11 @@ void SetWindowSize(const ce::Vec2u& size)
     ce::Camera::window->setSize(size.ToSfVector2());
 }
 
+void SetFrameRateLimit(unsigned int limit)
+{
+    ce::Camera::window->setFramerateLimit(limit);
+}
+
 void ce::SFMLLuaBind::DoBind(lua_State* L)
 {
     luabridge::getGlobalNamespace(L)
@@ -46,10 +51,11 @@ void ce::SFMLLuaBind::DoBind(lua_State* L)
                 .addData("b", &sf::Color::b)
                 .addData("a", &sf::Color::a)
             .endClass()
-
+            
             // Binds SFML RenderWindow
             .beginNamespace("Window")
                 .addFunction("SetSize", &SetWindowSize)
+                .addFunction("SetFrameRateLimit", &SetFrameRateLimit)
             .endNamespace()
             
         .endNamespace();
