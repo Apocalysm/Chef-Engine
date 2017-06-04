@@ -24,14 +24,12 @@
 
 
 #include "GameObject.h"
-
 #include "Component.h"
 #include "Sprite.h"
 #include "Collider.h"
 #include "Camera.h"
 #include "Transform.h"
 #include "Text.h"
-
 #include "LuaBind.h"
 #include "ContactListener.h"
 #include "GameObjectManager.h"

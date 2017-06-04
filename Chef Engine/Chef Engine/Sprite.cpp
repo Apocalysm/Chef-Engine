@@ -76,6 +76,7 @@ void Sprite::Update()
 
 void Sprite::SetSprite(const std::string& fileName)
 {
+	// Gets texture from ResourceManager
 	texture = (ce::Texture*)ce::ResourceManager::GetResource(fileName);
 
 	sprite->setTexture(*texture->GetTexture());

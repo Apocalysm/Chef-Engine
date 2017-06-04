@@ -7,6 +7,7 @@
 #include "SoundManager.h"
 #include "ResourceManager.h"
 #include "Timef.h"
+#include "LuaBind.h"
 
 #include <SFML\Graphics.hpp>
 #include <Tmx\TmxTile.h>
@@ -15,8 +16,6 @@
 #include <iostream>
 #include <typeinfo>
 #include <vector>
-
-#include "LuaBind.h"
 
 //////////////////////////////////////////////
 ///   \mainpage Main Page
