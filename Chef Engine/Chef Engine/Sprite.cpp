@@ -32,11 +32,9 @@
 #include "Sprite.h"
 #include "Transform.h"
 #include "GameObject.h"
-
 #include "DrawEventManager.h"
 #include "ResourceManager.h"
 #include "Texture.h"
-
 #include "LuaBind.h"
 
 #include <SFML\Graphics.hpp>
@@ -67,7 +65,7 @@ Sprite::~Sprite()
 
 void Sprite::Update()
 {
-	// Updates psition, scale and rotation depending on the set values in the transform
+	// Updates position, scale and rotation depending on the values in the transform
 	sprite->setPosition(transform->GetPosition().ToSfVector2());
 	sprite->setRotation(transform->GetRotation());
 	sprite->setScale(transform->GetScale().ToSfVector2());
@@ -84,6 +82,8 @@ void Sprite::SetSprite(const std::string& fileName)
 	sprite->setPosition(transform->GetPosition().ToSfVector2());
 }
 
+
+/*Author: Oskar Svensson*/
 void ce::Sprite::ChangeSprite(sf::Sprite* sprite)
 {
 	delete this->sprite; 

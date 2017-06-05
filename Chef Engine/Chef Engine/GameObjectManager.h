@@ -43,8 +43,12 @@ namespace ce
 	public:
 		CHEF_API GameObjectManager();
 
+		static void Initialize();
+
 		static void AddObject(GameObject* object);
+
 		static void RemoveObject(GameObject* object);
+
         CHEF_API static void CallUpdate();
 
 	private:

@@ -43,6 +43,13 @@ std::map<uint64,std::map<uint64, ce::GameObject*>> ce::GameObjectManager::enumTo
 
 ce::GameObjectManager::GameObjectManager()
 {
+	
+}
+
+
+void ce::GameObjectManager::Initialize()
+{
+	// Adds as many inner maps as there are layers
 	for (int i = 0; i < ce::GameObject::LAYER_AMOUNT; i++)
 	{
 		GameObjectMap map;
@@ -60,19 +67,18 @@ void ce::GameObjectManager::AddObject(GameObject* object)
 
 void ce::GameObjectManager::RemoveObject(GameObject* object)
 {
-	const unsigned long long ID = object->instanceID;
+	const uint64 ID = object->instanceID;
+
 	int layer = object->layer;
 
 	if (object->isNew)
 	{
 		// Deletes and erases the requested object from the map of new objects
-		//delete enumToMapNewObj[layer][ID];
 		enumToMapNewObj[layer].erase(ID);
 	}
 	else
 	{
 		// Deletes and erases the requested object from the map of objects
-		//delete enumToMapObj[layer][ID];
 		enumToMapObj[layer].erase(ID);
 	}
 }
@@ -80,59 +86,51 @@ void ce::GameObjectManager::RemoveObject(GameObject* object)
 
 void ce::GameObjectManager::CallUpdate()
 {
-	// If there is any object in the map
-    if (!enumToMapObj.empty())
+    // Iterates through every map in the map
+    for (auto outer_it = enumToMapObj.begin(); outer_it != enumToMapObj.end(); outer_it++)
     {
-        // Iterates through every map in the map
-        for (auto outer_it = enumToMapObj.begin(); outer_it != enumToMapObj.end(); outer_it++)
+        // If there is any object in the map
+        if (!outer_it->second.empty())
         {
-            // If there is any object in the map
-            if (!outer_it->second.empty())
+            // Iterates through every object in the map
+            for (auto inner_it = outer_it->second.begin(); inner_it != outer_it->second.end(); inner_it++)
             {
-                // Iterates through every object in the map
-                for (auto inner_it = outer_it->second.begin(); inner_it != outer_it->second.end(); inner_it++)
+                if (inner_it->second->active)
                 {
-                    // Updates the object
-                    if (inner_it->second->active)
-                    {
-                        //Calls Start methods of all the object's components
-                        inner_it->second->ComponentStart();
-                        //Calls Update methods of all the object's components
-                        inner_it->second->ComponentUpdate();
-                    }
+                    // Calls Start methods of all the object's components
+                    inner_it->second->ComponentStart();
+                    // Calls Update methods of all the object's components
+                    inner_it->second->ComponentUpdate();
                 }
             }
         }
     }
 
-	// If there are any maps in the map
-	if (!enumToMapNewObj.empty())
+	// Iterates through every map in the map
+	for (auto outer_it = enumToMapNewObj.begin(); outer_it != enumToMapNewObj.end(); outer_it++)
 	{
-		// Iterates through every map in the map
-		for (auto outer_it = enumToMapNewObj.begin(); outer_it != enumToMapNewObj.end(); outer_it++)
+		// If there is any object in the map
+		if (!outer_it->second.empty())
 		{
-			// If there is any object in the map
-			if (!outer_it->second.empty())
+			// Iterates through every object in the map
+			for (auto inner_it = outer_it->second.begin(); inner_it != outer_it->second.end(); inner_it++)
 			{
-				// Iterates through every object in the map
-				for (auto inner_it = outer_it->second.begin(); inner_it != outer_it->second.end(); inner_it++)
-				{
-                    if (inner_it->second->active)
-                    {
-                        //Calls Start methods of all the object's components
-                        inner_it->second->ComponentStart();
-                        //Calls Update methods of all the object's components
-                        inner_it->second->ComponentUpdate();
-                    }
-					inner_it->second->isNew = false;
+                if (inner_it->second->active)
+                {
+                    // Calls Start methods of all the object's components
+                    inner_it->second->ComponentStart();
+                    // Calls Update methods of all the object's components
+                    inner_it->second->ComponentUpdate();
+                }
 
-					// Adds the new object to the other map since it isn't new anymore
-					enumToMapObj[inner_it->second->layer].insert(std::make_pair(inner_it->second->instanceID, inner_it->second));
-				}
+				inner_it->second->isNew = false;
 
-				// Clears all the inner maps since they shouldn't contain anything anymore
-				outer_it->second.clear();
+				// Adds the new object to the other map since it isn't new anymore
+				enumToMapObj[inner_it->second->layer].insert(std::make_pair(inner_it->second->instanceID, inner_it->second));
 			}
+
+			// Clears the inner map since it shouldn't contain anything anymore
+			outer_it->second.clear();
 		}
 	}
 }

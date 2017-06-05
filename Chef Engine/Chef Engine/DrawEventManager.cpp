@@ -55,7 +55,7 @@ void ce::DrawEventManager::AddDrawable(ce::DrawableComponent* drawable)
 {
 	// Adds the DrawableComponent in the map
 	// The key of the outer maps is the drawables draw order and the inner maps key is the drawables objects ID
-	enumToMapNewDrawable[drawable->GetDrawOrder()].insert(std::make_pair(drawable->GetGameObject()->GetID(), drawable));
+	enumToMapNewDrawable[drawable->drawOrder].insert(std::make_pair(drawable->gameObject->GetID(), drawable));
 }
 
 
@@ -64,23 +64,26 @@ void ce::DrawEventManager::RemoveDrawable(DrawableComponent* drawable)
 	// If there is any drawable
 	if (drawable != nullptr)
 {
-		const unsigned long long ID = drawable->GetGameObject()->GetID();
+		const uint64 ID = drawable->gameObject->GetID();
 
 		// Erases the drawable from the map it belongs to
-		if (drawable->GetIsNew())
+		if (drawable->isNew)
 			enumToMapNewDrawable[drawable->drawOrder].erase(ID);
 		else
 			enumToMapDrawable[drawable->drawOrder].erase(ID);
 	}
 }
 
+
+// Moves drawable from its current map to the correct one
 void ce::DrawEventManager::MoveDrawable(ce::DrawableComponent* drawable, const int newDrawOrder)
 {
     // Checks if the drawable is new
-    if (!drawable->GetIsNew())
+    if (!drawable->isNew)
     {
         // Removes the drawable from it's old position
         enumToMapDrawable[drawable->drawOrder].erase(drawable->gameObject->GetID());
+
         // Adds it to the new position
         enumToMapDrawable[newDrawOrder][drawable->gameObject->GetID()] = drawable;
     }
@@ -88,10 +91,10 @@ void ce::DrawEventManager::MoveDrawable(ce::DrawableComponent* drawable, const i
     {
         // Removes the drawable from it's old position
         enumToMapNewDrawable[drawable->drawOrder].erase(drawable->gameObject->GetID());
+
         // Adds it to the new position
         enumToMapNewDrawable[newDrawOrder][drawable->gameObject->GetID()] = drawable;
     }
-
 }
 
 
@@ -104,7 +107,7 @@ void ce::DrawEventManager::AddTmxLayers(std::vector<std::map<int, ce::TileMapLay
 	for (auto outer_it = tileMapLayers.begin(); outer_it != tileMapLayers.end(); outer_it++)
 	{
 		for (auto inner_it = outer_it->begin(); inner_it != outer_it->end(); inner_it++)
-{
+		{
 			sf::RenderStates state;
 			state.texture = &inner_it->second->GetTexture();
 			renderStates.push_back(state);

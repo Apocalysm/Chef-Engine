@@ -51,10 +51,15 @@ namespace ce
 	{
 	public:
 		CHEF_API DrawEventManager();
+
         static void AddDrawable(DrawableComponent* drawable);
+
 		static void RemoveDrawable(DrawableComponent* drawable);
+
         static void MoveDrawable(DrawableComponent* drawable, int newDrawOrder);
+
 		static void AddTmxLayers(std::vector<std::map<int, ce::TileMapLayer*>> tileMapLayers);
+
         CHEF_API static void Draw(sf::RenderWindow& window);
 
 	private:

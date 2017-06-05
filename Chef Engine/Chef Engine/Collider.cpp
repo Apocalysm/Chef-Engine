@@ -54,6 +54,10 @@ Collider::Collider() :
 Collider::~Collider()
 {
 	ce::CollisionManager::RemoveCollider(this);
+
+	delete bodyDef;
+	delete shape;
+	delete fixtureDef;
 }
 
 

@@ -36,7 +36,6 @@
 #include "DrawEventManager.h"
 
 
-//using GameObject;
 namespace ce
 {
     const int GameObject::LAYER_AMOUNT = 6;

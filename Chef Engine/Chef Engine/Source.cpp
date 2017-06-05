@@ -43,6 +43,8 @@ int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
     ce::SFMLKeyboard::Initialize();
 
+	ce::GameObjectManager::Initialize();
+
 	ce::CollisionManager::Initialize();
 
     // Binds all defined classes with LuaBridge
