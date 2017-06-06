@@ -54,6 +54,7 @@ namespace ce
         static b2World* GetWorld();
 
 		static void AddCollider(ce::Collider* collider);
+
 		static void RemoveCollider(ce::Collider* collider);
 
         CHEF_API static void UpdateCollision();

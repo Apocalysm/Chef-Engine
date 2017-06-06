@@ -64,7 +64,7 @@ Collider::~Collider()
 void ce::Collider::Update()
 {
 	// Position that the body should be at
-	b2Vec2 center;
+	b2Vec2 pos;
 
 	transPos = transform->GetPosition();
 
@@ -80,14 +80,14 @@ void ce::Collider::Update()
 		float sprCenterX = transPos.x + spriteSize.x / 2 * transScale.x - spriteOrigin.x * transScale.x;
 		float sprCenterY = transPos.y + spriteSize.y / 2 * transScale.y - spriteOrigin.y * transScale.y;
 	
-		center = b2Vec2(sprCenterX, sprCenterY);
+		pos = b2Vec2(sprCenterX, sprCenterY);
 	}
 	else
 	{
-		center = b2Vec2(transPos.x, transPos.y);
+		pos = b2Vec2(transPos.x, transPos.y);
 	}
 						
-	body->SetTransform(center, transRot);
+	body->SetTransform(pos, transRot);
 
 	// If this collider is currently colliding with any other colliders
 	if (collidingColls.size() != 0)
@@ -108,54 +108,58 @@ void ce::Collider::SetupTMX(const ce::Vec2f& rectSize, const bool dynamic, const
 {
 	fitSprite = false;
 
-	// Makes bodies created from the bodyDef dynamic 
-	if (dynamic)
-		bodyDef->type = b2_dynamicBody;
-
-	// Creates a body and adds it to the world
-	body = CollisionManager::GetWorld()->CreateBody(bodyDef);
-
-	// The body will now hold a pointer to this component
-	body->SetUserData(this);
-
-	transScale = transform->GetScale();
-
-	// Gets rotation of the transform and calculates it from degrees to radians
-	transRot = (transform->GetRotation() * PI) / 180;
-
-	// Sets origin of the body so that it will be in the central position of the box in Tiled
-	b2Vec2 center = b2Vec2(rectSize.x / 2, rectSize.y / 2);
-
-	// Makes the shape a box based on size of the box, the scale of the transform, the center of the Tiled box and the rotation of the transform
-	shape->SetAsBox(rectSize.x * transScale.x / 2, rectSize.y * transScale.y / 2, center, transRot);
-
-	// The body will never "sleep" so that physics will always affect the body
-	body->SetSleepingAllowed(false);
-
-	// If the body is dynamic
-	if (dynamic)
+	// If a body hasn't been created already
+	if (!bodyIsCreated)
 	{
-		// Physics will no longer affect rotation
-		body->SetFixedRotation(true);
+		// Makes bodies created from the bodyDef dynamic 
+		if (dynamic)
+			bodyDef->type = b2_dynamicBody;
 
-		fixtureDef->shape = shape;
-		fixtureDef->density = 1.0f;
-		fixtureDef->friction = 0.3f;
+		// Creates a body and adds it to the world
+		body = CollisionManager::GetWorld()->CreateBody(bodyDef);
 
-		// Creates a fixture that is aplied to the body
-		body->CreateFixture(fixtureDef);
+		// The body will now hold a pointer to this component
+		body->SetUserData(this);
+
+		transScale = transform->GetScale();
+
+		// Gets rotation of the transform and calculates it from degrees to radians
+		transRot = (transform->GetRotation() * PI) / 180;
+
+		// Sets origin of the body so that it will be in the central position of the box in Tiled
+		b2Vec2 center = b2Vec2(rectSize.x / 2, rectSize.y / 2);
+
+		// Makes the shape a box based on size of the box, the scale of the transform, the center of the Tiled box and the rotation of the transform
+		shape->SetAsBox(rectSize.x * transScale.x / 2, rectSize.y * transScale.y / 2, center, transRot);
+
+		// The body will never "sleep" so that physics will always affect the body
+		body->SetSleepingAllowed(false);
+
+		// If the body is dynamic
+		if (dynamic)
+		{
+			// Physics will no longer affect rotation
+			body->SetFixedRotation(true);
+
+			fixtureDef->shape = shape;
+			fixtureDef->density = 1.0f;
+			fixtureDef->friction = 0.3f;
+
+			// Creates a fixture that is applied to the body
+			body->CreateFixture(fixtureDef);
+		}
+		else
+			// Creates a fixture that is applied to the body
+			body->CreateFixture(shape, 0.0f);
+
+		// Makes the body a sensor or not based on if it should be
+		// Sensor is basically the same as Trigger in Unity
+		body->GetFixtureList()->SetSensor(isTrigger);
+
+		this->isTrigger = isTrigger;
+
+		bodyIsCreated = true;
 	}
-	else
-		// Creates a fixture that is aplied to the body
-		body->CreateFixture(shape, 0.0f);
-
-	// Makes the body a sensor or not based on if it should be
-	// Sensor is basically the same as Trigger in Unity
-	body->GetFixtureList()->SetSensor(isTrigger);
-
-	this->isTrigger = isTrigger;
-
-	bodyIsCreated = true;
 }
 
 
@@ -212,11 +216,7 @@ void ce::Collider::SetFitSprite(const bool fitSprite, const bool dynamic, const 
 			// Creates a fixture that is aplied to the body
 			body->CreateFixture(shape, 0.0f);
 
-		// Makes the body a sensor or not based on if it should be
-		// Sensor is basically the same as Trigger in Unity
-		body->GetFixtureList()->SetSensor(isTrigger);
-
-		this->isTrigger = isTrigger;
+		SetIsTrigger(isTrigger);
 
 		bodyIsCreated = true;
 	}
@@ -225,8 +225,11 @@ void ce::Collider::SetFitSprite(const bool fitSprite, const bool dynamic, const 
 
 void ce::Collider::SetIsTrigger(const bool isTrigger)
 {
-	this->isTrigger = isTrigger;
+	// Makes the body a sensor or not based on if it should be
+	// Sensor is basically the same as Trigger in Unity
 	body->GetFixtureList()->SetSensor(isTrigger);
+
+	this->isTrigger = isTrigger;
 }
 
 
