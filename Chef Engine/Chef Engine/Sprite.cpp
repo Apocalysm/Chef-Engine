@@ -86,7 +86,7 @@ void Sprite::SetSprite(const std::string& fileName)
 /*Author: Oskar Svensson*/
 void ce::Sprite::ChangeSprite(sf::Sprite* sprite)
 {
-	delete this->sprite; 
+	delete this->sprite;
 	this->sprite = sprite;
 }
 

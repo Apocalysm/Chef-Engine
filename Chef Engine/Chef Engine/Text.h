@@ -94,7 +94,6 @@ namespace ce
 
 		sf::Drawable* GetDrawable() const;
 
-
 		void SetFont(const std::string path);
 		sf::Font* GetFont() const;
 

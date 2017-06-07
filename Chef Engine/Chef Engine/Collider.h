@@ -148,9 +148,6 @@ namespace ce
 		// Is a body created?
 		bool bodyIsCreated;
 
-		// Is the collider currently colliding?
-		bool isColliding;
-
 		// Bodies is created from this
 		b2BodyDef* bodyDef;
 

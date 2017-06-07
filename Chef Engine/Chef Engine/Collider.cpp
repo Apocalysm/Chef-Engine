@@ -243,7 +243,7 @@ void ce::Collider::SetGameObject(GameObject* gameObject)
 {
 	this->gameObject = gameObject;
 
-	transform = gameObject->GetTransform();
+	transform = gameObject->transform;
 
 	// Adds this collider to the CollisionManager
 	ce::CollisionManager::AddCollider(this);
@@ -253,7 +253,7 @@ void ce::Collider::SetGameObject(GameObject* gameObject)
 void ce::Collider::OnCollisionEnter(Collider* other)
 {
 	// Adds the colliding collider to the map
-	collidingColls.insert(std::make_pair(other->gameObject->GetID(), other));
+	collidingColls.insert(std::make_pair(other->gameObject->instanceID, other));
 
 	// Calls potential OnCollisionEnter methdods in lua-components
 	for (auto component : gameObject->luaComponents)
@@ -266,7 +266,7 @@ void ce::Collider::OnCollisionEnter(Collider* other)
 void ce::Collider::OnCollisionExit(Collider* other)
 {
 	// Erases the collider that this collider stopped colliding with from the map
-	collidingColls.erase(other->GetGameObject()->GetID());
+	collidingColls.erase(other->GetGameObject()->instanceID);
 
 	// Calls potential OnCollisionExit methdods in lua-components
 	for (auto component : gameObject->luaComponents)
@@ -289,7 +289,7 @@ void ce::Collider::OnCollisionStay(Collider* other)
 void ce::Collider::OnTriggerEnter(Collider* other)
 {
 	// Adds the colliding collider to the map
-	collidingColls.insert(std::make_pair(other->gameObject->GetID(), other));
+	collidingColls.insert(std::make_pair(other->gameObject->instanceID, other));
 
 	// Calls potential OnTriggerEnter methdods in lua-components
 	for (auto component : gameObject->luaComponents)
@@ -302,7 +302,7 @@ void ce::Collider::OnTriggerEnter(Collider* other)
 void ce::Collider::OnTriggerExit(Collider* other)
 {
 	// Erases the collider that this collider stopped colliding with from the map
-	collidingColls.erase(other->GetGameObject()->GetID());
+	collidingColls.erase(other->GetGameObject()->instanceID);
 
 	// Calls potential OnTriggerExit methdods in lua-components
 	for (auto component : gameObject->luaComponents)
@@ -312,7 +312,7 @@ void ce::Collider::OnTriggerExit(Collider* other)
 }
 
 
-void ce::Collider::OnTriggerStay(Collider * other)
+void ce::Collider::OnTriggerStay(Collider* other)
 {
 	// Calls potential OnTriggerStay methdods in lua-components
 	for (auto component : gameObject->luaComponents)
